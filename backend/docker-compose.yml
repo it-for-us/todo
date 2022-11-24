@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  app:
+    image: 'todoapp-postgres:latest'
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    container_name: todoapp
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/todoappdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_DATASOURCE_DB=todoappdb
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  db:
+    image: 'postgres:13.1-alpine'
+    ports:
+      - "5432:5432"
+    container_name: db
+    environment:
+      - POSTGRES_DATABASE_URL=jdbc:postgresql://db:5432/todoappdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=todoappdb
