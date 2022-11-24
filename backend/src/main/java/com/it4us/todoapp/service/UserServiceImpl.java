@@ -1,6 +1,7 @@
 package com.it4us.todoapp.service;
 
 import com.it4us.todoapp.dto.UserCreateDto;
+import com.it4us.todoapp.dto.UserSignInDto;
 import com.it4us.todoapp.dto.UserViewDto;
 import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.exception.UserExistException;
@@ -58,6 +59,15 @@ public class UserServiceImpl implements UserService{
             return true;
         else
             return false;
+    }
+
+    @Override
+    public Optional<?> login(UserSignInDto userSignInDto) {
+
+        Optional<?> user = Optional.ofNullable(userRepository.findOneByEmailIgnoreCaseAndPassword(userSignInDto.getEmail(), userSignInDto.getPassword())
+                .orElseThrow(() -> new UserExistException("User Not Found")));
+
+        return user;
     }
 
 }
