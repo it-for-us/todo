@@ -21,4 +21,17 @@ public class CustomExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("internal server error",500);
         return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UserNotExistException.class)
+    public ResponseEntity<?> userNotExist(UserNotExistException userNotExistException){
+        ErrorResponse errorResponse = new ErrorResponse(userNotExistException.getMessage(),404);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+
+    }
+
+
+
+
+
+
 }
