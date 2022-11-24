@@ -1,0 +1,50 @@
+openapi: 3.0.1
+info:
+  title: IT4US API DOCUMENTATION
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /api/signup:
+    post:
+      tags:
+        - user-controller
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserViewDto'
+components:
+  schemas:
+    UserCreateDto:
+      type: object
+      properties:
+        userName:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+        email:
+          type: string
+        password:
+          maxLength: 2147483647
+          minLength: 8
+          type: string
+    UserViewDto:
+      type: object
+      properties:
+        id:
+          type: string
+        userName:
+          type: string
+        email:
+          type: string
