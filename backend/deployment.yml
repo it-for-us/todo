@@ -17,6 +17,8 @@ spec:
         app: todo-backend
 
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: todo-backend
           image: taneraruk/todo-backend:$(DOCKER_IMAGE_TAG)

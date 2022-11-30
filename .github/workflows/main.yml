@@ -51,7 +51,7 @@ jobs:
         run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3.0.0
+        uses: docker/build-push-action@v3.1.1
         with:
           context: backend/
           file: backend/Dockerfile
