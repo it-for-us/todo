@@ -11,7 +11,7 @@ on:
       - development
 
 env:
-  DOCKER_IMAGE_TAG: ${GITHUB_SHA::7}
+  DOCKER_IMAGE_TAG: $(git rev-parse --short "$GITHUB_SHA")
 
 jobs:
   build:
