@@ -75,6 +75,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Show ENV variable
+        run: echo "DOCKER_IMAGE_TAG = ${{ env.DOCKER_IMAGE_TAG }}
+
       - name: Deploy to K8s
         uses: Azure/k8s-deploy@v4
         with:
