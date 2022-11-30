@@ -17,6 +17,7 @@ spec:
         app: todo-backend
 
     spec:
+      hostNetwork: false
       imagePullSecrets:
         - name: github-container-registry
       containers:
