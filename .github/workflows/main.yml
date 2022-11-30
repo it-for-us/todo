@@ -56,7 +56,7 @@ jobs:
           context: backend/
           file: backend/Dockerfile
           push: true
-          tags: taneraruk/todo-backend:${{ DOCKER_IMAGE_TAG }}
+          tags: taneraruk/todo-backend:${{ env.DOCKER_IMAGE_TAG }}
 
   deploy:
     needs: [build]
@@ -80,4 +80,4 @@ jobs:
         with:
           namespace: tnr
           manifests: deployment.yml
-          images: taneraruk/todo-backend:${{ DOCKER_IMAGE_TAG }}
+          images: taneraruk/todo-backend:${{ env.DOCKER_IMAGE_TAG }}
