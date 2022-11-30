@@ -18,7 +18,7 @@ spec:
 
     spec:
       imagePullSecrets:
-        - name: regcred
+        - name: github-container-registry
       containers:
         - name: todo-backend
           image: taneraruk/todo-backend:$(DOCKER_IMAGE_TAG)
