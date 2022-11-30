@@ -19,7 +19,7 @@ spec:
     spec:
       hostNetwork: false
       imagePullSecrets:
-        - name: github-container-registry
+        - name: regcred
       containers:
         - name: todo-backend
           image: taneraruk/todo-backend:$(DOCKER_IMAGE_TAG)
