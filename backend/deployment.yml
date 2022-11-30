@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: todo-backend-deployment
+  namespace: tnr
+
+spec:
+  selector:
+    matchLabels:
+      app: todo-backend
+
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+
+    spec:
+      containers:
+        - name: todo-backend
+          image: taneraruk/todo-backend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+
+---
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: todo-backend-service
+  namespace: tnr
+
+spec:
+  selector:
+    app: todo-backend
+
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: networking.k8s.io/v1
+
+kind: Ingress
+
+metadata:
+  name: todo-backend-ingress
+  namespace: tnr
+
+spec:
+  rules:
+    - host: tnr-dart.fria.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: todo-backend-service
+                port:
+                  number: 80

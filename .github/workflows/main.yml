@@ -79,5 +79,5 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           namespace: tnr
-          manifests: deployment.yml
+          manifests: backend/deployment.yml
           images: taneraruk/todo-backend:${{ env.DOCKER_IMAGE_TAG }}
