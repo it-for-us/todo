@@ -56,7 +56,7 @@ jobs:
           context: backend/
           file: backend/Dockerfile
           push: true
-          tags: taneraruk/todo-backend:${{ env.DOCKER_IMAGE_TAG }}
+          tags: taneraruk/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Set Kubernetes Context
         uses: Azure/k8s-set-context@v3.0
@@ -66,6 +66,6 @@ jobs:
       - name: Deploy to K8s
         uses: Azure/k8s-deploy@v4
         with:
-          namespace: tnr
+          namespace: dart-dev
           manifests: backend/deployment.yml
-          images: taneraruk/todo-backend:${{ env.DOCKER_IMAGE_TAG }}
+          images: taneraruk/dart-backend:${{ env.DOCKER_IMAGE_TAG }}

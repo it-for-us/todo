@@ -3,26 +3,25 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: todo-backend-deployment
-  namespace: tnr
+  name: dart-backend-deployment
 
 spec:
   selector:
     matchLabels:
-      app: todo-backend
+      app: dart-backend
 
   template:
     metadata:
       labels:
-        app: todo-backend
+        app: dart-backend
 
     spec:
       hostNetwork: false
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: todo-backend
-          image: taneraruk/todo-backend:$(DOCKER_IMAGE_TAG)
+        - name: dart-backend
+          image: taneraruk/dart-backend:$(DOCKER_IMAGE_TAG)
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -34,12 +33,11 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: todo-backend-service
-  namespace: tnr
+  name: dart-backend-service
 
 spec:
   selector:
-    app: todo-backend
+    app: dart-backend
 
   ports:
     - protocol: TCP
@@ -53,8 +51,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 
 metadata:
-  name: todo-backend-ingress
-  namespace: tnr
+  name: dart-backend-ingress
 
 spec:
   rules:
@@ -65,6 +62,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: todo-backend-service
+                name: dart-backend-service
                 port:
                   number: 80
