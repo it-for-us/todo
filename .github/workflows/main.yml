@@ -68,7 +68,7 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-prod
-          manifests: backend/deployment.yml
+          manifests: backend/deployment-prod.yml
           images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Deploy development to K8s
@@ -76,5 +76,5 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-dev
-          manifests: backend/deployment.yml
+          manifests: backend/deployment-dev.yml
           images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}

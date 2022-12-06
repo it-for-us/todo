@@ -55,7 +55,7 @@ metadata:
 
 spec:
   rules:
-    - host: tnr-dart.fria.io
+    - host: dart-dev.fria.io
       http:
         paths:
           - path: /
