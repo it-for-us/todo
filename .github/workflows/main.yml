@@ -63,9 +63,18 @@ jobs:
         with:
           kubeconfig: ${{secrets.KUBE_CONFIG}}
 
-      - name: Deploy to K8s
+      - name: Deploy master to K8s
+        if: github.ref == 'refs/heads/main'
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: backend/deployment.yml
+          images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy development to K8s
+        if: github.ref == 'refs/heads/development'
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-dev
           manifests: backend/deployment.yml
-          images: taneraruk/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+          images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
