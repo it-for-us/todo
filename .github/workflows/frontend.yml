@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "development", "added-frontend-action-file" ]
+    branches: [ "development" ]
   pull_request:
     branches: [ "development" ]
 
