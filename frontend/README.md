@@ -1,1 +1,5 @@
-This is reserved for frontend project
+# HomeStart
+```
+npm i
+npm run start
+```
