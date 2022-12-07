@@ -14,7 +14,7 @@ import { useState } from "react";
 const theme = createTheme();
 
 export default function Login() {
-  const [userData, setUserData] = useState({
+  const [userData] = useState({
     email: "test@gmail.com",
     password: "1234",
   });

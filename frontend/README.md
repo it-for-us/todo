@@ -1,1 +1,5 @@
-This is reserved for frontend project
+# How Start
+```
+npm i
+npm run start
+```
