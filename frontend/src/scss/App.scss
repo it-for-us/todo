@@ -1,0 +1,10 @@
+@import "./Variables.scss";
+@import "./Footer.scss";
+@import "./Login.scss";
+@import "./Register.scss";
+@import "./Footer.scss";
+@import "./mediaQueries.scss";
+
+body {
+  background-image: $backgroundColor;
+}
