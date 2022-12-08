@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { AiOutlineMenu } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+// import { Link, useNavigate } from "react-router-dom";
 
 export default function NavMobile({ setIsLogin, isLogin, setLoading }) {
   const [toggle, setToggle] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const handleToggle = () => {
     setToggle(!toggle);
   };
@@ -12,31 +13,40 @@ export default function NavMobile({ setIsLogin, isLogin, setLoading }) {
   return (
     <>
       <div className="nav-mobile">
-        <div onClick={() => navigate("/")} className="logo">
+        <div
+          // onClick={() => navigate("/")}
+          className="logo"
+        >
           {/* <img src="trello.png" alt="logo" /> */}
           <h4>IT4US</h4>
           <h2>TODO</h2>
         </div>
 
         {!toggle ? (
-          <AiOutlineMenu
+          <MenuIcon
             style={{ color: "white" }}
             onClick={handleToggle}
-            className="nav_menü"
+            className="nav-burger-menü"
           />
         ) : (
-          <i
+          <MenuOpenIcon
             style={{ color: "white" }}
             onClick={handleToggle}
-            class="las la-times nav-menü"
-          ></i>
+            className="nav-burger-menü"
+          />
         )}
       </div>
       {toggle ? (
         <div className="nav-toggle-items">
           <ul>
-            <Link to={"/about"}>About</Link>
-            <Link to={"/contact"}>Contact</Link>
+            {/* <Link to={"/about"}>About</Link>
+            <Link to={"/contact"}>Contact</Link> */}
+            <a href="/about" rel="noreferrer">
+              About
+            </a>
+            <a href="/contact" rel="noreferrer">
+              Contact
+            </a>
           </ul>
         </div>
       ) : null}
