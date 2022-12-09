@@ -6,24 +6,16 @@ import {
   MDBNavbarToggler,
   MDBIcon,
   MDBNavbarNav,
-  MDBNavbarItem,
-  MDBNavbarLink,
-  MDBBtn,
-  MDBDropdown,
-  MDBDropdownToggle,
-  MDBDropdownMenu,
-  MDBDropdownItem,
   MDBCollapse,
 } from "mdb-react-ui-kit";
 
 export default function Header() {
   const [showNavbar, setShowNavbar] = useState(false);
-  const [showUserName, setShowUserName] = useState(false);
+  // const [showUserName, setShowUserName] = useState(false);
+
+  // It's for only for testing. After Register&Login completed,Username came from 'prop'
   const Username = "UserName";
-  {
-    /* It's for only for testing. After Register&Login completed, 
-    Username came from 'prop' */
-  }
+
   return (
     <MDBNavbar
       expand="lg"

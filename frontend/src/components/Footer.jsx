@@ -10,7 +10,6 @@ const Footer = () => {
   return (
     <MDBFooter
       bgColor="light"
-      fixed="bottom"
       className="fixed-bottom text-center text-lg-start text-muted"
     >
       {/*Footer bg color changable from here*/}
