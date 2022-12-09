@@ -13,10 +13,11 @@ import { useNavigate } from "react-router-dom";
 const theme = createTheme();
 
 export default function Login() {
-   const [userData, setUserData] = useState({
+    const [userData, setUserData] = useState({
      email: "test@gmail.com",
      password: "1234",
-   });
+   }); 
+   setUserData()
   const [errorMesage, setErrorMesage] = useState()
   const navigate = useNavigate();
   const [inputData, setInputData] = useState({});
