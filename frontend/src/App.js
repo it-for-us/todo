@@ -1,10 +1,13 @@
+import Login from "./pages/Login";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 import "./scss/App.scss";
-import Login from "./pages/Login.jsx";
-
 function App() {
   return (
     <div className="App">
+      <Header />
       <Login />
+      <Footer />
     </div>
   );
 }
