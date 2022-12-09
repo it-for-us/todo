@@ -14,19 +14,19 @@ import { useState } from "react";
 const theme = createTheme();
 
 export default function Login() {
-  const [userData] = useState({
-    email: "test@gmail.com",
-    password: "1234",
-  });
+  // const [userData, setUserData] = useState({
+  //   email: "test@gmail.com",
+  //   password: "1234",
+  // });
   //const navigate = useNavigate();
   const [inputData, setInputData] = useState({});
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-        setInputData({ email: data.get("email"), password: data.get("password") });
-        };
-console.log("inputData",inputData);
-console.log("userData",userData);
+    setInputData({ email: data.get("email"), password: data.get("password") });
+  };
+  console.log("inputData", inputData);
+  // console.log("userData", userData);
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -69,10 +69,10 @@ console.log("userData",userData);
               autoComplete="current-password"
             />
             <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
 
             <Button
               type="submit"
@@ -80,8 +80,8 @@ console.log("userData",userData);
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-             Login
-            </Button> 
+              Login
+            </Button>
           </Box>
         </Box>
       </Container>
