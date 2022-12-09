@@ -1,4 +1,4 @@
-import Login from "./components/Login.js";
+import Login from "./pages/Login";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 function App() {
