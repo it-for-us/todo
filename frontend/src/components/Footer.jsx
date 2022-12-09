@@ -8,7 +8,10 @@ import {
 } from "mdb-react-ui-kit";
 const Footer = () => {
   return (
-    <MDBFooter bgColor="light" className="text-center text-lg-start text-muted">
+    <MDBFooter
+      bgColor="light"
+      className="fixed-bottom text-center text-lg-start text-muted"
+    >
       {/*Footer bg color changable from here*/}
       <div
         className="text-center p-4"
