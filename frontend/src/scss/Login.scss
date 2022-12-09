@@ -1,2 +1,16 @@
-
+.main{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        img{
+                width: 67%;
+                height: 70vh;
+                border-radius: 20px;
+                padding: 2vh 4%;
+                overflow: hidden;
+        }
+        .login{
+                width: 33%;
+        }
+}
 
