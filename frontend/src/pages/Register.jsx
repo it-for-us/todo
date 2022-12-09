@@ -7,11 +7,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-// import NavPages from "../components/NavPages";
 import { useForm } from "react-hook-form";
-import UsernameGenerator from "username-generator";
 
 const theme = createTheme();
 
@@ -29,7 +27,7 @@ export default function Register() {
   const [errorUserName, setErrorUserName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPasswordConfirm, setErrorPasswordConfirm] = useState("");
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -37,8 +35,6 @@ export default function Register() {
     formState: { errors },
   } = useForm();
   const onSubmit = (inputRegister) => {
-    const randomUserName = UsernameGenerator.generateUsername("_", 6);
-    console.log(randomUserName);
     console.log(inputRegister);
 
     if (userData[0].userName === inputRegister.userName) {
@@ -47,26 +43,6 @@ export default function Register() {
           This name already exist.Please try another name.
         </p>
       );
-    } else if (inputRegister.userName === "") {
-      inputRegister.userName = randomUserName;
-      setErrorUserName("");
-      if (inputRegister.password !== inputRegister.passwordConfirm) {
-        setErrorPasswordConfirm(
-          <p style={{ color: "red" }}>Password not matched</p>
-        );
-      } else if (userData[0].email === inputRegister.email) {
-        setErrorEmail(
-          <p style={{ color: "red" }}>
-            This email already exist.Please {<Link to={"/"}>login</Link>} try
-            another name.
-          </p>
-        );
-      } else {
-        setUserData([inputRegister]);
-        // setTimeout(() => {
-        //     navigate("/");
-        // }, 300);
-      }
     } else {
       if (inputRegister.password !== inputRegister.passwordConfirm) {
         setErrorPasswordConfirm(<p>Password not matched</p>);
@@ -80,9 +56,9 @@ export default function Register() {
         );
       } else {
         setUserData([inputRegister]);
-        // setTimeout(() => {
-        //     navigate("/");
-        // }, 300);
+        setTimeout(() => {
+          navigate("/");
+        }, 300);
       }
     }
   };
@@ -99,6 +75,7 @@ export default function Register() {
               marginTop: 3,
               display: "flex",
               flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Typography sx={{ color: "white" }} component="h1" variant="h5">
@@ -107,7 +84,7 @@ export default function Register() {
 
             <Grid item sx={{ m: 1, color: "white" }}>
               Already Registered?
-              {/* <Link
+              <Link
                 style={{
                   textDecoration: "none",
                   color: "white",
@@ -117,7 +94,7 @@ export default function Register() {
                 variant="body2"
               >
                 Login
-              </Link> */}
+              </Link>
             </Grid>
 
             <Box
@@ -130,7 +107,6 @@ export default function Register() {
                 <Grid item xs={12}>
                   {errors.userName && (
                     <p style={{ color: "red" }}>
-                      {" "}
                       Please enter a valid username{" "}
                     </p>
                   )}
