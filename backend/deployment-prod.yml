@@ -21,7 +21,6 @@ spec:
         - name: regcred
       containers:
         - name: dart-backend
-          image: ghcr.io/it-for-us/dart-backend:$(DOCKER_IMAGE_TAG)
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
