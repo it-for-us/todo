@@ -114,7 +114,6 @@ export default function Register() {
                   <TextField
                     autoComplete="given-name"
                     name="userName"
-                    required
                     fullWidth
                     id="username"
                     label="USERNAME"
@@ -122,11 +121,11 @@ export default function Register() {
                     color="warning"
                     {...register("userName", {
                       required: false,
-                      minLength: 4,
-                      maxLength: 15,
-                      pattern: {
-                        value: /^(?=)(?=).{4,15}$/,
-                      },
+                      // minLength: 4,
+                      // maxLength: 15,
+                      // pattern: {
+                      //   value: /^(?=)(?=).{4,15}$/,
+                      // },
                     })}
                   />
                 </Grid>
@@ -173,7 +172,8 @@ export default function Register() {
                     {...register("password", {
                       required: true,
                       pattern: {
-                        value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                        // value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                        value: /^()()().{8,15}$/,
                       },
                     })}
                   />
