@@ -1,0 +1,76 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  buildAndDeploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Maven Action
+        uses: stCarolas/setup-maven@v4.5
+        with:
+            maven-version: 3.8.6
+
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots package
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3.1.1
+        with:
+          context: backend/
+          file: backend/Dockerfile
+          push: true
+          tags: taneraruk/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Set Kubernetes Context
+        uses: Azure/k8s-set-context@v3.0
+        with:
+          kubeconfig: ${{secrets.KUBE_CONFIG}}
+
+      - name: Deploy master to K8s
+        if: github.ref == 'refs/heads/main'
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: backend/deployment-prod.yml
+          images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy development to K8s
+        if: github.ref == 'refs/heads/development'
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: backend/deployment-dev.yml
+          images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
