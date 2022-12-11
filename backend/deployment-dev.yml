@@ -50,6 +50,19 @@ spec:
           persistentVolumeClaim:
             claimName: dart-postgres
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dart-postgres
+spec:
+  selector:
+    app: dart-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
