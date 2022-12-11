@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dart-backend-deployment
+  name: dart-backend
 spec:
   selector:
     matchLabels:
@@ -13,7 +13,7 @@ spec:
     spec:
       hostNetwork: false
       imagePullSecrets:
-        - name: regcred
+        - name: ghcr-credentials
       containers:
         - name: dart-backend
           image: ghcr.io/it-for-us/dart-backend:latest
@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dart-backend-service
+  name: dart-backend
 spec:
   selector:
     app: dart-backend
@@ -36,7 +36,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dart-backend-ingress
+  name: dart-backend
 spec:
   rules:
     - host: dart-prod.fria.io
@@ -46,6 +46,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: dart-backend-service
+                name: dart-backend
                 port:
                   number: 80
