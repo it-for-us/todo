@@ -57,7 +57,7 @@ jobs:
         with:
           kubeconfig: ${{secrets.KUBE_CONFIG}}
 
-      - name: Deploy master to K8s
+      - name: Deploy main to K8s
         if: github.ref == 'refs/heads/main'
         uses: Azure/k8s-deploy@v4
         with:
