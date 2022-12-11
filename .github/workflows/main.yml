@@ -8,7 +8,7 @@ on:
       - pipeline-test
 
 jobs:
-  buildAndDeploy:
+  cd:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -63,7 +63,7 @@ jobs:
         with:
           namespace: dart-prod
           manifests: backend/deployment-prod.yml
-          images: ghcr.io/it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Deploy development to K8s
         if: github.ref == 'refs/heads/pipeline-test'
@@ -71,4 +71,4 @@ jobs:
         with:
           namespace: dart-dev
           manifests: backend/deployment-dev.yml
-          images: ghcr.io/it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
