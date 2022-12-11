@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,9 +11,13 @@ import { useForm } from "react-hook-form";
 
 const theme = createTheme();
 
-export default function ForgotPassword({ userData }) {
+export default function ForgotPassword() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const userData = {
+    userName: "test",
+    email: "test@gmail.com",
+  };
 
   const {
     register,
@@ -23,7 +26,7 @@ export default function ForgotPassword({ userData }) {
   } = useForm();
 
   const onSubmit = (inputEmail) => {
-    const userEmail = userData[0].email;
+    const userEmail = userData.email;
     const email = inputEmail.email;
     console.log(email);
     console.log(userEmail);
@@ -39,10 +42,9 @@ export default function ForgotPassword({ userData }) {
   };
   return (
     <div className="forgot_password">
-      <NavPages />
+      {/* <NavPages /> */}
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
-          <CssBaseline />
           <Box
             sx={{
               display: "flex",
@@ -60,7 +62,6 @@ export default function ForgotPassword({ userData }) {
             </Typography>
             <Box
               component="form"
-              // onSubmit={handleSubmit}
               onSubmit={handleSubmit(onSubmit)}
               noValidate
               // sx={{
@@ -69,7 +70,11 @@ export default function ForgotPassword({ userData }) {
               //   padding: '10px',
               // }}
             >
-              {errors.email && <p>Please enter a valid email address</p>}
+              {errors.email && (
+                <p style={{ color: "red" }}>
+                  Please enter a valid email address
+                </p>
+              )}
               {errorMessage}
               <TextField
                 required
