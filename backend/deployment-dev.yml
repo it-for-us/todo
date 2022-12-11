@@ -86,15 +86,15 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: kubernetes
-            - name: DB_USERNAME
+            - name: POSTGRES_USERNAME
               valueFrom:
                 secretKeyRef:
-                  key: DB_USERNAME
+                  key: POSTGRES_USERNAME
                   name: postgres-secret
-            - name: DB_PASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: DB_PASSWORD
+                  key: POSTGRES_PASSWORD
                   name: postgres-secret
           ports:
             - containerPort: 8080
