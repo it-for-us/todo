@@ -40,8 +40,9 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add DOCKER_IMAGE_TAG env property with commit short sha
         run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
@@ -52,7 +53,7 @@ jobs:
           context: backend/
           file: backend/Dockerfile
           push: true
-          tags: taneraruk/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+          tags: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Set Kubernetes Context
         uses: Azure/k8s-set-context@v3.0
@@ -65,7 +66,7 @@ jobs:
         with:
           namespace: dart-prod
           manifests: backend/deployment-prod.yml
-          images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+          images: ghcr.io/it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Deploy development to K8s
         if: github.ref == 'refs/heads/development'
@@ -73,4 +74,4 @@ jobs:
         with:
           namespace: dart-dev
           manifests: backend/deployment-dev.yml
-          images: it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+          images: ghcr.io/it-4-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
