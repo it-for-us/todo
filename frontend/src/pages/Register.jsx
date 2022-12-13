@@ -45,7 +45,11 @@ export default function Register() {
       );
     } else {
       if (inputRegister.password !== inputRegister.passwordConfirm) {
-        setErrorPasswordConfirm(<p>Password not matched</p>);
+        setErrorPasswordConfirm(
+          <p style={{ color: "red", textAlign: "center" }}>
+            Password not matched
+          </p>
+        );
       } else if (userData[0].email === inputRegister.email) {
         setErrorEmail(
           <p style={{ color: "red" }}>
