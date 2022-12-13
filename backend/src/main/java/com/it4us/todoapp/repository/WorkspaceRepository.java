@@ -9,4 +9,5 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
 
     Optional<Workspace> findByName(String name);
 
+
 }

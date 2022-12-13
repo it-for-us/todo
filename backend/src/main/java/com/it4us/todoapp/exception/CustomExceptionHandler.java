@@ -1,15 +1,9 @@
 package com.it4us.todoapp.exception;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
@@ -32,22 +26,25 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(IncorrectWorkspaceNameException.class)
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> badRequest(BadRequestException badRequestException){
+        ErrorResponse errorResponse = new ErrorResponse(badRequestException.getMessage(), 400);
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> notFound(NotFoundException notFoundException){
+        ErrorResponse errorResponse = new ErrorResponse(notFoundException.getMessage(), 404);
+        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+    }
+
+    /*@ExceptionHandler(IncorrectWorkspaceNameException.class)
     public ResponseEntity<?> incorrectWorkspaceName(IncorrectWorkspaceNameException incorrectWorkspaceNameException){
         ErrorResponse errorResponse = new ErrorResponse("workspace name is in incorrect format", 400);
         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> incorrectWorkspaceName(MethodArgumentNotValidException ex){
-        List<String> details = new ArrayList<>();
-
-        for(ObjectError error : ex.getBindingResult().getAllErrors()) {
-            details.add(error.getDefaultMessage());
-        }
-        String message = String.join(",", details);
-        ErrorResponse errorResponse = new ErrorResponse("workspace name is in incorrect format \n"+message, 400);
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
-    }
+*/
 
 }
+
+

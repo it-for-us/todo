@@ -7,5 +7,6 @@ public interface WorkspaceService {
 
     WorkspaceViewDto creat (WorkspaceCreateDto workspaceCreateDto);
     Boolean isWorkspaceExist(String workspaceName);
+    void deleteWorkspaceById(Long id);
 
 }
