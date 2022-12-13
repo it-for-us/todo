@@ -1,0 +1,68 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: ./mvnw --batch-mode --update-snapshots package
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3.1.1
+        with:
+          context: backend/
+          file: backend/Dockerfile
+          push: true
+          tags: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Set Kubernetes Context
+        uses: Azure/k8s-set-context@v3.0
+        with:
+          kubeconfig: ${{secrets.KUBE_CONFIG}}
+
+      - name: Deploy main to K8s
+        if: github.ref == 'refs/heads/main'
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: backend/deployment-prod.yml
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy development to K8s
+        if: github.ref == 'refs/heads/development'
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: backend/deployment-dev.yml
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}

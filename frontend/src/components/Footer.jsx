@@ -1,106 +1,125 @@
-import React from "react";
-import {
-  MDBFooter,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBIcon,
-} from "mdb-react-ui-kit";
-const Footer = () => {
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Icon from "@mui/material/Icon";
+import { Link } from "@mui/material";
+import Grid from "@mui/material/Grid";
+export default function FooterNew() {
   return (
-    <MDBFooter
-      bgColor="light"
-      className="fixed-bottom text-center text-lg-start text-muted"
+    <Box
+      sx={{
+        position: "fixed",
+        left: 0,
+        right: 0,
+        bottom: 0,
+      }}
+      component="footer"
+      className="footer"
     >
-      {/*Footer bg color changable from here*/}
-      <div
-        className="text-center p-4"
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-      >
-        <section className="">
-          <MDBContainer className="text-center text-md-start mt-5">
-            <MDBRow className="mt-3">
-              <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
-                {/*This place can be replaced with a logo*/}
-                <a
-                  href="https://www.it4us.org/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mb-4"
-                >
-                  IT4US-ToDo
-                </a>
-              </MDBCol>
-
-              <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
-                <a href="/" className=" fw-bold mb-4">
-                  HOME
-                </a>
-              </MDBCol>
-
-              <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
-                {/*After Privacy Policy page created, we can change here (if needed)*/}
-                <a href="/privacy_policy" className=" fw-bold mb-4">
-                  PRIVACY POLICY
-                </a>
-              </MDBCol>
-              <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
-                {/*After Contact page created, we can change here (if needed)*/}
-                <a href="/contact" className=" fw-bold mb-4">
-                  CONTACT
-                </a>
-              </MDBCol>
-            </MDBRow>
-          </MDBContainer>
-        </section>
-        <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-          <div className="me-5 d-none d-lg-block">
-            <span>Get connected with us on social media:</span>
-          </div>
-          {/*Social media links will be added (if we have)*/}
-          <div>
-            <a
-              href="https://twitter.com/"
+      <Grid container spacing={2}>
+        <Grid
+          item
+          xs={6}
+          md={4}
+          sx={{
+            position: "fixed",
+            left: 0,
+            bottom: 0,
+          }}
+          color="white"
+        >
+          <Typography variant="subtitle2" fontSize="large">
+            Copyright &copy;
+            <Link
+              variant="subtitle2"
+              href="https://www.it4us.org/"
               target="_blank"
-              rel="noreferrer"
-              className="me-4 text-reset"
+              underline="hover"
+              color="inherit"
             >
-              <MDBIcon fab icon="twitter" />
-            </a>
-
-            <a
-              href="https://linkedin.com/"
+              IT4US
+            </Link>{" "}
+            2022
+          </Typography>
+          <Typography variant="subtitle2" fontSize="large">
+            {/* Privacy Policy Link will be added */}
+            <Link
+              underline="hover"
+              color="inherit"
+              fontSize="large"
+              href="#privacy-policy"
               target="_blank"
-              rel="noreferrer"
-              className="me-4 text-reset"
             >
-              <MDBIcon fab icon="linkedin" />
-            </a>
-            <a
-              href="https://github.com/it-for-us"
-              target="_blank"
-              rel="noreferrer"
-              className="me-4 text-reset"
+              Privacy Policy
+            </Link>
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={5}
+          md={8}
+          sx={{
+            position: "fixed",
+            right: 0,
+            bottom: 0,
+          }}
+          color="white"
+        >
+          <Grid>
+            <Typography
+              sx={{ display: { xs: "none", md: "block" } }}
+              variant="subtitle1"
             >
-              <MDBIcon fab icon="github" />
-            </a>
-          </div>
-        </section>
-        <p>
-          © 2022 Copyright:
-          <a
-            className="text-reset fw-bold"
-            href="https://www.it4us.org/"
-            target="_blank"
-            rel="noreferrer"
+              Get connected with us on social media{" "}
+            </Typography>
+          </Grid>
+          <Grid
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
           >
-            {" "}
-            IT4US
-          </a>
-        </p>
-      </div>
-    </MDBFooter>
+            <Link
+              underline="hover"
+              color="inherit"
+              href="https://github.com/it-for-us/todo"
+              target="_blank"
+            >
+              <Icon
+                fontSize="large"
+                baseClassName="fas"
+                className="fa-brands fa-github"
+              />
+            </Link>
+            <Link
+              underline="hover"
+              color="inherit"
+              href="https://facebook.com"
+              target="_blank"
+            >
+              <Icon
+                fontSize="large"
+                baseClassName="fas"
+                color="inherit"
+                className="fa-brands fa-facebook"
+              />
+            </Link>
+            <Link
+              underline="hover"
+              color="inherit"
+              href="https://twitter.com"
+              target="_blank"
+            >
+              <Icon
+                fontSize="large"
+                baseClassName="fas"
+                color="inherit"
+                className="fa-brands fa-twitter"
+              />
+            </Link>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Box>
   );
-};
-
-export default Footer;
+}
