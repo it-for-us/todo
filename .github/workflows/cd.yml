@@ -22,9 +22,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Change wrapper permissions
-        run: chmod +x ./mvnw
-
       - name: Build with Maven
         run: ./mvnw --batch-mode --update-snapshots package
 
