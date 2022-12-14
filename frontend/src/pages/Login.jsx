@@ -13,11 +13,11 @@ import { useNavigate } from "react-router-dom";
 const theme = createTheme();
 
 export default function Login() {
-  const [userData, setUserData] = useState({
+
+  const userData = {
     email: "test@gmail.com",
     password: "1234",
-  });
-  // setUserData();
+  };
   const [errorMesage, setErrorMesage] = useState();
   const navigate = useNavigate();
   const [inputData, setInputData] = useState({});
@@ -41,7 +41,7 @@ export default function Login() {
     } else if (userData.password !== inputData.password) {
       setErrorMesage(
         <p style={{ color: "red" }}>
-          Your password false! , Please click Forgot Password.
+          Your password false! Please try again or click Forgot Password.
         </p>
       );
     }
@@ -62,6 +62,7 @@ export default function Login() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                color: "white",
               }}
             >
               <Typography component="h1" variant="h5">
@@ -101,9 +102,12 @@ export default function Login() {
                 >
                   <Link
                     to={"/forgotpassword"}
-                    style={{ color: "white", textDecoration: "none" }}
+                    style={{
+                      color: "white",
+                      textDecoration: "none",
+                      cursor: "pointer",
+                    }}
                   >
-                    {" "}
                     Forgot Password?
                   </Link>
                 </Typography>

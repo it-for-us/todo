@@ -45,7 +45,11 @@ export default function Register() {
       );
     } else {
       if (inputRegister.password !== inputRegister.passwordConfirm) {
-        setErrorPasswordConfirm(<p>Password not matched</p>);
+        setErrorPasswordConfirm(
+          <p style={{ color: "red", textAlign: "center" }}>
+            Password not matched
+          </p>
+        );
       } else if (userData[0].email === inputRegister.email) {
         setErrorEmail(
           <p style={{ color: "red" }}>
@@ -114,7 +118,6 @@ export default function Register() {
                   <TextField
                     autoComplete="given-name"
                     name="userName"
-                    required
                     fullWidth
                     id="username"
                     label="USERNAME"
@@ -122,11 +125,11 @@ export default function Register() {
                     color="warning"
                     {...register("userName", {
                       required: false,
-                      minLength: 4,
-                      maxLength: 15,
-                      pattern: {
-                        value: /^(?=)(?=).{4,15}$/,
-                      },
+                      // minLength: 4,
+                      // maxLength: 15,
+                      // pattern: {
+                      //   value: /^(?=)(?=).{4,15}$/,
+                      // },
                     })}
                   />
                 </Grid>
@@ -173,7 +176,8 @@ export default function Register() {
                     {...register("password", {
                       required: true,
                       pattern: {
-                        value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                        // value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                        value: /^()()().{8,15}$/,
                       },
                     })}
                   />
