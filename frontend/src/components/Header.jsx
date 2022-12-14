@@ -1,71 +1,89 @@
 import React, { useState } from "react";
-import {
-  MDBContainer,
-  MDBNavbar,
-  MDBNavbarBrand,
-  MDBNavbarToggler,
-  MDBIcon,
-  MDBNavbarNav,
-  MDBCollapse,
-} from "mdb-react-ui-kit";
-
+import { autocompleteClasses, Link, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Logo from "../DartLogo.png";
+import { Collapse } from "@mui/material";
 export default function Header() {
-  const [showNavbar, setShowNavbar] = useState(false);
-  // const [showUserName, setShowUserName] = useState(false);
-
-  // It's for only for testing. After Register&Login completed,Username came from 'prop'
-  const Username = "UserName";
-
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+    setOpen(!open);
+  };
   return (
-    <MDBNavbar
-      expand="lg"
-      bgColor="light"
-      className="text-center text-lg-start text-muted "
-    >
-      <MDBContainer fluid>
-        <MDBNavbarBrand className="" href="/">
-          {/* Logo will be here */}
-          <img src="/" height="30" alt="LOGO" loading="lazy" />
-        </MDBNavbarBrand>
-        {/* Navbar start from here */}
-        <MDBNavbarToggler
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-          onClick={() => setShowNavbar(!showNavbar)}
-        >
-          <MDBIcon icon="bars" fas />
-        </MDBNavbarToggler>
-        {/* This line for navbar. You can see an example as below; */}
+    <Box className="header" component="header">
+      <Box
+        expanded
+        sx={{
+          display: { xs: "flex", lg: "none" },
+          ml: "auto",
+          alignContent: "center",
+          flexWrap: "wrap",
+          flexDirection: "column",
+        }}
+        onClick={handleClick}
+      >
+        <img src={Logo} height="50" alt="LOGO" loading="lazy" />
+        <Collapse in={open}>
+          <Box>
+            <Link href="/#" variant="subtitle2" underline="none" color="white">
+              Home
+            </Link>
+          </Box>
+          <Box>
+            <Link
+              href="/about"
+              variant="subtitle2"
+              underline="none"
+              color="white"
+            >
+              About
+            </Link>
+          </Box>
+          <Box>
+            <Link
+              href="/contact"
+              variant="subtitle2"
+              underline="none"
+              color="white"
+            >
+              Contact
+            </Link>
+          </Box>
+        </Collapse>
+      </Box>
+      <Box
+        className="logo"
+        href="/"
+        sx={{ display: { xs: "none", lg: "block" } }}
+      >
+        {/* Logo will be here */}
 
-        <MDBCollapse navbar show={showNavbar}>
-          <MDBNavbarNav className="mr-auto mb-2 mb-lg-0">
-            {/* <MDBNavbarItem>
-              <MDBNavbarLink
-                active
-                aria-current="page"
-                href="#"
-                className="fw-bold mb-4"
-              >
-                HOME
-              </MDBNavbarLink>
-            </MDBNavbarItem>
-            <MDBNavbarItem>
-              <MDBNavbarLink
-                active
-                aria-current="page"
-                href="#"
-                className="fw-bold mb-4"
-              >
-                ABOUT
-              </MDBNavbarLink>
-            </MDBNavbarItem> */}
-          </MDBNavbarNav>
-          <p className="fw-bold" href="#">
-            {Username}
-          </p>
-        </MDBCollapse>
-      </MDBContainer>
-    </MDBNavbar>
+        <Link href="/">
+          <img src={Logo} height="50" alt="LOGO" loading="lazy" />
+        </Link>
+
+        <Link
+          href="/about"
+          sx={{ position: "absolute", right: 100 }}
+          variant="subtitle2"
+          underline="none"
+          color="white"
+          fontSize="large"
+        >
+          About
+        </Link>
+        <Link
+          sx={{ position: "fixed", right: 10 }}
+          href="/contact"
+          variant="subtitle2"
+          underline="none"
+          color="white"
+          fontSize="large"
+        >
+          Contact
+        </Link>
+      </Box>
+
+      {/* Navbar start from here */}
+    </Box>
   );
 }

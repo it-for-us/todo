@@ -17,7 +17,7 @@ export default function Login() {
     email: "test@gmail.com",
     password: "1234",
   });
-  setUserData();
+  // setUserData();
   const [errorMesage, setErrorMesage] = useState();
   const navigate = useNavigate();
   const [inputData, setInputData] = useState({});

@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Icon from "@mui/material/Icon";
 import { Link } from "@mui/material";
 import Grid from "@mui/material/Grid";
-export default function FooterNew() {
+export default function Footer() {
   return (
     <Box
       sx={{
@@ -31,7 +31,6 @@ export default function FooterNew() {
           <Typography variant="subtitle2" fontSize="large">
             Copyright &copy;
             <Link
-              variant="subtitle2"
               href="https://www.it4us.org/"
               target="_blank"
               underline="hover"
@@ -46,7 +45,6 @@ export default function FooterNew() {
             <Link
               underline="hover"
               color="inherit"
-              fontSize="large"
               href="#privacy-policy"
               target="_blank"
             >
