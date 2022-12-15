@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import "./scss/App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
+import CreateNewPass from "./pages/CreateNewPass";
 function App() {
   return (
     <div className="App">
@@ -18,6 +19,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/createnewpass" element={<CreateNewPass />} />
           <Route />
         </Routes>
         <Footer />
