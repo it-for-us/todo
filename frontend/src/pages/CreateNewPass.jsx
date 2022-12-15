@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
-import NavPages from "../components/navbar/NavPages";
 import { useForm } from "react-hook-form";
 
 const theme = createTheme();
@@ -23,11 +22,10 @@ export default function CreateNewPass() {
   const location = useLocation();
   const userEmail = location.state.inputEmail;
   console.log(userEmail);
-
   console.log(userData);
 
-  const userInfo = userData.find((el) => el.email === userEmail.email);
-  console.log(userInfo);
+  // const userInfo = userData.find((el) => el.email === userEmail.email);
+  // console.log(userInfo);
   const {
     register,
     handleSubmit,
@@ -36,14 +34,16 @@ export default function CreateNewPass() {
   const onSubmit = (inputNewPassword) => {
     console.log(inputNewPassword);
     if (inputNewPassword.password !== inputNewPassword.passwordConfirm) {
-      setErrorPasswordConfirm(<p>Password not matched</p>);
+      setErrorPasswordConfirm(
+        <p style={{ color: "red" }}>Password not matched</p>
+      );
     } else {
       setErrorPasswordConfirm(
         <p style={{ color: "yellowgreen" }}>successful</p>
       );
-      userInfo.password = inputNewPassword.password;
-      userInfo.passwordConfirm = inputNewPassword.passwordConfirm;
-      setUserData([userInfo]);
+      userData.password = inputNewPassword.password;
+      userData.passwordConfirm = inputNewPassword.passwordConfirm;
+      setUserData(userData);
       setTimeout(() => {
         navigate("/");
       }, 1000);
@@ -51,7 +51,6 @@ export default function CreateNewPass() {
   };
   return (
     <div className="create-new-passs">
-      <NavPages />
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
           <Box
@@ -59,7 +58,9 @@ export default function CreateNewPass() {
               marginTop: 3,
               display: "flex",
               flexDirection: "column",
+              alignItems: "center",
               margin: "6vh 0",
+              textAlign: "center",
             }}
           >
             <Typography sx={{ color: "white" }} component="h3" variant="h5">
@@ -75,7 +76,11 @@ export default function CreateNewPass() {
             >
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  {errors.password && <p>Please enter a valid password</p>}
+                  {errors.password && (
+                    <p style={{ color: "red" }}>
+                      Please enter a valid password
+                    </p>
+                  )}
 
                   <TextField
                     required
@@ -98,7 +103,9 @@ export default function CreateNewPass() {
                 <Grid item xs={12}>
                   {errorPasswordConfirm}
                   {errors.passwordConfirm && (
-                    <p>Please enter a valid password</p>
+                    <p style={{ color: "red" }}>
+                      Please enter a valid password
+                    </p>
                   )}
                   <TextField
                     required
@@ -111,9 +118,10 @@ export default function CreateNewPass() {
                     color="warning"
                     {...register("passwordConfirm", {
                       required: true,
-                      //   pattern: {
-                      //     value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
-                      //   },
+                      pattern: {
+                        // value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                        value: /^()()().{8,15}$/,
+                      },
                     })}
                   />
                 </Grid>
