@@ -37,6 +37,23 @@ export default function Register() {
   const onSubmit = (inputRegister) => {
     console.log(inputRegister);
 
+    // fetch("http://dart-dev.fria.io/api/signup", {
+    //   method: "POST",
+    //   mode: "no-cors",
+    //   headers: {
+    //     "Content-Type": "'Content-Type': 'application/json' ",
+    //   },
+    //   body: {
+    //     userName: null,
+    //     email: "test9@email.com",
+    //     password: "123456798",
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     console.log(result);
+    //   });
+
     if (userData[0].userName === inputRegister.userName) {
       setErrorUserName(
         <p style={{ color: "red" }}>
