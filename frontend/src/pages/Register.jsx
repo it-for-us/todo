@@ -43,13 +43,16 @@ export default function Register() {
     //   headers: {
     //     "Content-Type": "'Content-Type': 'application/json' ",
     //   },
-    //   body: {
+    //   body: JSON.stringify({
     //     userName: null,
     //     email: "test9@email.com",
     //     password: "123456798",
-    //   },
+    //   }),
     // })
-    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     console.log(response);
+    //     return response.json();
+    //   })
     //   .then((result) => {
     //     console.log(result);
     //   });
