@@ -39,7 +39,7 @@ export default function CreateNewPass() {
       );
     } else {
       setErrorPasswordConfirm(
-        <p style={{ color: "yellowgreen" }}>successful</p>
+        <p style={{ color: "yellowgreen" }}>Password successfully changed</p>
       );
       userData.password = inputNewPassword.password;
       userData.passwordConfirm = inputNewPassword.passwordConfirm;
