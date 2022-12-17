@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "@mui/material";
 import Box from "@mui/material/Box";
-import Logo from "../DartLogo.png";
+import Logo from "../Logo.png";
 import { Collapse } from "@mui/material";
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -21,7 +21,7 @@ export default function Header() {
         }}
         onClick={handleClick}
       >
-        <img src={Logo} height="50" alt="LOGO" loading="lazy" />
+        <img src={Logo} height="75" alt="LOGO" loading="lazy" />
         <Collapse in={open}>
           <Box>
             <Link href="/#" variant="subtitle2" underline="none" color="white">
@@ -58,7 +58,7 @@ export default function Header() {
         {/* Logo will be here */}
 
         <Link href="/">
-          <img src={Logo} height="50" alt="LOGO" loading="lazy" />
+          <img src={Logo} height="75" alt="LOGO" loading="lazy" />
         </Link>
 
         <Link
