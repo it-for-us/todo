@@ -145,11 +145,11 @@ export default function Register() {
                     color="warning"
                     {...register("userName", {
                       required: false,
-                      // minLength: 4,
-                      // maxLength: 15,
-                      // pattern: {
-                      //   value: /^(?=)(?=).{4,15}$/,
-                      // },
+                      minLength: 4,
+                      maxLength: 15,
+                      pattern: {
+                        value: /^(?=)(?=).{4,15}$/,
+                      },
                     })}
                   />
                 </Grid>
