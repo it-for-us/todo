@@ -7,7 +7,6 @@ import InputBase from "@mui/material/InputBase";
 import { useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
-import { redirect } from "react-router-dom";
 export default function Home() {
   const errorMessage =
     "Workspace and Board names can contain letters (a-z), numbers(0-9), and an underline(_) and it can have 4-15 characters long. It can start only letter or number";
