@@ -1,0 +1,46 @@
+.work-space {
+  background-color: rgba(236, 222, 222, 0.637);
+  width: 90%;
+  height: 75vh;
+  margin: 1vh auto;
+  border-radius: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px;
+  .work-space-card {
+    width: 200px;
+    height: 200px;
+    /* border-radius: 20px; */
+    cursor: pointer;
+    transform: rotate(345deg);
+    box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.75);
+    h3 {
+      line-height: 170px;
+      color: #fff;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .work-space {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    .work-space-card {
+      width: 200px;
+      height: 150px;
+      cursor: pointer;
+      h3 {
+        line-height: 150px;
+        color: #fff;
+      }
+    }
+  }
+}
