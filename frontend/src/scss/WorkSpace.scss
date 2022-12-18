@@ -10,9 +10,11 @@
   align-items: flex-start;
   gap: 40px;
   padding: 40px;
+  position: relative;
   .work-space-card {
     width: 200px;
     height: 200px;
+    text-align: center;
     /* border-radius: 20px; */
     cursor: pointer;
     transform: rotate(345deg);
@@ -20,6 +22,12 @@
     h3 {
       line-height: 170px;
       color: #fff;
+    }
+    svg {
+      color: #000;
+      position: absolute;
+      left: 45%;
+      top: -5%;
     }
   }
 }
