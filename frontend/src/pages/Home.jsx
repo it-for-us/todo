@@ -1,20 +1,25 @@
 import React from "react";
 import { useState } from "react";
 import Card from "@mui/material/Card";
-import { color, Container } from "@mui/system";
-import {
-  Box,
-  CardContent,
-  Typography,
-  Button,
-  FormLabel,
-  FormGroup,
-} from "@mui/material";
+import { Container } from "@mui/system";
+import { Box, CardContent, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 import TextField from "@mui/material/TextField";
 import { useForm } from "react-hook-form";
+import Modal from "@mui/material/Modal";
+
 export default function Home() {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const errorMessage =
+    "Workspace and Board names can contain letters (a-z),numbers(0-9),and an underline(_) and it can have 4-15 characters long. It canstart only letter or number";
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const navigate = useNavigate();
   const [userSticykNote, setUserStickyNote] = useState([
     {
@@ -23,20 +28,7 @@ export default function Home() {
     },
   ]);
   console.log(userSticykNote);
-  const [errorWorkSpaceName, setErrorWorkSpaceName] = useState("");
-  const [errorBoardName, setErrorBoardName] = useState("");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (inputRegister) => {
-    console.log(inputRegister);
-    setUserStickyNote([inputRegister]);
-    setTimeout(() => {
-      navigate("/");
-    }, 300);
-  };
+  console.log(errors.workSpaceName?.message);
 
   return (
     <Container
@@ -45,6 +37,11 @@ export default function Home() {
         mt: 8,
       }}
     >
+      <div sx={{ right: "0", bottom: "0" }}>
+        {errors.workSpaceName?.message || errors.boardName?.message
+          ? errorMessage
+          : ""}
+      </div>
       <Typography
         component="h1"
         variant="h4"
@@ -78,13 +75,17 @@ export default function Home() {
               component="form"
               textAlign="center"
               noValidate
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit((data) => {
+                console.log(data);
+              })}
             >
-              {errors.workSpaceName && (
-                <p style={{ color: "red" }}>Please try a valid name </p>
-              )}
-              {errorWorkSpaceName}
               <TextField
+                sx={{
+                  bgcolor: "white",
+                  borderRadius: "16px",
+                  borderTopColor: "red",
+                  color: "white",
+                }}
                 margin="normal"
                 name="workSpaceName"
                 id="workspacename"
@@ -93,20 +94,12 @@ export default function Home() {
                 color="warning"
                 fullWidth
                 {...register("workSpaceName", {
-                  required: true,
-                  minLength: 4,
-                  maxLength: 15,
-                  pattern: {
-                    value: /^(?=)(?=).{4,15}$/,
-                  },
+                  required: "Please try a valid name",
+                  minLength: { value: 4, message: "true" },
                 })}
                 autoFocus
               />
-
-              {errors.workSpaceName && (
-                <p style={{ color: "red" }}>Please enter a valid name </p>
-              )}
-              {errorBoardName}
+              <p>{errors.boardName?.message ? "true" : "No error"}</p>
               <TextField
                 sx={{
                   bgcolor: "white",
@@ -118,16 +111,24 @@ export default function Home() {
                 margin="normal"
                 required
                 fullWidth
-                name="Board_name"
-                id="Board_name"
+                name="BoardName"
+                id="boardName"
                 {...register("boardName", {
-                  required: true,
-                  pattern: {
-                    value: /^()()().{8,15}$/,
+                  required: "Board name needs 4 character",
+                  minLength: {
+                    value: 4,
+                    message: "true",
                   },
                 })}
               />
               <Button
+                onClick={() => {
+                  if (
+                    errors.workSpaceName?.message ||
+                    errors.boardName?.message
+                  ) {
+                  }
+                }}
                 type="submit"
                 variant="contained"
                 sx={{ bgcolor: "#b498ce" }}
@@ -138,6 +139,42 @@ export default function Home() {
           </Container>
         </CardContent>
       </Card>
+
+      <div>
+        <Button
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          Open modal
+        </Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Workspace and Board names can contain letters (a-z),numbers(0-9),
+              and an underline(_) and it can have 4-15 characters long. It can
+              start only letter or number
+            </Typography>
+          </Box>
+        </Modal>
+      </div>
     </Container>
   );
 }
