@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import Card from "@mui/material/Card";
 import { Container } from "@mui/system";
 import { Box, CardContent, Typography, Button } from "@mui/material";
@@ -29,13 +28,6 @@ export default function Home() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [userSticykNote, setUserStickyNote] = useState([
-    {
-      workSpaceName: "testSpace",
-      boardName: "testBoard",
-    },
-  ]);
-  console.log(userSticykNote);
 
   return (
     <Container
