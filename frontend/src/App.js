@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
 import Home from "./pages/Home";
+import WorkSpace from "./components/WorkSpace";
 function App() {
   return (
     <div className="App">
@@ -22,6 +23,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/createnewpass" element={<CreateNewPass />} />
+          <Route path="/workspace" element={<WorkSpace />} />
           <Route />
         </Routes>
         <Footer />
