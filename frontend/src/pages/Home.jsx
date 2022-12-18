@@ -94,6 +94,7 @@ export default function Home() {
                   textAlign="center"
                   noValidate
                   onSubmit={handleSubmit((data) => {
+                    // Navigate will be linked to TO DO Home Page #2 (issue 83)
                     navigate("/");
                     console.log(data);
                   })}
