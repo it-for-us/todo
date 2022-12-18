@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { CgAttachment } from "react-icons/cg";
+// import { CgAttachment } from "react-icons/cg";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -20,7 +21,7 @@ const style = {
   borderRadius: "20px",
 };
 
-export default function WorkSpace({ workSpace, setWorkSpace }) {
+export default function WorkSpace() {
   const [workSpace, setWorkSpace] = useState([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -64,7 +65,7 @@ export default function WorkSpace({ workSpace, setWorkSpace }) {
 
   return (
     <>
-      <h2 style={{ color: "white" }}>Welcome TODO</h2>
+      <h2 style={{ color: "white", textAlign: "center" }}>Welcome TODO</h2>
       <div className="work-space">
         <Modal
           open={open}
@@ -163,21 +164,22 @@ export default function WorkSpace({ workSpace, setWorkSpace }) {
           </Box>
         </Modal>
 
-        {workSpace.map((el, i) => (
-          <div
-            onClick={() => navigate("/dashboard", { state: { el } })}
-            key={i}
-            style={{
-              background: i % 2 === 1 ? "#ebb328" : "green",
-              cursor: "pointer",
-            }}
-            // style={{ background: randomBackground() }}
-            className="work-space-card"
-          >
-            <CgAttachment style={{ fontSize: "1.5rem" }} />
-            <h3>{el.workSpaceName}</h3>
-          </div>
-        ))}
+        {workSpace &&
+          workSpace.map((el, i) => (
+            <div
+              onClick={() => navigate("/dashboard", { state: { el } })}
+              key={i}
+              style={{
+                background: i % 2 === 1 ? "#ebb328" : "green",
+                cursor: "pointer",
+              }}
+              // style={{ background: randomBackground() }}
+              className="work-space-card"
+            >
+              <AttachFileIcon style={{ fontSize: "1.5rem" }} />
+              <h3>{el.workSpaceName}</h3>
+            </div>
+          ))}
         <div
           onClick={createWorkSpace}
           style={{ background: "#5C17CF" }}
