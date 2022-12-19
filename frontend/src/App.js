@@ -8,6 +8,7 @@ import "./scss/App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
+import Home from "./pages/Home";
 import WorkSpace from "./components/WorkSpace";
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
