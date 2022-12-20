@@ -10,7 +10,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
 import Home from "./pages/Home";
 import WorkSpace from "./components/WorkSpace";
-import { UserContextProvider } from "./contexts/UserContext";
+import { UserContextProvider } from "./contexts/UserContext.jsx";
 function App() {
   return (
     <div className="App">
