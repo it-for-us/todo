@@ -99,6 +99,7 @@ export default function Register() {
               marginTop: 3,
               display: "flex",
               flexDirection: "column",
+              textAlign: "center",
               alignItems: "center",
             }}
           >
@@ -177,6 +178,27 @@ export default function Register() {
                     })}
                   />
                 </Grid>
+                {errors.userName && (
+                  <div className="error-username">
+                    <p>● Username can be 4-15 characters lang</p>
+                    <p>● Username can only start with a letter (a-z)</p>
+                    <p>● Username can contain numbers 0-9</p>
+                    <p>
+                      ● Username can only use the special character
+                      '_'(underline) and cannot use more than one
+                    </p>
+                  </div>
+                )}
+                {errors.password && (
+                  <div className="error-password">
+                    <p>Passwords must contain one of each </p>
+                    <p>● Uppercase letters: (A-Z)</p>
+                    <p>● Lowercase letters: (a-z)</p>
+                    <p>● Numbers: 0-9 </p>
+                    <p>● Symbols ~`!@#$%^&*()_-+= </p>
+                    <p>Passwords can be 8-15 characters long</p>
+                  </div>
+                )}
                 <Grid item xs={12}>
                   {errors.password && (
                     <p style={{ color: "red" }}>
