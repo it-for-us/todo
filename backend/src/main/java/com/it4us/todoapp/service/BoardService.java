@@ -8,6 +8,7 @@ public interface BoardService {
 
     BoardViewDto create (BoardCreateDto boardCreateDto);
     Boolean isBoardExist(String boardName, Long workspaceId);
+    void deleteBoard(Long id);
 
 
 

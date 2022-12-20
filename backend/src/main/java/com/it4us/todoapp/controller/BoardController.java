@@ -6,10 +6,7 @@ import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.service.BoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -30,5 +27,10 @@ public class BoardController {
     public ResponseEntity<BoardViewDto> createBoard (@Valid @RequestBody BoardCreateDto boardCreateDto){
         BoardViewDto boardViewDto = boardService.create(boardCreateDto);
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long id){
+        boardService.deleteBoard(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

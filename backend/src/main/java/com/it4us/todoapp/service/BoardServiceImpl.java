@@ -75,4 +75,10 @@ public class BoardServiceImpl implements BoardService {
         }
         return false;
     }
+
+    @Override
+    public void deleteBoard(Long id) {
+        Board board=boardRepository.findById(id).orElseThrow(()->new NotFoundException("board not found"));
+        boardRepository.delete(board);
+    }
 }
