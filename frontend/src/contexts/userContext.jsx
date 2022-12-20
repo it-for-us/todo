@@ -1,8 +1,8 @@
 import { createContext, useState } from "react";
 
-export const UserContext = createContext();
+const UserContext = createContext();
 
-export function UserContextProvider(props) {
+export const UserContextProvider = (props) => {
   const [userData, setUserData] = useState([
     {
       userName: "test",
@@ -18,4 +18,6 @@ export function UserContextProvider(props) {
       {props.children}
     </UserContext.Provider>
   );
-}
+};
+
+export default UserContext;
