@@ -10,23 +10,26 @@ import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
 import Home from "./pages/Home";
 import WorkSpace from "./components/WorkSpace";
+import { UserContextProvider } from "./contexts/UserContext";
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/createnewpass" element={<CreateNewPass />} />
-          <Route path="/workspace" element={<WorkSpace />} />
-          <Route />
-        </Routes>
-        <Footer />
+        <UserContextProvider>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/createnewpass" element={<CreateNewPass />} />
+            <Route path="/workspace" element={<WorkSpace />} />
+            <Route />
+          </Routes>
+          <Footer />
+        </UserContextProvider>
       </BrowserRouter>
     </div>
   );
