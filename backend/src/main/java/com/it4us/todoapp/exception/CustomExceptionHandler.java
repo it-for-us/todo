@@ -38,13 +38,6 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
     }
 
-    /*@ExceptionHandler(IncorrectWorkspaceNameException.class)
-    public ResponseEntity<?> incorrectWorkspaceName(IncorrectWorkspaceNameException incorrectWorkspaceNameException){
-        ErrorResponse errorResponse = new ErrorResponse("workspace name is in incorrect format", 400);
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
-    }
-*/
-
 }
 
 

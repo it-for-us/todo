@@ -1,9 +1,12 @@
 package com.it4us.todoapp.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,9 +26,9 @@ public class Workspace {
     @Column(name = "workspace_name")
     private String name;
 
-   /* @ManyToOne
-    private User user;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "workspace", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonManagedReference
+    private List<Board> boards;
 
-    @OneToMany
-    private List<Board> boards;*/
 }
