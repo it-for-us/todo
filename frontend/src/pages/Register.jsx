@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -10,18 +10,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import UserContext from "../contexts/UserContext";
 
 const theme = createTheme();
 
 export default function Register() {
-  const [userData, setUserData] = useState([
-    {
-      userName: "test",
-      email: "test@gmail.com",
-      password: "",
-      passwordConfirm: "",
-    },
-  ]);
+  const { userData, setUserData } = useContext(UserContext);
 
   console.log(userData);
   const [errorUserName, setErrorUserName] = useState("");
