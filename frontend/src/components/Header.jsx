@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "@mui/material";
 import Box from "@mui/material/Box";
-<<<<<<< Updated upstream
 import Logo from "../Logo.png";
-=======
-import Logo from "../Logo2.png";
->>>>>>> Stashed changes
 import { Collapse } from "@mui/material";
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -25,11 +21,8 @@ export default function Header() {
         }}
         onClick={handleClick}
       >
-<<<<<<< Updated upstream
         <img src={Logo} height="75" alt="LOGO" loading="lazy" />
-=======
-        <img src={Logo} height="100" alt="LOGO" loading="lazy" />
->>>>>>> Stashed changes
+
         <Collapse in={open}>
           <Box>
             <Link href="/#" variant="subtitle2" underline="none" color="white">
@@ -66,11 +59,7 @@ export default function Header() {
         {/* Logo will be here */}
 
         <Link href="/">
-<<<<<<< Updated upstream
-          <img src={Logo} height="75" alt="LOGO" loading="lazy" />
-=======
           <img src={Logo} height="100" alt="LOGO" loading="lazy" />
->>>>>>> Stashed changes
         </Link>
 
         <Link
