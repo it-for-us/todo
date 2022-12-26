@@ -1,5 +1,4 @@
 import Login from "./pages/Login";
-// import Register from "./pages/Register";
 import SignUp from "./modules/auth/SignUp";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
