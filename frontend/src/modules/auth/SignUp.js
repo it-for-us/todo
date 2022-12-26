@@ -59,10 +59,10 @@ export default function Register() {
         setErrorEmail(
           <p style={{ color: "red" }}>
             This email already exist.Please
-            {<Link to={"/login"}>login</Link>}
-            try another one.
+            {<Link to={"/login"}>login</Link>} or try another one.
           </p>
         );
+        setErrorUserName("");
       } else {
         setUserData([inputRegister]);
         setTimeout(() => {
