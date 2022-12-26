@@ -1,16 +1,53 @@
-.main{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        img{
-                width: 67%;
-                height: 70vh;
-                border-radius: 20px;
-                padding: 2vh 4%;
-                overflow: hidden;
-        }
-        .login{
-                width: 33%;
-        }
-}
+.login-page {
+  background-color: #f5f5f5;
+  height: 100vh;
+  padding-top: 100px;
+  form {
+    width: 400px;
+    margin: 0 auto;
+    background: #ffff;
+    padding: 35px 40px 25px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    font-family: "Roboto", sans-serif;
+    input {
+      font-size: 14px;
+      font-weight: 300;
+      color: #757575;
+      height: 40px;
+      width: 320px;
+      background: #fafbfc;
+      border: 2px solid #dfe1e6;
+      border-radius: 3px;
+    }
+    h2 {
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      color: #5e6c84;
+      margin-bottom: 2rem;
+    }
 
+    .signup-account {
+      border-top: solid 1px #8c8c8c;
+      padding-top: 20px;
+      font-weight: 300;
+      text-align: center;
+      color: #0052cc;
+      margin-top: 100px;
+    }
+    p {
+      text-align: center;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+  h3 {
+    font-weight: 300;
+    text-align: center;
+    color: #0052cc;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+}
