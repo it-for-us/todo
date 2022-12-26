@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
+import axios from "axios";
 
 export default function Register() {
   const [errorUserName, setErrorUserName] = useState("");
@@ -22,25 +23,23 @@ export default function Register() {
   const onSubmit = (inputRegister) => {
     console.log(inputRegister);
 
-    // fetch("http://dart-dev.fria.io/api/signup", {
-    //   method: "POST",
-    //   mode: "no-cors",
-    //   headers: {
-    //     "Content-Type": "'Content-Type': 'application/json' ",
-    //   },
-    //   body: JSON.stringify({
-    //     userName: null,
-    //     email: "test9@email.com",
-    //     password: "123456798",
-    //   }),
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     return response.json();
-    //   })
-    //   .then((result) => {
-    //     console.log(result);
-    //   });
+    axios
+      .post(`https://lb4-service.onrender.com/users/signup`, {
+        // mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        username: "test",
+        email: "test9@email.com",
+        password: "123456798",
+        role: "test",
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .then((err) => {
+        console.log(err);
+      });
 
     if (userData[0].userName === inputRegister.userName) {
       setErrorUserName(
