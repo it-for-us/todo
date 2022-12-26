@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
-// import axios from "axios";
+import axios from "axios";
 
 export default function Register() {
   const [errorUserName, setErrorUserName] = useState("");
@@ -12,7 +12,7 @@ export default function Register() {
   const [errorPasswordConfirm, setErrorPasswordConfirm] = useState("");
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(UserContext);
-  console.log(userData);
+  // console.log(userData);
 
   const {
     register,
@@ -22,6 +22,22 @@ export default function Register() {
 
   const onSubmit = (inputRegister) => {
     console.log(inputRegister);
+    const inputUserName = inputRegister.userName;
+    const inputUseremail = inputRegister.email;
+    const inputUserPassword = inputRegister.password;
+    axios
+      .post(`https://lb4-service.onrender.com/users/signup`, {
+        username: inputUserName,
+        email: inputUseremail,
+        password: inputUserPassword,
+        role: inputUserName,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .then((err) => {
+        console.log(err);
+      });
 
     if (userData[0].userName === inputRegister.userName) {
       setErrorUserName(
