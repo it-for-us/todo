@@ -6,44 +6,48 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { useState ,useContext} from "react";
 import { useNavigate, Link } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
+import { Grid } from "@mui/material";
+import UserContext from "../contexts/UserContext.jsx";
 const theme = createTheme();
 
 export default function Login() {
-  const userData = {
-    email: "test@gmail.com",
-    password: "1234",
-  };
-  const [errorMesage, setErrorMesage] = useState();
-  const navigate = useNavigate();
-  const [inputData, setInputData] = useState({});
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const { userData, setUserData } = useContext(UserContext);
 
-    setInputData({ email: data.get("email"), password: data.get("password") });
-    if (
-      userData.email === inputData.email &&
-      userData.password === inputData.password
-    ) {
-      //navigate('/home')
-      console.log("login successful");
-    } else if (userData.email !== inputData.email) {
-      setErrorMesage(
+  console.log(userData);
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (inputLogin) => {
+
+    if (userData[0].email !== inputLogin.email) {
+      setErrorEmail(
         <p style={{ color: "red" }}>
-          Your email not registered or incorrect, Please try again.
+          Email not matched
         </p>
       );
-    } else if (userData.password !== inputData.password) {
-      setErrorMesage(
-        <p style={{ color: "red" }}>
-          Your password false! Please try again or click Forgot Password.
-        </p>
-      );
+    } 
+    else if (inputLogin.password !== userData[0].password) {
+        setErrorPassword(
+          <p style={{ color: "red", textAlign: "center" }}>
+            Password not matched
+          </p>
+        )
+    }  else {
+        setTimeout(() => {
+          navigate("/register");
+        }, 300);
     }
-  };
+    }
+  
   return (
     <div className="main">
       <img
@@ -69,10 +73,10 @@ export default function Login() {
               <Box
                 component="form"
                 textAlign="center"
-                onSubmit={handleSubmit}
-                noValidate
+                onSubmit={handleSubmit(onSubmit)}
                 sx={{ mt: 1 }}
               >
+                <Grid item xs={12}>
                 <TextField
                   margin="normal"
                   required
@@ -82,7 +86,25 @@ export default function Login() {
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  {...register('email',
+                  {required:"Required field",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
+                    message:"Invalid email address"
+                  },
+                })}
+                  error={!!errors?.email}
+                  helperText={errors?.email ? errors.email.message : null}
                 />
+                {/* {errors.email && (
+                    <p style={{ color: "red" }}>
+                      Please enter a valid email address
+                    </p>
+                  )} */}
+                  {errorEmail}
+                </Grid>
+                <Grid item xs={12}>
+                  
                 <TextField
                   margin="normal"
                   required
@@ -92,8 +114,23 @@ export default function Login() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  {...register('password',
+                  {required:"Required field",
+                  pattern: {
+                    value: /^()()().{8,15}$/,
+                    message:"Invalid password "
+                  },
+                })}
+                error={!!errors?.password}
+                  helperText={errors?.password ? errors.password.message : null}
                 />
-                {errorMesage}
+                {/* {errors.password && (
+                    <p style={{ color: "red" }}>
+                      Please enter a valid password
+                    </p>
+                  )} */}
+                  {errorPassword}
+                  </Grid>
                 <Typography
                   sx={{ textAlign: "center", pt: 2, fontSize: "12px" }}
                   component="h1"
