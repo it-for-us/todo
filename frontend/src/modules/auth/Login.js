@@ -4,11 +4,13 @@ import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
+import { useAuthContext } from "./AuthContext";
 
-export default function Login({ setIsLogin }) {
+export default function Login() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { userData } = useContext(UserContext);
+  const { setIsAuthenticated } = useAuthContext();
   console.log(userData);
   const userEmail = userData[0].email;
   const userPassword = userData[0].password;
@@ -27,7 +29,7 @@ export default function Login({ setIsLogin }) {
       setMessage(<p style={{ color: "yellowgreen" }}>Login successful</p>);
 
       setTimeout(() => {
-        setIsLogin(true);
+        setIsAuthenticated(true);
         navigate("/");
       }, 1000);
     } else if (userEmail !== inputLogin.email) {
@@ -39,7 +41,8 @@ export default function Login({ setIsLogin }) {
     } else if (userPassword !== inputLogin.password) {
       setMessage(
         <p style={{ color: "red" }}>
-          Password false!,please click Forgot Password
+          Password false!,please try again or click
+          <Link to={"/forgotpassword"}>Forgot Password</Link>
         </p>
       );
     }
