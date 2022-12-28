@@ -43,17 +43,9 @@ export default function CreateNewPass() {
       setErrorPasswordConfirm(
         <p style={{ color: "yellowgreen" }}>Password successfully changed</p>
       );
-      // userData.password = inputNewPassword.password;
-      // userData.passwordConfirm = inputNewPassword.passwordConfirm;
-      setUserData([
-        {
-          userName: "test",
-          email: "test@gmail.com",
-          password: inputNewPassword.password,
-          passwordConfirm: inputNewPassword.passwordConfirm,
-          workSpace: "",
-        },
-      ]);
+      userData[0].password = inputNewPassword.password;
+      userData[0].passwordConfirm = inputNewPassword.passwordConfirm;
+      setUserData(userData);
       setTimeout(() => {
         navigate("/");
       }, 1000);
