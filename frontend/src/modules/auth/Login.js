@@ -4,14 +4,14 @@ import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
+import axios from "axios";
 import { useAuthContext } from "./AuthContext";
-
 export default function Login() {
+  const { userData,setIsLogin } = useContext(UserContext);
+
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { userData } = useContext(UserContext);
   const { setIsAuthenticated } = useAuthContext();
-  console.log(userData);
   const userEmail = userData[0].email;
   const userPassword = userData[0].password;
   const {
@@ -19,10 +19,21 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const onSubmit = (inputLogin) => {
-    console.log(inputLogin);
-    if (
+  const onSubmit =async (inputLogin) => {
+    try {
+      const response =await axios
+      .post(`https://lb4-service.onrender.com/users/login`, {
+        email: inputLogin.email,
+        password: inputLogin.password,
+      })
+      const token = response.data.token
+      setIsAuthenticated(token)
+      localStorage.setItem("token",JSON.stringify(token))
+      setIsLogin(true)
+    } catch (error) {
+      console.log({error});
+    }
+     if (
       userEmail === inputLogin.email &&
       userPassword === inputLogin.password
     ) {
@@ -45,7 +56,7 @@ export default function Login() {
           <Link to={"/forgotpassword"}>Forgot Password</Link>
         </p>
       );
-    }
+    } 
   };
   return (
     <div className="login-page ">
