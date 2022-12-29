@@ -13,9 +13,17 @@ import userContext from "./contexts/UserContext";
 import { AuthProvider } from "./modules/auth/AuthContext";
 import ProtectedRoute from "./modules/routes/ProtectedRoute";
 import PublicRoute from "./modules/routes/PublicRoute";
-import { useContext } from "react";
+import { useContext ,useEffect} from "react";
 function App() {
-  const { isLogin } = useContext(userContext);
+  const { isLogin ,setIsLogin} = useContext(userContext);
+  useEffect(() => {
+    const localToken = JSON.parse(localStorage.getItem('token'))
+    if (localToken) {
+      setIsLogin(true)
+    }
+    
+  },[]) 
+
   console.log("islogin", isLogin);
   return (
     <div className="App">
@@ -23,8 +31,8 @@ function App() {
         {/* <Header /> */}
         <Routes>
           
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={isLogin ? <Home />:<Login />} />
+          <Route path="/signup" element={isLogin ? <Home />:<SignUp />} />
           <Route element={<PublicRoute />}>
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/createnewpass" element={<CreateNewPass />} />
@@ -33,7 +41,7 @@ function App() {
           </Route>
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={isLogin ? <Home />:<Login />} />
           </Route>
         </Routes>
         {/* <Footer /> */}

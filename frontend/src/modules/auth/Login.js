@@ -7,9 +7,10 @@ import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 import { useAuthContext } from "./AuthContext";
 export default function Login() {
+  const { userData,setIsLogin } = useContext(UserContext);
+
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { userData } = useContext(UserContext);
   const { setIsAuthenticated } = useAuthContext();
   const userEmail = userData[0].email;
   const userPassword = userData[0].password;
@@ -28,9 +29,9 @@ export default function Login() {
       const token = response.data.token
       setIsAuthenticated(token)
       localStorage.setItem("token",JSON.stringify(token))
-      
+      setIsLogin(true)
     } catch (error) {
-      
+      console.log({error});
     }
      if (
       userEmail === inputLogin.email &&
