@@ -43,7 +43,7 @@ export default function Login() {
         )
     }  else {
         setTimeout(() => {
-          navigate("/register");
+          navigate("/");
         }, 300);
     }
     }
