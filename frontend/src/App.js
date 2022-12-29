@@ -22,7 +22,7 @@ function App() {
       setIsLogin(true)
     }
     
-  },[]) 
+  }) 
 
   console.log("islogin", isLogin);
   return (
