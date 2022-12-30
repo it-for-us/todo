@@ -20,24 +20,25 @@ export default function Register() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (inputRegister) => {
+  const onSubmit = async (inputRegister) => {
     console.log(inputRegister);
     const inputUserName = inputRegister.userName;
-    const inputUseremail = inputRegister.email;
+    const inputUserEmail = inputRegister.email;
     const inputUserPassword = inputRegister.password;
-    axios
-      .post(`https://lb4-service.onrender.com/users/signup`, {
-        username: inputUserName,
-        email: inputUseremail,
-        password: inputUserPassword,
-        role: inputUserName,
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .then((err) => {
-        console.log(err);
-      });
+    try {
+      const response = await axios.post(
+        `https://lb4-service.onrender.com/users/signup`,
+        {
+          username: inputUserName,
+          email: inputUserEmail,
+          password: inputUserPassword,
+          role: inputUserName,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
 
     if (userData[0].userName === inputRegister.userName) {
       setErrorUserName(
@@ -77,7 +78,7 @@ export default function Register() {
             type="text"
             placeholder="Username"
             {...register("userName", {
-              required: false,
+              required: true,
               minLength: 4,
               maxLength: 15,
               pattern: {
