@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/work-space")
@@ -20,8 +19,9 @@ public class WorkspaceController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkspaceViewDto> createWorkspace(@Valid @RequestBody WorkspaceCreateDto workspaceCreateDto){
-        WorkspaceViewDto workspaceViewDto = workspaceService.creat(workspaceCreateDto);
+    public ResponseEntity<WorkspaceViewDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto){
+
+        WorkspaceViewDto workspaceViewDto = workspaceService.create(workspaceCreateDto);
         return new ResponseEntity<>(workspaceViewDto, HttpStatus.CREATED);
     }
 

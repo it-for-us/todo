@@ -15,4 +15,8 @@ public class UserSignInDto {
     @Size(min = 8)
     private String password;
 
+    private String token;
+
+    private String username;
+
 }

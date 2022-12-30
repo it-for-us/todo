@@ -15,36 +15,53 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
 
+
+
     @Override
-    public WorkspaceViewDto creat(WorkspaceCreateDto workspaceCreateDto) {
-
-        int count_ = 0;
-        for (char c : workspaceCreateDto.getName().toCharArray()){
-            if (c=='_'){
-                count_++;
-            }
-        }
-
-        if(workspaceCreateDto.getName().charAt(0)=='_'|| count_>1){
-            throw new BadRequestException("workspace name is in incorrect format");
-        }else if(isWorkspaceExist(workspaceCreateDto.getName())){
-            throw new WorkspaceExistException("Workspace already exist");
-        }
-
+    public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto) {
         Workspace workspace = new Workspace();
-        workspace.setName(workspaceCreateDto.getName());
+
+        if (isWorkspaceExist(workspaceCreateDto.getName()))
+            throw new WorkspaceExistException("Workspace is already exist");
+        else if (isAValidWorkspaceName(workspaceCreateDto))
+            workspace.setName(workspaceCreateDto.getName());
+
         return WorkspaceViewDto.of(workspaceRepository.save(workspace));
     }
 
     @Override
     public Boolean isWorkspaceExist(String workspaceName) {
+
         Optional<Workspace> workspace = workspaceRepository.findByName(workspaceName);
 
-        if (workspace.isPresent()){
-            return true;
-        }else return false;
+        return workspace.isPresent();
     }
 
+    @Override
+    public Boolean isAValidWorkspaceName(WorkspaceCreateDto workspaceCreateDto) {
+
+        char[] workspaceNameToChar = workspaceCreateDto.getName().toCharArray();
+
+        int countOf_ = 0;
+
+        for (char c : workspaceNameToChar) {
+            if ((c >= 'a' && c <= 'z')
+                    || (c >= '0' && c <= '9')
+                    || (c == ' ')
+                    || (c == '_')) {
+                if (c=='_'){
+                    countOf_++;
+                }
+                continue;
+            }else
+                throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
+        }
+
+        if (workspaceNameToChar.length<4 || workspaceNameToChar.length>15 || workspaceNameToChar[0]=='_'|| countOf_>1)
+            throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
+
+        return true;
+    }
 
     @Override
     public void deleteWorkspaceById(Long id) {
@@ -53,10 +70,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
         if (workspace.isPresent()) {
             workspaceRepository.deleteById(id);
-        } else if (workspace.isEmpty()) {
-            throw new NotFoundException("Workspace not found");
-        } else if (!(id>0 && id<=Long.MAX_VALUE)) {
-            throw new BadRequestException("Authorization Header or Id is in incorrect format");
         }
     }
 }

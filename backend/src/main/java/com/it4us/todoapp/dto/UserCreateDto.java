@@ -9,12 +9,11 @@ import javax.validation.constraints.Size;
 public class UserCreateDto {
 
     @Size(min = 1)
-    private String userName;
+    private String username;
 
     @Email
     private String email;
 
     @Size(min = 8)
     private String password;
-
 }
