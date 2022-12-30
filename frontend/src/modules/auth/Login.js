@@ -7,7 +7,7 @@ import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 import { useAuthContext } from "./AuthContext";
 export default function Login() {
-  const { userData,setIsLogin } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
 
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -19,28 +19,28 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit =async (inputLogin) => {
+  const onSubmit = async (inputLogin) => {
     try {
-      const response =await axios
-      .post(`https://lb4-service.onrender.com/users/login`, {
-        email: inputLogin.email,
-        password: inputLogin.password,
-      })
-      const token = response.data.token
-      setIsAuthenticated(token)
-      localStorage.setItem("token",JSON.stringify(token))
-      setIsLogin(true)
+      const response = await axios.post(
+        `https://lb4-service.onrender.com/users/login`,
+        {
+          email: inputLogin.email,
+          password: inputLogin.password,
+        }
+      );
+      const token = response.data.token;
+      setIsAuthenticated(token);
+      localStorage.setItem("token", JSON.stringify(token));
     } catch (error) {
-      console.log({error});
+      console.log({ error });
     }
-     if (
+    if (
       userEmail === inputLogin.email &&
       userPassword === inputLogin.password
     ) {
       setMessage(<p style={{ color: "yellowgreen" }}>Login successful</p>);
 
       setTimeout(() => {
-        setIsAuthenticated(true);
         navigate("/");
       }, 1000);
     } else if (userEmail !== inputLogin.email) {
@@ -56,7 +56,7 @@ export default function Login() {
           <Link to={"/forgotpassword"}>Forgot Password</Link>
         </p>
       );
-    } 
+    }
   };
   return (
     <div className="login-page ">

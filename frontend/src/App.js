@@ -9,30 +9,22 @@ import { Routes, Route } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
 import Home from "./pages/Home";
-import userContext from "./contexts/UserContext";
 import { AuthProvider } from "./modules/auth/AuthContext";
 import ProtectedRoute from "./modules/routes/ProtectedRoute";
 import PublicRoute from "./modules/routes/PublicRoute";
-import { useContext ,useEffect} from "react";
-function App() {
-  const { isLogin ,setIsLogin} = useContext(userContext);
-  useEffect(() => {
-    const localToken = JSON.parse(localStorage.getItem('token'))
-    if (localToken) {
-      setIsLogin(true)
-    }
-    
-  }) 
+import AuthRoute from "./modules/routes/AuthRoute";
 
-  console.log("islogin", isLogin);
+function App() {
   return (
     <div className="App">
       <AuthProvider>
         {/* <Header /> */}
         <Routes>
-          
-          <Route path="/login" element={isLogin ? <Home />:<Login />} />
-          <Route path="/signup" element={isLogin ? <Home />:<SignUp />} />
+          <Route element={<AuthRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Route>
+
           <Route element={<PublicRoute />}>
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/createnewpass" element={<CreateNewPass />} />
@@ -41,7 +33,7 @@ function App() {
           </Route>
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={isLogin ? <Home />:<Login />} />
+            <Route path="/" element={<Home />} />
           </Route>
         </Routes>
         {/* <Footer /> */}
