@@ -1,25 +1,25 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import UserContext from "../../contexts/UserContext";
+
 import axios from "axios";
 import { useAuthContext } from "./AuthContext";
+import Loading from "../../components/Loading";
 export default function Login() {
-  const { userData } = useContext(UserContext);
-
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState("");
   const navigate = useNavigate();
   const { setIsAuthenticated } = useAuthContext();
-  const userEmail = userData[0].email;
-  const userPassword = userData[0].password;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = async (inputLogin) => {
+    setLoading(<Loading />);
     try {
       const response = await axios.post(
         `https://lb4-service.onrender.com/users/login`,
@@ -29,33 +29,30 @@ export default function Login() {
         }
       );
       const token = response.data.token;
-      setIsAuthenticated(token);
       localStorage.setItem("token", JSON.stringify(token));
-    } catch (error) {
-      console.log({ error });
-    }
-    if (
-      userEmail === inputLogin.email &&
-      userPassword === inputLogin.password
-    ) {
-      setMessage(<p style={{ color: "yellowgreen" }}>Login successful</p>);
 
       setTimeout(() => {
-        navigate("/");
+        setTimeout(() => {
+          setIsAuthenticated(token);
+          navigate("/");
+        }, 1000);
+        setLoading(null);
+        setMessage(<p style={{ color: "yellowgreen" }}>Login successful</p>);
+      }, 2000);
+    } catch (error) {
+      console.log({ error });
+
+      setTimeout(() => {
+        setLoading(null);
+        setMessage(
+          <p style={{ color: "red" }}>
+            {error.response.data.error.message} Please try again or
+            <Link style={{ marginLeft: "2px" }} to={"/forgotpassword"}>
+              Forgot Password
+            </Link>
+          </p>
+        );
       }, 1000);
-    } else if (userEmail !== inputLogin.email) {
-      setMessage(
-        <p style={{ color: "red" }}>
-          Your email not registered or incorrect, Please try again.
-        </p>
-      );
-    } else if (userPassword !== inputLogin.password) {
-      setMessage(
-        <p style={{ color: "red" }}>
-          Password false!,please try again or click
-          <Link to={"/forgotpassword"}>Forgot Password</Link>
-        </p>
-      );
     }
   };
   return (
@@ -92,6 +89,7 @@ export default function Login() {
           {errors.password && (
             <p style={{ color: "red" }}>Please enter a valid password</p>
           )}
+          {loading}
           {message}
         </Form.Group>
 
