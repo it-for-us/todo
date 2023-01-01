@@ -40,19 +40,23 @@ export default function Login() {
         setMessage(<p style={{ color: "yellowgreen" }}>Login successful</p>);
       }, 2000);
     } catch (error) {
-      console.log({ error });
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
 
-      setTimeout(() => {
-        setLoading(null);
-        setMessage(
-          <p style={{ color: "red" }}>
-            {error.response.data.error.message} Please try again or
-            <Link style={{ marginLeft: "2px" }} to={"/forgotpassword"}>
-              Forgot Password
-            </Link>
-          </p>
-        );
-      }, 1000);
+        setTimeout(() => {
+          setLoading(null);
+          setMessage(
+            <p style={{ color: "red" }}>
+              {error.response.data.error.message} Please try again or
+              <Link style={{ marginLeft: "2px" }} to={"/forgotpassword"}>
+                Forgot Password
+              </Link>
+            </p>
+          );
+        }, 1000);
+      }
     }
   };
   return (
