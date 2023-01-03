@@ -8,8 +8,8 @@ public interface BoardService {
 
     BoardViewDto create (BoardCreateDto boardCreateDto);
     Boolean isBoardExist(String boardName, Long workspaceId);
-
-
+    Boolean isAValidBoardName(BoardCreateDto boardCreateDto);
+    Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto);
 
 
 }

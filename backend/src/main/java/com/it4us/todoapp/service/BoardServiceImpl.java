@@ -29,35 +29,18 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardViewDto create(BoardCreateDto boardCreateDto) {
 
-        int count_ = 0;
-        for (char c : boardCreateDto.getName().toCharArray()){
-            if (c=='_'){
-                count_++;
-            }
-        }
-
-        if(boardCreateDto.getName().charAt(0)=='_'
-                || count_>1
-                || (!(boardCreateDto.getWorkspaceId()>0 && boardCreateDto.getWorkspaceId()<=Long.MAX_VALUE)))
-        {
-            throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
-        } else if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId())) {
-            throw new BoardExistException("Board is already exist");
-        }
-
         Board board = new Board();
-        board.setName(boardCreateDto.getName());
 
-        Optional<Workspace> workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId());
-        if (workspace.isPresent()){
-            board.setWorkspace(workspace.get());
-        } else {
-            throw new NotFoundException("There is no such workspace");
-        }
+         if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
+            throw new BoardExistException("Board is already exist");
+
+         else if( isAValidWorkspaceId(boardCreateDto) && isAValidBoardName(boardCreateDto) ){
+
+             board.setName(boardCreateDto.getName());
+             board.setWorkspace((workspaceRepository.findById(boardCreateDto.getWorkspaceId())).get());
+         }
         return BoardViewDto.of(boardRepository.save(board));
-
     }
-
 
     @Override
     public Boolean isBoardExist(String boardName, Long workspaceId) {
@@ -74,5 +57,41 @@ public class BoardServiceImpl implements BoardService {
             }
         }
         return false;
+    }
+
+    @Override
+    public Boolean isAValidBoardName(BoardCreateDto boardCreateDto) {
+
+
+        char[] boardNameToChar = boardCreateDto.getName().toCharArray();
+        int countOf_ = 0;
+
+        for (char c : boardNameToChar) {
+            if ((c >= 'a' && c <= 'z')
+                    || (c >= '0' && c <= '9')
+                    || (c == ' ')
+                    || (c == '_')) {
+                if (c=='_'){
+                    countOf_++;
+                }
+            }else
+                throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
+        }
+
+        if (boardNameToChar.length<4 || boardNameToChar.length>15 || boardNameToChar[0]=='_'|| countOf_>1)
+            throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
+
+        return true;
+    }
+
+    @Override
+    public Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto) {
+
+        Optional<Workspace> workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId());
+
+        if (workspace.isEmpty())
+            throw new NotFoundException("There is no such workspace");
+
+        return true;
     }
 }

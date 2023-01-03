@@ -38,12 +38,12 @@ components:
         password:
           maxLength: 2147483647
           minLength: 8
-          type: string
+          type: Long
     UserViewDto:
       type: object
       properties:
         id:
-          type: string
+          type: Long
         userName:
           type: string
         email:
