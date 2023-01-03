@@ -1,14 +1,12 @@
 package com.it4us.todoapp.dto;
 
 import lombok.Data;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 @Data
 public class UserCreateDto {
 
-    @Size(min = 1)
     private String username;
 
     @Email

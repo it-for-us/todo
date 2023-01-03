@@ -52,12 +52,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 if (c=='_'){
                     countOf_++;
                 }
-                continue;
             }else
                 throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
         }
 
-        if (workspaceNameToChar.length<4 || workspaceNameToChar.length>15 || workspaceNameToChar[0]=='_'|| countOf_>1)
+        if (workspaceNameToChar.length<4 || workspaceNameToChar.length>15
+                || workspaceNameToChar[0]=='_'|| countOf_>1)
             throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
 
         return true;

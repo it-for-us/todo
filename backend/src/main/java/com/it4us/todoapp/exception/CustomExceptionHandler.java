@@ -44,6 +44,12 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<?> unAuthorized(UnAuthorizedException unAuthorizedException){
+        ErrorResponse errorResponse = new ErrorResponse("Unauthorized exception",401);
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
+    }
+
 }
 
 

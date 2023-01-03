@@ -9,10 +9,11 @@ import com.it4us.todoapp.exception.UserExistException;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.security.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,26 +27,31 @@ import java.util.UUID;
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService{
 
-
     private final UserRepository userRepository;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    PasswordEncoder encoder;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
 
     @Override
     public UserViewDto create(UserCreateDto userCreateDto) {
         String uuid = UUID.randomUUID().toString();
+        String username=userCreateDto.getUsername();
         User user = new User();
+
 
         if(isEmailExist(userCreateDto.getEmail()))
             throw new UserExistException("user already exist");
-        else if(userCreateDto.getUsername() == null)
+        else if( username == null)
             userCreateDto.setUsername(createUsernameIfNoPresent(userCreateDto));
 
 
         user.setUsername(userCreateDto.getUsername());
         user.setEmail(userCreateDto.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(userCreateDto.getPassword()));
+        user.setPassword(encoder.encode(userCreateDto.getPassword()));
         user.setId(uuid);
 
         return UserViewDto.of(userRepository.save(user));
@@ -78,21 +84,29 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     public UserSignInResponse login(UserSignInDto userSignInDto) {
 
         User user = userRepository.findByEmail(userSignInDto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
 
         UserSignInResponse userSignInResponse = UserSignInResponse.of(user);
 
-        userSignInResponse.setToken(JwtUtils.generateToken(user));
+        userSignInResponse.setToken(jwtUtils.generateToken(user));
 
         return userSignInResponse;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() ->
+    public User findByEmail(String email) {
+
+        return  userRepository.findByEmail(email)
+                .orElseThrow(()->new UsernameNotFoundException("User is Not Found"));
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("User is Not Found"));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 new ArrayList<>());
     }
 }

@@ -74,7 +74,6 @@ public class BoardServiceImpl implements BoardService {
                 if (c=='_'){
                     countOf_++;
                 }
-                continue;
             }else
                 throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
         }
