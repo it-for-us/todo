@@ -8,16 +8,18 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import UserContext from "../contexts/UserContext";
+import { useContext } from "react";
 
 const theme = createTheme();
 
 export default function CreateNewPass() {
   const [errorPasswordConfirm, setErrorPasswordConfirm] = useState("");
-  const [userData, setUserData] = useState({
-    userName: "test",
-    email: "test@gmail.com",
-    password: "test.1234",
-  });
+
+  const { userData, setUserData } = useContext(UserContext);
+
+  console.log(userData);
+
   const navigate = useNavigate();
   const location = useLocation();
   const userEmail = location.state.inputEmail;
@@ -41,8 +43,8 @@ export default function CreateNewPass() {
       setErrorPasswordConfirm(
         <p style={{ color: "yellowgreen" }}>Password successfully changed</p>
       );
-      userData.password = inputNewPassword.password;
-      userData.passwordConfirm = inputNewPassword.passwordConfirm;
+      userData[0].password = inputNewPassword.password;
+      userData[0].passwordConfirm = inputNewPassword.passwordConfirm;
       setUserData(userData);
       setTimeout(() => {
         navigate("/");
