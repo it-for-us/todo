@@ -12,22 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.Table;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/boards")
 @Table(name = "Boards")
 public class BoardController {
 
-    private BoardService boardService;
+    private final BoardService boardService;
 
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
 
-
     @PostMapping
-    public ResponseEntity<BoardViewDto> createBoard (@Valid @RequestBody BoardCreateDto boardCreateDto){
+    public ResponseEntity<BoardViewDto> createBoard (@RequestBody BoardCreateDto boardCreateDto){
         BoardViewDto boardViewDto = boardService.create(boardCreateDto);
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
     }

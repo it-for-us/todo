@@ -38,6 +38,18 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(BoardExistException.class)
+    public ResponseEntity<?> boardExist(BoardExistException boardExistException){
+        ErrorResponse errorResponse = new ErrorResponse("board is already exist", 403);
+        return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<?> unAuthorized(UnAuthorizedException unAuthorizedException){
+        ErrorResponse errorResponse = new ErrorResponse("Unauthorized exception",401);
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
+    }
+
 }
 
 

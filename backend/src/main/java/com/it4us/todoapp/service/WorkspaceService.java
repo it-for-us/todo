@@ -5,8 +5,9 @@ import com.it4us.todoapp.dto.WorkspaceViewDto;
 
 public interface WorkspaceService {
 
-    WorkspaceViewDto creat (WorkspaceCreateDto workspaceCreateDto);
+    WorkspaceViewDto create (WorkspaceCreateDto workspaceCreateDto);
     Boolean isWorkspaceExist(String workspaceName);
+    Boolean isAValidWorkspaceName(WorkspaceCreateDto workspaceCreateDto);
     void deleteWorkspaceById(Long id);
 
 }

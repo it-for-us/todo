@@ -31,4 +31,5 @@ public class Workspace {
     @JsonManagedReference
     private List<Board> boards;
 
+
 }
