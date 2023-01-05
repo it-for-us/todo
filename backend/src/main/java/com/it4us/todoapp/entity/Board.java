@@ -25,10 +25,8 @@ public class Board {
     @Column(name = "board_name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="workspace_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="workspace_id",referencedColumnName = "workspace_id", nullable = false)
     private Workspace workspace;
 
 
