@@ -26,9 +26,14 @@ public class Workspace {
     @Column(name = "workspace_name")
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "workspace", orphanRemoval = true)
+    /*@OneToMany(fetch = FetchType.EAGER, mappedBy = "workspace", orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference
-    private List<Board> boards;
+    private List<Board> boards;*/
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
 }

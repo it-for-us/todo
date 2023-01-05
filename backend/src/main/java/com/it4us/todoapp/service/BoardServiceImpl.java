@@ -12,6 +12,7 @@ import com.it4us.todoapp.repository.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,16 +58,13 @@ public class BoardServiceImpl implements BoardService {
         return BoardViewDto.of(boardRepository.save(board));
 
     }
-
-
     @Override
     public Boolean isBoardExist(String boardName, Long workspaceId) {
-
         Optional<Workspace> workspace = workspaceRepository.findById(workspaceId);
 
         if (workspace.isPresent()) {
-            List<Board> boardList = workspace.get().getBoards();
 
+            List<Board> boardList = boardRepository.findBoardsByWorkspaceId(workspaceId);
             for (Board boards : boardList) {
                 if (boards.getName().equals(boardName)) {
                     return true;
