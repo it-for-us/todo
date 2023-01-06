@@ -4,15 +4,15 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 // import Footer from "./components/Footer";
 // import Header from "./components/Header";
-import "./scss/App.scss";
+import "./assets/scss/App.scss";
 import { Routes, Route } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
 import Home from "./pages/Home";
 import { AuthProvider } from "./modules/auth/AuthContext";
-import ProtectedRoute from "./modules/routes/ProtectedRoute";
-import PublicRoute from "./modules/routes/PublicRoute";
-import AuthRoute from "./modules/routes/AuthRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicRoute from "./routes/PublicRoute";
+import AuthRoute from "./routes/AuthRoute";
 
 function App() {
   return (
