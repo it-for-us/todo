@@ -3,7 +3,8 @@ name: Build & Deploy
 on:
   push:
     branches:
-      - todo-new
+      - main
+      - development
 
 jobs:
   cd:
