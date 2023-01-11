@@ -1,18 +1,19 @@
-import Login from "./modules/auth//Login";
-import SignUp from "./modules/auth/SignUp";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
+import Login from './modules/auth//Login';
+import SignUp from './modules/auth/SignUp';
+import Contact from './pages/Contact';
+import About from './pages/About';
 // import Footer from "./components/Footer";
 // import Header from "./components/Header";
-import "./assets/scss/App.scss";
-import { Routes, Route } from "react-router-dom";
-import ForgotPassword from "./pages/ForgotPassword";
-import CreateNewPass from "./pages/CreateNewPass";
-import Home from "./pages/Home";
-import { AuthProvider } from "./modules/auth/AuthContext";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import PublicRoute from "./routes/PublicRoute";
-import AuthRoute from "./routes/AuthRoute";
+import { Routes, Route } from 'react-router-dom';
+import ForgotPassword from './pages/ForgotPassword';
+import CreateNewPass from './pages/CreateNewPass';
+import Home from './pages/Home';
+import { AuthProvider } from './modules/auth/AuthContext';
+import ProtectedRoute from './routes/ProtectedRoute';
+import PublicRoute from './routes/PublicRoute';
+import AuthRoute from './routes/AuthRoute';
+
+import './assets/scss/main.scss';
 
 function App() {
   return (
