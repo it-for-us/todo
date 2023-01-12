@@ -1,20 +1,16 @@
-import React, { Suspense } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-// import { useAuthContext } from './AuthContext';
-import Loading from '../../components/Loading';
-import { login } from './_redux/auth-slice';
+import React, { Suspense } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from "../../components/Loading";
+import { login } from "./_redux/auth-slice";
 
 export default function Login() {
-  // const navigate = useNavigate();
-  // const { setIsAuthenticated } = useAuthContext();
-
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.auth);
-  const { isLoading } = authState;
+  const { isLoading, error } = authState;
 
   const {
     register,
@@ -24,10 +20,6 @@ export default function Login() {
   const onSubmit = async (inputLogin) => {
     dispatch(login({ email: inputLogin.email, password: inputLogin.password }));
   };
-
-  // if (isAuth) {
-  //   navigate('/');
-  // }
 
   return (
     <Suspense fallback={<Loading />}>
@@ -39,7 +31,7 @@ export default function Login() {
             <Form.Control
               type="email"
               placeholder="Enter email"
-              {...register('email', {
+              {...register("email", {
                 required: true,
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
@@ -47,22 +39,25 @@ export default function Login() {
               })}
             />
             {errors.email && (
-              <p style={{ color: 'red' }}>Please enter a valid email address</p>
+              <p style={{ color: "red" }}>Please enter a valid email address</p>
             )}
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Control
               type="password"
               placeholder="Password"
-              {...register('password', {
+              {...register("password", {
                 required: true,
                 pattern: {
                   value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
                 },
               })}
             />
+            {error.error.message === "Invalid email or password." && (
+              <p style={{ color: "red" }}>{error.error.message}</p>
+            )}
             {errors.password && (
-              <p style={{ color: 'red' }}>Please enter a valid password</p>
+              <p style={{ color: "red" }}>Please enter a valid password</p>
             )}
           </Form.Group>
 
@@ -77,7 +72,7 @@ export default function Login() {
             )}
           </Button>
           <p className="signup-account">
-            Can't log in?<Link to={'/signup'}> • Sign up for an account</Link>
+            Can't log in?<Link to={"/signup"}> • Sign up for an account</Link>
           </p>
         </Form>
         <h3>Privacy Policy • Terms of Service</h3>
