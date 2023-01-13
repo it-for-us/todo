@@ -50,6 +50,12 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(UserNameExistException.class)
+    public ResponseEntity<?> userNameExist(UserNameExistException userNameExistException){
+        ErrorResponse errorResponse = new ErrorResponse(userNameExistException.getMessage(),403);
+        return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
+    }
+
 }
 
 
