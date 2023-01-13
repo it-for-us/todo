@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
                 throw new UserNameExistException("username has already been used");
             }else{
                 userCreateDto.setUsername(createUsernameIfNoPresent(userCreateDto));
+
             }
         }
 
