@@ -17,11 +17,11 @@ public class WorkspaceController {
     private WorkspaceService workspaceService;
 
     public WorkspaceController(WorkspaceService workspaceService) {
-        this.workspaceService=workspaceService;
+        this.workspaceService = workspaceService;
     }
 
     @PostMapping
-    public ResponseEntity<WorkspaceViewDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto){
+    public ResponseEntity<WorkspaceViewDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -31,8 +31,14 @@ public class WorkspaceController {
         return new ResponseEntity<>(workspaceViewDto, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{workspaceId}")
+    public ResponseEntity<WorkspaceViewDto> getWorkspaceWithBoardsById(@PathVariable("workspaceId") Long workspaceId) {
+        WorkspaceViewDto workspaceViewDto = workspaceService.getWorkspaceById(workspaceId);
+        return new ResponseEntity<>(workspaceViewDto, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
-    public HttpStatus deleteWorkspace(@PathVariable Long id){
+    public HttpStatus deleteWorkspace(@PathVariable Long id) {
         workspaceService.deleteWorkspaceById(id);
         return HttpStatus.OK;
     }

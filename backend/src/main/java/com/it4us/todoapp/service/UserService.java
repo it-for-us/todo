@@ -9,6 +9,7 @@ import com.it4us.todoapp.entity.User;
 public interface UserService {
 
     UserViewDto create(UserCreateDto userCreateDto);
+    User getUserById(Long userId);
     Boolean isEmailExist(String email);
     String createUsernameIfNoPresent(UserCreateDto userCreateDto);
     UserSignInResponse login(UserSignInDto userSignInDto);

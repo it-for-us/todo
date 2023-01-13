@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -25,37 +26,45 @@ public class BoardServiceImpl implements BoardService {
     private WorkspaceRepository workspaceRepository;
 
 
-
     @Override
     public BoardViewDto create(BoardCreateDto boardCreateDto) {
 
         Board board = new Board();
 
-         if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
+        if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
             throw new BoardExistException("Board is already exist");
 
-         else if( isAValidWorkspaceId(boardCreateDto) && isAValidBoardName(boardCreateDto) ){
+        else if (isAValidWorkspaceId(boardCreateDto) && isAValidBoardName(boardCreateDto)) {
 
-             board.setName(boardCreateDto.getName());
-             board.setWorkspace((workspaceRepository.findById(boardCreateDto.getWorkspaceId())).get());
-         }
+            board.setName(boardCreateDto.getName());
+            board.setWorkspace((workspaceRepository.findById(boardCreateDto.getWorkspaceId())).get());
+        }
         return BoardViewDto.of(boardRepository.save(board));
     }
 
     @Override
-    public Boolean isBoardExist(String boardName, Long workspaceId) {
+    public List<BoardViewDto> getAllBoards(Optional<Long> workspaceId) {
+        List<Board> boards;
+        if (workspaceId.isPresent()) {
+            boards = boardRepository.findByWorkspaceId(workspaceId);
+        } else boards = boardRepository.findAll();
+        return boards.stream().map(board -> BoardViewDto.of(board)).collect(Collectors.toList());
+    }
 
+    @Override
+    public Boolean isBoardExist(String boardName, Long workspaceId) {
+//Bu metod Cihat Bey tarafindan güncellendi.
+// Bu haliyle fetch type Eager olmadigi icin hata veriyor. O yuzden burayi kapattim.
         Optional<Workspace> workspace = workspaceRepository.findById(workspaceId);
 
-        if (workspace.isPresent()) {
-            List<Board> boardList = workspace.get().getBoards();
-
-            for (Board boards : boardList) {
-                if (boards.getName().equals(boardName)) {
-                    return true;
-                }
-            }
-        }
+//        if (workspace.isPresent()) {
+//            List<Board> boardList = workspace.get().getBoards();
+//            for (Board boards : boardList) {
+//                if (boards.getName().equals(boardName)) {
+//                    return true;
+//                }
+//            }
+//        }
         return false;
     }
 
@@ -71,14 +80,14 @@ public class BoardServiceImpl implements BoardService {
                     || (c >= '0' && c <= '9')
                     || (c == ' ')
                     || (c == '_')) {
-                if (c=='_'){
+                if (c == '_') {
                     countOf_++;
                 }
-            }else
+            } else
                 throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
         }
 
-        if (boardNameToChar.length<4 || boardNameToChar.length>15 || boardNameToChar[0]=='_'|| countOf_>1)
+        if (boardNameToChar.length < 4 || boardNameToChar.length > 15 || boardNameToChar[0] == '_' || countOf_ > 1)
             throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
 
         return true;
