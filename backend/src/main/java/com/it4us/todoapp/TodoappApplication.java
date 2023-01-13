@@ -13,7 +13,7 @@ public class TodoappApplication {
 
 	}
 
-
-
-
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();}
 }
