@@ -6,6 +6,7 @@ import com.it4us.todoapp.dto.UserSignInResponse;
 import com.it4us.todoapp.dto.UserViewDto;
 import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.exception.UserExistException;
+import com.it4us.todoapp.exception.UserNameExistException;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.security.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -43,10 +44,19 @@ public class UserServiceImpl implements UserService, UserDetailsService{
         User user = new User();
 
 
-        if(isEmailExist(userCreateDto.getEmail()))
+        if(isEmailExist(userCreateDto.getEmail())) {
             throw new UserExistException("user already exist");
-        else if( username == null)
-            userCreateDto.setUsername(createUsernameIfNoPresent(userCreateDto));
+        }else if(isUserNameExist(userCreateDto.getUsername())){
+            throw new UserNameExistException("username already exist");
+        }
+        else if( username == null) {
+            String randomUsername = createUsernameIfNoPresent(userCreateDto);
+            if(isUserNameExist(randomUsername)) {
+                throw new UserNameExistException("username has already been used");
+            }else{
+                userCreateDto.setUsername(createUsernameIfNoPresent(userCreateDto));
+            }
+        }
 
 
         user.setUsername(userCreateDto.getUsername());
@@ -63,6 +73,14 @@ public class UserServiceImpl implements UserService, UserDetailsService{
         Optional<?> user = userRepository.findByEmail(email);
 
         return user.isPresent();
+    }
+
+    @Override
+    public Boolean isUserNameExist(String userName) {
+
+            Optional<?> user = userRepository.findByUsername(userName);
+
+            return user.isPresent();
     }
 
     @Override

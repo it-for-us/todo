@@ -10,6 +10,7 @@ public interface UserService {
 
     UserViewDto create(UserCreateDto userCreateDto);
     Boolean isEmailExist(String email);
+    Boolean isUserNameExist(String userName);
     String createUsernameIfNoPresent(UserCreateDto userCreateDto);
     UserSignInResponse login(UserSignInDto userSignInDto);
     User findByEmail(String email);
