@@ -25,7 +25,6 @@ jobs:
       - name: Build with Maven
         run: ./mvnw --batch-mode --update-snapshots package
 
-jobs:
   cd:
     runs-on: ubuntu-latest
     defaults:
