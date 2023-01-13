@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { register as rdxRegister, registerReset } from './_redux/auth-slice';
+import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { register as rdxRegister, registerReset } from "./_redux/auth-slice";
 
 export default function Register() {
+  const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoading, error: registerError, status } = useSelector((state) => state.auth);
+  const {
+    isLoading,
+    error: registerError,
+    status,
+  } = useSelector((state) => state.auth);
 
   useEffect(() => {
     return () => {
@@ -28,65 +33,42 @@ export default function Register() {
     const inputUserName = inputRegister.userName;
     const inputUserEmail = inputRegister.email;
     const inputUserPassword = inputRegister.password;
+    const inputUserConfirmPassword = inputRegister.passwordConfirm;
     const user = {
       username: inputUserName,
       email: inputUserEmail,
       password: inputUserPassword,
-      role: 'user',
+      role: "user",
     };
     dispatch(rdxRegister(user));
-    // try {
-    //   const response = await axios.post(`https://lb4-service.onrender.com/users/signup`, {
-    //     username: inputUserName,
-    //     email: inputUserEmail,
-    //     password: inputUserPassword,
-    //     role: 'user',
-    //   });
-    //   console.log(response.data);
-    // } catch (error) {
-    //   console.log(error);
-    // }
 
-    // if (userData[0].userName === inputRegister.userName) {
-    //   setErrorUserName(
-    //     <p style={{ color: 'red' }}>This name already exist.Please try another name.</p>
-    //   );
-    // } else {
-    //   if (inputRegister.password !== inputRegister.passwordConfirm) {
-    //     setErrorPasswordConfirm(
-    //       <p style={{ color: 'red', textAlign: 'center' }}>Password not matched</p>
-    //     );
-    //   } else if (userData[0].email === inputRegister.email) {
-    //     setErrorEmail(
-    //       <p style={{ color: 'red' }}>
-    //         This email already exist.Please
-    //         {<Link to={'/login'}>login</Link>} or try another one.
-    //       </p>
-    //     );
-    //     setErrorUserName('');
-    //   } else {
-    //     setUserData([inputRegister]);
-    //     setTimeout(() => {
-    //       navigate('/login');
-    //     }, 300);
-    //   }
-    // }
+    if (inputUserPassword !== inputUserConfirmPassword) {
+      setErrorConfirmPassword(
+        <p style={{ color: "red", textAlign: "center" }}>
+          Password not matched
+        </p>
+      );
+    } else if (status === "register/succeeded") {
+      navigate("/login");
+    }
   };
 
-  if (status === 'register/succeeded') {
-    navigate('/login');
-  }
+  // if (status === "register/succeeded") {
+  //   navigate("/login");
+  // }
 
   return (
     <div className="register-page ">
-      {registerError && <p style={{ color: 'red' }}>{registerError?.message}</p>}
+      {registerError && (
+        <p style={{ color: "red" }}>{registerError?.message}</p>
+      )}
       <Form className="d-grid" onSubmit={handleSubmit(onSubmit)}>
         <h2>Sign up for your account</h2>
         <Form.Group className="mb-3" controlId="formBasicUserName">
           <Form.Control
             type="text"
             placeholder="Username"
-            {...register('userName', {
+            {...register("userName", {
               required: true,
               minLength: 4,
               maxLength: 15,
@@ -96,14 +78,14 @@ export default function Register() {
             })}
           />
           {errors.userName && (
-            <p style={{ color: 'red' }}>Please enter a valid username </p>
+            <p style={{ color: "red" }}>Please enter a valid username </p>
           )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Control
             type="email"
             placeholder="Enter email"
-            {...register('email', {
+            {...register("email", {
               required: true,
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
@@ -111,14 +93,14 @@ export default function Register() {
             })}
           />
           {errors.email && (
-            <p style={{ color: 'red' }}>Please enter a valid email address</p>
+            <p style={{ color: "red" }}>Please enter a valid email address</p>
           )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Control
             type="password"
             placeholder="Password"
-            {...register('password', {
+            {...register("password", {
               required: true,
               pattern: {
                 value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
@@ -126,28 +108,29 @@ export default function Register() {
             })}
           />
           {errors.password && (
-            <p style={{ color: 'red' }}>Please enter a valid password</p>
+            <p style={{ color: "red" }}>Please enter a valid password</p>
           )}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicconfirmPassword">
           <Form.Control
             type="password"
             placeholder="Confirm Password"
-            {...register('passwordConfirm', {
+            {...register("passwordConfirm", {
               required: true,
               pattern: {
                 value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
               },
             })}
           />
+          {errorConfirmPassword}
           {errors.passwordConfirm && (
-            <p style={{ color: 'red' }}>Please enter a valid password</p>
+            <p style={{ color: "red" }}>Please enter a valid password</p>
           )}
         </Form.Group>
         <Form.Text className="text-muted">
           By signing up, you confirm that you've read and accepted our
           <Link>Terms of Service</Link> and
-          <Link to={'/privacypolicy'}>Privacy Policy</Link> .
+          <Link to={"/privacypolicy"}>Privacy Policy</Link> .
         </Form.Text>
 
         <Button className="register-btn mb-5 mt-3" type="submit">
@@ -161,7 +144,7 @@ export default function Register() {
           )}
         </Button>
         <p className="already-account">
-          Already have an account?<Link to={'/login'}> Log In</Link>
+          Already have an account?<Link to={"/login"}> Log In</Link>
         </p>
       </Form>
     </div>

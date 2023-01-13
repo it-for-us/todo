@@ -56,10 +56,13 @@ function* workRegister(action) {
   }
 }
 
-function* workLogout() {
+function* workLogout(action) {
   try {
+    // const { token } = action.payload;
     yield call(() =>
-      axios.put("https://dart-todo-api.onrender.com/users/logout")
+      axios.put("https://dart-todo-api.onrender.com/users/logout", {
+        // Authorization: "Bearer" + token,
+      })
     );
     yield put(logoutSuccess());
   } catch (error) {
