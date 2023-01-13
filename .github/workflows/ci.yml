@@ -28,19 +28,23 @@ jobs:
 jobs:
   cd:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
 
     strategy:
       matrix:
         node-version: [16.x, 18.x]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-      run: npm ci
-      run: npm run build --if-present
-      run: eslint . --ext .js,.jsx,.ts,.tsx
-      run: npm test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+        run: npm ci
+        run: npm run build --if-present
+      - name: Run Eslint
+        run: eslint . --ext .js,.jsx,.ts,.tsx
+        run: npm test
  
