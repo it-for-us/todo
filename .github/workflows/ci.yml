@@ -25,7 +25,6 @@ jobs:
       - name: Build with Maven
         run: ./mvnw --batch-mode --update-snapshots package
 
-    defaults:
       run:
         working-directory: frontend
 
@@ -39,9 +38,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+        run: npm i
         run: npm ci
         run: npm run build --if-present
-      - name: Run Eslint
         run: eslint . --ext .js,.jsx,.ts,.tsx
         run: npm test
  
