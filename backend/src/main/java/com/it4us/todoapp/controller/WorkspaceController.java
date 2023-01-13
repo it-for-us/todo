@@ -30,7 +30,6 @@ public class WorkspaceController {
         WorkspaceViewDto workspaceViewDto = workspaceService.create(workspaceCreateDto);
         return new ResponseEntity<>(workspaceViewDto, HttpStatus.CREATED);
     }
-
     @DeleteMapping("/{id}")
     public HttpStatus deleteWorkspace(@PathVariable Long id){
         workspaceService.deleteWorkspaceById(id);

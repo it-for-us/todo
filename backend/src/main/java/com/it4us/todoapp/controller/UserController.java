@@ -7,6 +7,7 @@ import com.it4us.todoapp.dto.UserViewDto;
 import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.exception.UnAuthorizedException;
 import com.it4us.todoapp.service.UserService;
+import com.it4us.todoapp.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
