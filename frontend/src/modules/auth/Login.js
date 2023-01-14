@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -53,8 +54,10 @@ export default function Login() {
                 },
               })}
             />
-            {error.error.message === "Invalid email or password." && (
-              <p style={{ color: "red" }}>{error.error.message}</p>
+            {error && error.error.message === "Invalid email or password." && (
+              <Alert className="text-center mt-2 py-2" variant="danger">
+                {error.error.message}!
+              </Alert>
             )}
             {errors.password && (
               <p style={{ color: "red" }}>Please enter a valid password</p>

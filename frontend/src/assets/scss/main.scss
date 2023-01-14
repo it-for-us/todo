@@ -4,11 +4,10 @@ $danger: tomato;
 @import "~bootstrap/scss/bootstrap";
 // Then add additional custom code here
 
-@import './Variables.scss';
-@import './Footer.scss';
-@import './Login.scss';
-@import './Register.scss';
-@import './Footer.scss';
-@import './Navbar.scss';
-@import './WorkSpace.scss';
-
+@import "./base/variables";
+@import "./Footer.scss";
+@import "./Login.scss";
+@import "./Register.scss";
+@import "./Footer.scss";
+@import "./Navbar.scss";
+@import "./WorkSpace.scss";
