@@ -38,4 +38,4 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: cd frontend; npm ci; npm i eslint; npm test; npm run build --if-present    
+      - run: npm ci; npm i eslint; npm run build --if-present; npm test   
