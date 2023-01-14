@@ -39,4 +39,4 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci && npm i eslint &&  npm run build --if-present && npm test   
+      - run: npm i && npm i eslint &&  npm run build --if-present && npm test   
