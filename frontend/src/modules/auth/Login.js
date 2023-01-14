@@ -54,9 +54,9 @@ export default function Login() {
                 },
               })}
             />
-            {error && error.error.message === "Invalid email or password." && (
+            {error && (
               <Alert className="text-center mt-2 py-2" variant="danger">
-                {error.error.message}!
+                {error?.error?.message || "Something went wrong"}!
               </Alert>
             )}
             {errors.password && (

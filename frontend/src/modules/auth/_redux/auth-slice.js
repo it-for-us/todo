@@ -60,7 +60,7 @@ const authSlice = createSlice({
       state.token = null;
       state.user = null;
       state.isLoading = false;
-      state.error = action.payload.error || "Logout failed";
+      state.error = null;
       state.status = "idle";
     },
 
