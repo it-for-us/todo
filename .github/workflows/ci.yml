@@ -3,10 +3,10 @@ me: Build
 on:
   push:
     branches:
-      - todo-new
+      - ci-frontend
   pull_request:
     branches:
-      - todo-new 
+      - ci-frontend
 jobs:
   ci-backend:
     runs-on: ubuntu-latest
