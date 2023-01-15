@@ -6,10 +6,8 @@ import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.service.BoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Table;
 
@@ -29,4 +27,13 @@ public class BoardController {
         BoardViewDto boardViewDto = boardService.create(boardCreateDto);
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
     }
+
+    @PutMapping(path="{id}")
+    public HttpStatus updateWorkspace(Authentication auth, @PathVariable Long id, @RequestParam(required = false) String name) {
+        String username = auth.getName();
+
+        boardService.updateBoard(id,username,name);
+        return HttpStatus.OK;
+    }
+
 }

@@ -38,9 +38,13 @@ public class WorkspaceController {
     }
 
     @PutMapping(path="{id}")
-    public void updateWorkspace(@PathVariable("id") Long id, @RequestParam(required = false) String name){
-        workspaceService.updateWorkspace(id,name);
+    public HttpStatus updateWorkspace(Authentication auth,@PathVariable Long id, @RequestParam(required = false) String name) {
+        String username = auth.getName();
+
+        workspaceService.updateWorkspace(id,username,name);
+        return HttpStatus.OK;
     }
+
 }
 
 
