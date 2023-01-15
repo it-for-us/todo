@@ -12,7 +12,7 @@ import { AuthProvider } from "./modules/auth/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import AuthRoute from "./routes/AuthRoute";
-
+// import axiosInterceptors from "./app/setup-axios";
 import "./assets/scss/main.scss";
 
 function App() {
