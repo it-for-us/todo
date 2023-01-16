@@ -1,11 +1,14 @@
 img {
-  width: 20px;
+  width: 25px;
   margin-right: 5px;
 }
 .brand {
   text-decoration: none;
   display: flex;
   align-items: center;
+  span {
+    font-size: 1.5rem;
+  }
 }
 .nav_bar {
   .auth-btn {

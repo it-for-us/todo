@@ -18,7 +18,6 @@ function App() {
   return (
     <div className="App">
       <AuthProvider>
-        {/* <Header /> */}
         <Routes>
           <Route element={<AuthRoute />}>
             <Route path="/login" element={<Login />} />
