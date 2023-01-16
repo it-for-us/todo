@@ -1,36 +1,37 @@
-import React from 'react';
-import Card from '@mui/material/Card';
-import { Container } from '@mui/system';
-import { Box, CardContent, Typography, Button } from '@mui/material';
-import InputBase from '@mui/material/InputBase';
-import { useForm } from 'react-hook-form';
-import Grid from '@mui/material/Grid';
-import { useContext, useState } from 'react';
-import UserContext from '../contexts/UserContext';
-import WorkSpace from '../components/WorkSpace';
-import { useDispatch } from 'react-redux';
-import { logout } from '../modules/auth/_redux/auth-slice';
+import React from "react";
+import Card from "@mui/material/Card";
+import { Container } from "@mui/system";
+import { Box, CardContent, Typography, Button } from "@mui/material";
+import InputBase from "@mui/material/InputBase";
+import { useForm } from "react-hook-form";
+import Grid from "@mui/material/Grid";
+import { useContext, useState } from "react";
+import UserContext from "../contexts/UserContext";
+import WorkSpace from "../components/WorkSpace";
+import { useDispatch } from "react-redux";
+import { logout } from "../modules/auth/_redux/auth-slice";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const [message, setMesaage] = useState('');
+  const [message, setMesaage] = useState("");
   const [toggle, setToggle] = useState(false);
   const [workSpace, setWorkSpace] = useState([]);
   const { userData, setUserData } = useContext(UserContext);
+
   // userData[0].workSpace = workSpace;
   setUserData(userData, (userData[0].workSpace = workSpace));
   console.log(userData);
   console.log(workSpace);
   const errorMessage =
-    'Workspace and Board names can contain letters (a-z), numbers(0-9), and an underline(_) and it can have 4-15 characters long. It can start only letter or number';
+    "Workspace and Board names can contain letters (a-z), numbers(0-9), and an underline(_) and it can have 4-15 characters long. It can start only letter or number";
   const inputError = (
     <Typography
       variant="subtitle2"
       sx={{
-        color: 'red',
-        bgcolor: 'gray',
-        textAlign: 'center',
-        borderRadius: '32px',
+        color: "red",
+        bgcolor: "gray",
+        textAlign: "center",
+        borderRadius: "32px",
       }}
     >
       Please try a valid name
@@ -59,7 +60,7 @@ export default function Home() {
           boardsName: [{ boardName: inputWorkSpace.boardName }],
         },
       ]);
-      setMesaage('');
+      setMesaage("");
       setToggle(!toggle);
       reset();
     }
@@ -82,7 +83,7 @@ export default function Home() {
         <div className="home">
           <Container
             sx={{
-              color: 'white',
+              color: "white",
               mt: 8,
             }}
           >
@@ -90,10 +91,10 @@ export default function Home() {
               container
               spacing={1}
               sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                color: 'white',
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                color: "white",
               }}
             >
               <Grid item xs={3}></Grid>
@@ -103,30 +104,31 @@ export default function Home() {
                   component="h1"
                   variant="h4"
                   sx={{
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                 >
                   Welcome DART
                 </Typography>
                 <Card
                   sx={{
-                    bgcolor: 'rgba(175,149,213,255)',
-                    borderRadius: '16px',
-                    margin: 'auto',
+                    bgcolor: "rgba(175,149,213,255)",
+                    borderRadius: "16px",
+                    margin: "auto",
                     mt: 2,
                   }}
                 >
                   <CardContent
                     sx={{
-                      textAlign: 'center',
+                      textAlign: "center",
                     }}
                   >
                     <Typography
                       sx={{
-                        margin: 'auto',
+                        margin: "auto",
                       }}
                     >
-                      Firstly create a workspace and a board than start add your post-it
+                      Firstly create a workspace and a board than start add your
+                      post-it
                     </Typography>
 
                     <Container component="main" maxWidth="xs">
@@ -139,65 +141,65 @@ export default function Home() {
                         <Typography
                           variant="subtitle2"
                           sx={{
-                            textAlign: 'left',
-                            color: 'white',
+                            textAlign: "left",
+                            color: "white",
                             mt: 2,
                           }}
                         >
                           WORKSPACE NAME*
                         </Typography>
-                        {errors.workSpaceName?.message ? inputError : ''}
+                        {errors.workSpaceName?.message ? inputError : ""}
                         {message}
                         <InputBase
                           sx={{
-                            bgcolor: 'white',
-                            borderRadius: '16px',
+                            bgcolor: "white",
+                            borderRadius: "16px",
                           }}
                           name="workSpaceName"
                           id="workspacename"
                           fullWidth
                           autoFocus
-                          {...register('workSpaceName', {
-                            required: 'true',
+                          {...register("workSpaceName", {
+                            required: "true",
                             pattern: {
                               value: /^[a-zA-Z0-9][a-zA-Z0-9_]{4,15}$/,
-                              message: 'true',
+                              message: "true",
                             },
                           })}
                         />
                         <Typography
                           variant="subtitle2"
                           sx={{
-                            textAlign: 'left',
-                            color: 'white',
+                            textAlign: "left",
+                            color: "white",
                             mt: 2,
                           }}
                         >
                           BOARD NAME*
                         </Typography>
 
-                        {errors.boardName?.message ? inputError : ''}
+                        {errors.boardName?.message ? inputError : ""}
                         <InputBase
                           sx={{
-                            bgcolor: 'white',
-                            borderRadius: '16px',
+                            bgcolor: "white",
+                            borderRadius: "16px",
                           }}
                           fullWidth
                           autoFocus
                           name="BoardName"
                           id="boardName"
-                          {...register('boardName', {
-                            required: 'true',
+                          {...register("boardName", {
+                            required: "true",
                             pattern: {
                               value: /^[a-zA-Z0-9][a-zA-Z0-9_]{3,14}$/,
-                              message: 'true',
+                              message: "true",
                             },
                           })}
                         />
                         <Button
                           type="submit"
                           variant="contained"
-                          sx={{ bgcolor: '#b498ce', mt: 2 }}
+                          sx={{ bgcolor: "#b498ce", mt: 2 }}
                         >
                           Create
                         </Button>
@@ -209,17 +211,17 @@ export default function Home() {
               <Grid item xs={3}>
                 <Box
                   sx={{
-                    bgcolor: 'rgba(175,149,213,255)',
-                    borderRadius: '5%',
-                    color: 'black',
+                    bgcolor: "rgba(175,149,213,255)",
+                    borderRadius: "5%",
+                    color: "black",
                     mt: 8,
                   }}
                 >
-                  {' '}
+                  {" "}
                   <Typography component="h1" variant="body2">
                     {errors.workSpaceName?.message || errors.boardName?.message
                       ? errorMessage
-                      : ''}
+                      : ""}
                   </Typography>
                 </Box>
               </Grid>

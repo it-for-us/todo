@@ -2,8 +2,6 @@ import Login from "./modules/auth//Login";
 import SignUp from "./modules/auth/SignUp";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-// import Footer from "./components/Footer";
-// import Header from "./components/Header";
 import { Routes, Route } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
@@ -14,6 +12,7 @@ import PublicRoute from "./routes/PublicRoute";
 import AuthRoute from "./routes/AuthRoute";
 
 import "./assets/scss/main.scss";
+import Landing from "./pages/Landing";
 
 function App() {
   return (
@@ -24,6 +23,7 @@ function App() {
           <Route element={<AuthRoute />}>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/" element={<Landing />} />
           </Route>
 
           <Route element={<PublicRoute />}>
@@ -34,10 +34,9 @@ function App() {
           </Route>
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
           </Route>
         </Routes>
-        {/* <Footer /> */}
       </AuthProvider>
     </div>
   );
