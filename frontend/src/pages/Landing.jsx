@@ -4,7 +4,7 @@ import img from "../assets/images/TrelloUICollage_4x.webp";
 import imgSlider from "../assets/images/Carousel_Image_Boards_2x.webp";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-// import Footer from "../components/Footer";
+import Footer from "../components/Footer";
 
 export default function Landing() {
   return (
@@ -76,7 +76,7 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
