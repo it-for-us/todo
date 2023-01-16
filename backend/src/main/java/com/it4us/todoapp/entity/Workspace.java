@@ -36,4 +36,5 @@ public class Workspace {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+
 }

@@ -2,41 +2,54 @@ package com.it4us.todoapp.controller;
 
 import com.it4us.todoapp.dto.UserCreateDto;
 import com.it4us.todoapp.dto.UserSignInDto;
+import com.it4us.todoapp.dto.UserSignInResponse;
 import com.it4us.todoapp.dto.UserViewDto;
+import com.it4us.todoapp.entity.User;
+import com.it4us.todoapp.exception.UnAuthorizedException;
 import com.it4us.todoapp.service.UserService;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
     public ResponseEntity<UserViewDto> createUser(@Valid @RequestBody UserCreateDto userCreateDto){
+
         UserViewDto user = userService.create(userCreateDto);
         return ResponseEntity.ok(user);
     }
 
     @PostMapping("/signin")
-    public HttpStatus signIn(@Valid @RequestBody UserSignInDto userSignInDto){
+    public ResponseEntity<UserSignInResponse> signin(@Valid @RequestBody UserSignInDto userSignInDto){
 
-            Optional<?> user = userService.login(userSignInDto);
+        User user = userService.findByEmail(userSignInDto.getEmail());
 
-            return HttpStatus.OK;
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), userSignInDto.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            throw  new UnAuthorizedException(e.getMessage());
+        }
 
 
+        UserSignInResponse signInResponse = userService.login(userSignInDto);
+        return ResponseEntity.ok(signInResponse);
     }
-
-
 }
