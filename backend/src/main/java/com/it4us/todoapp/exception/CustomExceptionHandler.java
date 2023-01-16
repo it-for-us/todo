@@ -53,22 +53,34 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(WorkspaceNotFoundException.class)
     public ResponseEntity<?> workspaceNotFound(WorkspaceNotFoundException workspaceNotFoundException) {
-        ErrorResponse errorResponse = new ErrorResponse("Workspace is not found.", 404);
+        ErrorResponse errorResponse = new ErrorResponse(workspaceNotFoundException.getMessage(), 404);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(WorkspaceBelongAnotherUserException.class)
     public ResponseEntity<?> workspaceBelongedAnotherUser(WorkspaceBelongAnotherUserException workspaceBelongAnotherUserException) {
-        ErrorResponse errorResponse = new ErrorResponse("Workspace is belonged to another user.", 401);
+        ErrorResponse errorResponse = new ErrorResponse(workspaceBelongAnotherUserException.getMessage(), 401);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class) // to catch cast exception in @PathVariable when type is wrong passed.
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    // to catch cast exception in @PathVariable when type is wrong passed.
     public ResponseEntity<?> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException methodArgumentTypeMismatchException) {
         ErrorResponse errorResponse = new ErrorResponse(methodArgumentTypeMismatchException.getMessage(), 400);
-    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BoardBelongAnotherUserException.class)
+    public ResponseEntity<?> boardBelongedAnotherUser(BoardBelongAnotherUserException boardBelongAnotherUserException) {
+        ErrorResponse errorResponse = new ErrorResponse(boardBelongAnotherUserException.getMessage(), 401);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BoardNotFoundException.class)
+    public ResponseEntity<?> boardNotFoundException(BoardNotFoundException boardNotFoundException) {
+        ErrorResponse errorResponse = new ErrorResponse(boardNotFoundException.getMessage(), 404);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }
 
 

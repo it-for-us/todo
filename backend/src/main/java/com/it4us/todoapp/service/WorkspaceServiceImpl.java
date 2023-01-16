@@ -47,14 +47,14 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new WorkspaceNotFoundException("Workspace is not found."));
 
-        if (IsWorkspaceBelongedUser(workspace, username)) {
+        if (isWorkspaceBelongedUser(workspace, username)) {
             List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspaceId));
             return WorkspaceViewDto.of(workspace, boards);
         } else
             throw new WorkspaceBelongAnotherUserException("Workspace is belonged to another user.");
     }
 
-    private boolean IsWorkspaceBelongedUser(Workspace workspace, String username) { //????
+    private boolean isWorkspaceBelongedUser(Workspace workspace, String username) { //????
         return workspace.getUser().getUsername().equals(username);
     }
 

@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface BoardService {
 
     BoardViewDto create(BoardCreateDto boardCreateDto);
+    BoardViewDto getBoardById(Long boardId);
 
     List<BoardViewDto> getAllBoards(Optional<Long> workspaceId);
 

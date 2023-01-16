@@ -4,12 +4,12 @@ import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.entity.Board;
 import com.it4us.todoapp.entity.Workspace;
-import com.it4us.todoapp.exception.BadRequestException;
-import com.it4us.todoapp.exception.BoardExistException;
-import com.it4us.todoapp.exception.NotFoundException;
+import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.BoardRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +40,23 @@ public class BoardServiceImpl implements BoardService {
             board.setWorkspace((workspaceRepository.findById(boardCreateDto.getWorkspaceId())).get());
         }
         return BoardViewDto.of(boardRepository.save(board));
+    }
+
+    @Override
+    public BoardViewDto getBoardById(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException("Board is not found"));
+        if (isBoardBelongedUser(boardId))
+            return BoardViewDto.of(board);
+        else throw new BoardBelongAnotherUserException("The board is belonged another user.");
+    }
+
+    private boolean isBoardBelongedUser(Long boardId) {
+        return (boardRepository.isBoardBelongedUser(boardId, getUserName()) > 0);
+    }
+
+    private String getUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 
     @Override
@@ -103,4 +120,5 @@ public class BoardServiceImpl implements BoardService {
 
         return true;
     }
+
 }
