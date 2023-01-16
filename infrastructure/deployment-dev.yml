@@ -111,19 +111,76 @@ spec:
       port: 80
       targetPort: 8080
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dart-frontend
+spec:
+  selector:
+    matchLabels:
+      app: dart-frontend
+  template:
+    metadata:
+      labels:
+        app: dart-frontend
+    spec:
+      hostNetwork: false
+      imagePullSecrets:
+        - name: ghcr-credentials
+      containers:
+        - name: dart-frontend
+          image: ghcr.io/it-for-us/dart-frontend:latest
+          imagePullPolicy: Always
+ #         env:
+ #           - name: SPRING_PROFILES_ACTIVE
+ #             value: kubernetes
+ #           - name: POSTGRES_USERNAME
+ #             valueFrom:
+ #               secretKeyRef:
+ #                 key: POSTGRES_USERNAME
+ #                 name: postgres-secret
+ #           - name: POSTGRES_PASSWORD
+ #             valueFrom:
+ #               secretKeyRef:
+ #                 key: POSTGRES_PASSWORD
+ #                 name: postgres-secret
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dart-frontend
+spec:
+  selector:
+    app: dart-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dart-backend
+  name: dart-app-ingress
 spec:
   rules:
     - host: dart-dev.fria.io
       http:
         paths:
-          - path: /
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: dart-frontend
+                port:
+                  number: 80
+          - path: /api
             pathType: Prefix
             backend:
               service:
                 name: dart-backend
                 port:
                   number: 80
+                  
