@@ -4,7 +4,7 @@ import MainLayout from "./layouts/MainLayout";
 import { useSelector } from "react-redux";
 
 export default function AuthRoute() {
-  const { isAuthenticated } = useSelector(state => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   if (!isAuthenticated) {
     return (
@@ -13,5 +13,5 @@ export default function AuthRoute() {
       </MainLayout>
     );
   }
-  return <Navigate to="/" />;
+  return <Navigate to="/home" />;
 }
