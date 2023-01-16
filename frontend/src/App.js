@@ -14,8 +14,12 @@ import PublicRoute from "./routes/PublicRoute";
 import AuthRoute from "./routes/AuthRoute";
 // import axiosInterceptors from "./app/setup-axios";
 import "./assets/scss/main.scss";
+// import { useCallback } from "react";
 
 function App() {
+  // useCallback(() => {
+  //   axiosInterceptors.put("https://dart-todo-api.onrender.com/users/logout");
+  // }, []);
   return (
     <div className="App">
       <AuthProvider>

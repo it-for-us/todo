@@ -6,7 +6,10 @@ import axios from "axios";
 
 const axiosInterceptors = axios.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("token");
+    const token = JSON.parse(
+      sessionStorage.getItem("persist:dart-todo-app-auth")
+    ).token;
+    console.log(token);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
