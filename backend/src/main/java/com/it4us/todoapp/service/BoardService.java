@@ -11,5 +11,4 @@ public interface BoardService {
     Boolean isAValidBoardName(BoardCreateDto boardCreateDto);
     Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto);
 
-
 }

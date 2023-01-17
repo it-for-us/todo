@@ -34,29 +34,18 @@ public class BoardServiceImpl implements BoardService {
          if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
             throw new BoardExistException("Board is already exist");
 
-         else if( isAValidWorkspaceId(boardCreateDto) && isAValidBoardName(boardCreateDto) ){
+         else if(isAValidWorkspaceId(boardCreateDto) && isAValidBoardName(boardCreateDto)){
 
              board.setName(boardCreateDto.getName());
              board.setWorkspace((workspaceRepository.findById(boardCreateDto.getWorkspaceId())).get());
          }
+
         return BoardViewDto.of(boardRepository.save(board));
     }
 
     @Override
     public Boolean isBoardExist(String boardName, Long workspaceId) {
-
-        Optional<Workspace> workspace = workspaceRepository.findById(workspaceId);
-
-        if (workspace.isPresent()) {
-            List<Board> boardList = workspace.get().getBoards();
-
-            for (Board boards : boardList) {
-                if (boards.getName().equals(boardName)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return boardRepository.isBoardExistInWorkSpace(boardName, workspaceId);
     }
 
     @Override

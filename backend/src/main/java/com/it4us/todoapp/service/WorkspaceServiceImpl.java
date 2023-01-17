@@ -1,9 +1,12 @@
 package com.it4us.todoapp.service;
 
+import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.WorkspaceCreateDto;
 import com.it4us.todoapp.dto.WorkspaceViewDto;
+import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
+import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,26 +18,27 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
 
+    private final UserRepository userRepository;
+
 
 
     @Override
     public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto) {
         Workspace workspace = new Workspace();
 
-        if (isWorkspaceExist(workspaceCreateDto.getName()))
+        if (isWorkspaceExist(workspaceCreateDto.getName(), workspaceCreateDto.getUserId()))
             throw new WorkspaceExistException("Workspace is already exist");
-        else if (isAValidWorkspaceName(workspaceCreateDto))
+        else if (isAValidWorkspaceName(workspaceCreateDto)) {
             workspace.setName(workspaceCreateDto.getName());
-
+            workspace.setUser((userRepository.findById(workspaceCreateDto.getUserId())).get());
+        }
         return WorkspaceViewDto.of(workspaceRepository.save(workspace));
     }
 
     @Override
-    public Boolean isWorkspaceExist(String workspaceName) {
+    public Boolean isWorkspaceExist(String workspaceName, Long userId) {
 
-        Optional<Workspace> workspace = workspaceRepository.findByName(workspaceName);
-
-        return workspace.isPresent();
+        return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
     }
 
     @Override
@@ -65,6 +69,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public void deleteWorkspaceById(Long id) {
+
 
         Optional<Workspace> workspace = workspaceRepository.findById(id);
 
