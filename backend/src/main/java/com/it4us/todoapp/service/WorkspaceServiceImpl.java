@@ -116,30 +116,5 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 
     }
-
-    @Override
-    @Transactional
-    public void updateWorkspace(Long id, String name) {
-
-
-        Workspace workspace=workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("workspace not found"));
-
-        if(id==null|| name==null || name.length()==0){
-            throw new IllegalStateException("Id or workspace is incorrect format");
-        }
-
-        Optional<Workspace> workspaceOptional=workspaceRepository.findWorkspaceByName(name);
-        if(workspaceOptional.isPresent()){
-            throw new IllegalStateException("workspace already exists");
-        }
-        if(id!=null && name!=null && name.length()>0){
-
-
-            workspace.setName(name);
-        }
-
-
-    }
 }
 
