@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.Table;
 
 @RestController
-@RequestMapping(value = "/boards")
+@RequestMapping(value = "/api/boards")
 @Table(name = "Boards")
 public class BoardController {
 

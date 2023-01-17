@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/work-space")
+@RequestMapping("/api/work-space")
 public class WorkspaceController {
 
     private WorkspaceService workspaceService;
