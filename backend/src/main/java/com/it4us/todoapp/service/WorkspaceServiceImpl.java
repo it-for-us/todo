@@ -1,11 +1,15 @@
 package com.it4us.todoapp.service;
 
+import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.WorkspaceCreateDto;
 import com.it4us.todoapp.dto.WorkspaceViewDto;
+import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
+import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,26 +22,31 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
 
+    private final UserRepository userRepository;
+
 
 
     @Override
-    public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto) {
+    public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto, String username) {
         Workspace workspace = new Workspace();
 
-        if (isWorkspaceExist(workspaceCreateDto.getName()))
-            throw new WorkspaceExistException("Workspace is already exist");
-        else if (isAValidWorkspaceName(workspaceCreateDto))
-            workspace.setName(workspaceCreateDto.getName());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User is not found"));
 
+
+        if (isWorkspaceExist(workspaceCreateDto.getName(), user.getUserId()))
+            throw new WorkspaceExistException("Workspace is already exist");
+        else if (isAValidWorkspaceName(workspaceCreateDto)) {
+            workspace.setName(workspaceCreateDto.getName());
+            workspace.setUser(user);
+        }
         return WorkspaceViewDto.of(workspaceRepository.save(workspace));
     }
 
     @Override
-    public Boolean isWorkspaceExist(String workspaceName) {
+    public Boolean isWorkspaceExist(String workspaceName, Long userId) {
 
-        Optional<Workspace> workspace = workspaceRepository.findByName(workspaceName);
-
-        return workspace.isPresent();
+        return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
     }
 
     @Override
@@ -67,13 +76,45 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public void deleteWorkspaceById(Long id) {
+    public void deleteWorkspaceById(Long id, String username) {
 
-        Optional<Workspace> workspace = workspaceRepository.findById(id);
 
-        if (workspace.isPresent()) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User is not found"));
+
+
+        Workspace workspace = workspaceRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Workspace is not found"));
+
+
+        if (user.getUsername().equals(workspace.getUser().getUsername())) {
             workspaceRepository.deleteById(id);
+        }else throw new UnAuthorizedException("UnAuthorized Exception");
+    }
+
+    @Override
+    @Transactional
+    public void updateWorkspace(Long id, String name) {
+
+
+        Workspace workspace=workspaceRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("workspace not found"));
+
+        if(id==null|| name==null || name.length()==0){
+            throw new IllegalStateException("Id or workspace is incorrect format");
         }
+
+        Optional<Workspace> workspaceOptional=workspaceRepository.findWorkspaceByName(name);
+        if(workspaceOptional.isPresent()){
+            throw new IllegalStateException("workspace already exists");
+        }
+        if(id!=null && name!=null && name.length()>0){
+
+
+            workspace.setName(name);
+        }
+
+
     }
 
     @Override
