@@ -1,1 +1,0 @@
-// burada protected routing kismi insa edilecek
