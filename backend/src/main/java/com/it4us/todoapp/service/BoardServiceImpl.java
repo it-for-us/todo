@@ -3,9 +3,11 @@ package com.it4us.todoapp.service;
 import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.entity.Board;
+import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.BoardRepository;
+import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,20 +27,31 @@ public class BoardServiceImpl implements BoardService {
     @Autowired
     private WorkspaceRepository workspaceRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Override
-    public BoardViewDto create(BoardCreateDto boardCreateDto) {
+    public BoardViewDto create(BoardCreateDto boardCreateDto, String username) {
 
         Board board = new Board();
 
+        Workspace workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId())
+                .orElseThrow(() -> new NotFoundException("Workspace is not found"));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User is not found"));
+
+
         if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
             throw new BoardExistException("Board is already exist");
-
-        else if (isAValidWorkspaceId(boardCreateDto) && isAValidBoardName(boardCreateDto)) {
+        else if (isAValidBoardName(boardCreateDto)
+                && workspace.getUser().getUsername().equals(user.getUsername())) {
 
             board.setName(boardCreateDto.getName());
-            board.setWorkspace((workspaceRepository.findById(boardCreateDto.getWorkspaceId())).get());
+            board.setWorkspace(workspace);
         }
+
         return BoardViewDto.of(boardRepository.save(board));
     }
 
@@ -70,19 +83,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Boolean isBoardExist(String boardName, Long workspaceId) {
-//Bu metod Cihat Bey tarafindan güncellendi.
-// Bu haliyle fetch type Eager olmadigi icin hata veriyor. O yuzden burayi kapattim.
-        Optional<Workspace> workspace = workspaceRepository.findById(workspaceId);
-
-//        if (workspace.isPresent()) {
-//            List<Board> boardList = workspace.get().getBoards();
-//            for (Board boards : boardList) {
-//                if (boards.getName().equals(boardName)) {
-//                    return true;
-//                }
-//            }
-//        }
-        return false;
+        return boardRepository.isBoardExistInWorkSpace(boardName, workspaceId);
     }
 
     @Override
@@ -109,16 +110,4 @@ public class BoardServiceImpl implements BoardService {
 
         return true;
     }
-
-    @Override
-    public Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto) {
-
-        Optional<Workspace> workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId());
-
-        if (workspace.isEmpty())
-            throw new NotFoundException("There is no such workspace");
-
-        return true;
-    }
-
 }

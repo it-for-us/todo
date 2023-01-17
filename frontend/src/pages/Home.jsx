@@ -8,12 +8,16 @@ import Grid from "@mui/material/Grid";
 import { useContext, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import WorkSpace from "../components/WorkSpace";
+import { useDispatch } from "react-redux";
+import { logout } from "../modules/auth/_redux/auth-slice";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const [message, setMesaage] = useState("");
   const [toggle, setToggle] = useState(false);
   const [workSpace, setWorkSpace] = useState([]);
   const { userData, setUserData } = useContext(UserContext);
+
   // userData[0].workSpace = workSpace;
   setUserData(userData, (userData[0].workSpace = workSpace));
   console.log(userData);
@@ -61,8 +65,20 @@ export default function Home() {
       reset();
     }
   };
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
   return (
     <div className="home-page">
+      <div className="d-grid">
+        <button
+          onClick={logoutHandler}
+          className="btn btn-danger btn-lg mx-auto my-4 w-100"
+        >
+          Logout
+        </button>
+      </div>
       {!toggle ? (
         <div className="home">
           <Container

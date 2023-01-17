@@ -1,10 +1,10 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import { useAuthContext } from "../modules/auth/AuthContext";
+import { useSelector } from "react-redux";
 
 export default function ProtectedRoute() {
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   if (isAuthenticated) {
     return (
@@ -13,5 +13,5 @@ export default function ProtectedRoute() {
       </MainLayout>
     );
   }
-  return <Navigate to="/login" />;
+  return <Navigate to="/" />;
 }
