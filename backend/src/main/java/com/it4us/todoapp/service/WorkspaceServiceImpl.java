@@ -9,6 +9,7 @@ import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -23,14 +24,18 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 
     @Override
-    public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto) {
+    public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto, String username) {
         Workspace workspace = new Workspace();
 
-        if (isWorkspaceExist(workspaceCreateDto.getName(), workspaceCreateDto.getUserId()))
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User is not found"));
+
+
+        if (isWorkspaceExist(workspaceCreateDto.getName(), user.getUserId()))
             throw new WorkspaceExistException("Workspace is already exist");
         else if (isAValidWorkspaceName(workspaceCreateDto)) {
             workspace.setName(workspaceCreateDto.getName());
-            workspace.setUser((userRepository.findById(workspaceCreateDto.getUserId())).get());
+            workspace.setUser(user);
         }
         return WorkspaceViewDto.of(workspaceRepository.save(workspace));
     }
@@ -68,14 +73,20 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public void deleteWorkspaceById(Long id) {
+    public void deleteWorkspaceById(Long id, String username) {
 
 
-        Optional<Workspace> workspace = workspaceRepository.findById(id);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User is not found"));
 
-        if (workspace.isPresent()) {
+
+        Workspace workspace = workspaceRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Workspace is not found"));
+
+
+        if (user.getUsername().equals(workspace.getUser().getUsername())) {
             workspaceRepository.deleteById(id);
-        }
+        }else throw new UnAuthorizedException("UnAuthorized Exception");
     }
 }
 

@@ -3,13 +3,17 @@ package com.it4us.todoapp.service;
 import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.entity.Board;
+import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.BadRequestException;
 import com.it4us.todoapp.exception.BoardExistException;
 import com.it4us.todoapp.exception.NotFoundException;
 import com.it4us.todoapp.repository.BoardRepository;
+import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,20 +28,29 @@ public class BoardServiceImpl implements BoardService {
     @Autowired
     private WorkspaceRepository workspaceRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
-    public BoardViewDto create(BoardCreateDto boardCreateDto) {
+    public BoardViewDto create(BoardCreateDto boardCreateDto, String username) {
 
         Board board = new Board();
 
+        Workspace workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId())
+                .orElseThrow(() -> new NotFoundException("Workspace is not found"));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User is not found"));
+
+
          if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
             throw new BoardExistException("Board is already exist");
-
-         else if(isAValidWorkspaceId(boardCreateDto) && isAValidBoardName(boardCreateDto)){
+         else if( isAValidBoardName(boardCreateDto)
+                 && workspace.getUser().getUsername().equals(user.getUsername())){
 
              board.setName(boardCreateDto.getName());
-             board.setWorkspace((workspaceRepository.findById(boardCreateDto.getWorkspaceId())).get());
+             board.setWorkspace(workspace);
          }
 
         return BoardViewDto.of(boardRepository.save(board));
@@ -69,17 +82,6 @@ public class BoardServiceImpl implements BoardService {
 
         if (boardNameToChar.length<4 || boardNameToChar.length>15 || boardNameToChar[0]=='_'|| countOf_>1)
             throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
-
-        return true;
-    }
-
-    @Override
-    public Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto) {
-
-        Optional<Workspace> workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId());
-
-        if (workspace.isEmpty())
-            throw new NotFoundException("There is no such workspace");
 
         return true;
     }

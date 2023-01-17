@@ -2,7 +2,9 @@ package com.it4us.todoapp.controller;
 
 import com.it4us.todoapp.dto.WorkspaceCreateDto;
 import com.it4us.todoapp.dto.WorkspaceViewDto;
+import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.service.WorkspaceService;
+import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,17 +25,14 @@ public class WorkspaceController {
     @PostMapping
     public ResponseEntity<WorkspaceViewDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        System.out.println(username);
-
-        WorkspaceViewDto workspaceViewDto = workspaceService.create(workspaceCreateDto);
+        WorkspaceViewDto workspaceViewDto = workspaceService.create(workspaceCreateDto,
+                LoggedUsername.getUsernameFromAuthentication());
         return new ResponseEntity<>(workspaceViewDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public HttpStatus deleteWorkspace(@PathVariable Long id){
-        workspaceService.deleteWorkspaceById(id);
+        workspaceService.deleteWorkspaceById(id, LoggedUsername.getUsernameFromAuthentication());
         return HttpStatus.OK;
     }
 }

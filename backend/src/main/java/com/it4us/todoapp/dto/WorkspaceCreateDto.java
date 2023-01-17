@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class WorkspaceCreateDto {
 
     private String name;
-    private Long userId;
 }
