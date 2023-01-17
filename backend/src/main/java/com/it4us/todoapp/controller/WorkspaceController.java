@@ -35,6 +35,11 @@ public class WorkspaceController {
         workspaceService.deleteWorkspaceById(id, LoggedUsername.getUsernameFromAuthentication());
         return HttpStatus.OK;
     }
+
+    @PutMapping(path="{id}")
+    public void updateWorkspace(@PathVariable("id") Long id, @RequestParam(required = false) String name){
+        workspaceService.updateWorkspace(id,name);
+    }
 }
 
 

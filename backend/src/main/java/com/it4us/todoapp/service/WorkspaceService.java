@@ -10,4 +10,5 @@ public interface WorkspaceService {
     Boolean isAValidWorkspaceName(WorkspaceCreateDto workspaceCreateDto);
     void deleteWorkspaceById(Long id, String username);
 
+    void updateWorkspace(Long id, String name);
 }
