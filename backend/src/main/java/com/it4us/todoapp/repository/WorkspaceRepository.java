@@ -13,6 +13,8 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
     Optional<Workspace> findByName(String name);
     Optional<Workspace> findWorkspaceByName(String name);
 
+    Optional<Workspace> findWorkspaceByName(String name);
+
     @Query(value = "SELECT * FROM workspaces w where w.user_id = :userId", nativeQuery = true)
     List<Workspace> findWorkspacesByUserId(@Param("userId")Long userId);
     @Query(value = "SELECT CASE WHEN COUNT(w) > 0 THEN true ELSE false END FROM workspaces w where w.user_id = :userId and w.workspace_name= :workspaceName", nativeQuery = true)
