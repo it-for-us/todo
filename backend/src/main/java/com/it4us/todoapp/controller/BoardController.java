@@ -7,10 +7,7 @@ import com.it4us.todoapp.service.BoardService;
 import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Table;
 
@@ -30,5 +27,11 @@ public class BoardController {
         BoardViewDto boardViewDto = boardService.create(boardCreateDto,
                 LoggedUsername.getUsernameFromAuthentication());
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping({"/{boardId}"})
+    public ResponseEntity<BoardViewDto> getBoardById(@PathVariable("boardId") Long boardId){
+        BoardViewDto boardViewDto = boardService.getBoardById(boardId);
+        return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.OK);
     }
 }

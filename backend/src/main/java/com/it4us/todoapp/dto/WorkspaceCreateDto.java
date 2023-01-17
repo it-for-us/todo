@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkspaceCreateDto {
-
     private String name;
+    private Long userId;
 }

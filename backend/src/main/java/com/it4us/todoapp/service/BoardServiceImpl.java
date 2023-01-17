@@ -5,9 +5,7 @@ import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.entity.Board;
 import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
-import com.it4us.todoapp.exception.BadRequestException;
-import com.it4us.todoapp.exception.BoardExistException;
-import com.it4us.todoapp.exception.NotFoundException;
+import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.BoardRepository;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -44,16 +43,42 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundException("User is not found"));
 
 
-         if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
+        if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
             throw new BoardExistException("Board is already exist");
-         else if( isAValidBoardName(boardCreateDto)
-                 && workspace.getUser().getUsername().equals(user.getUsername())){
+        else if (isAValidBoardName(boardCreateDto)
+                && workspace.getUser().getUsername().equals(user.getUsername())) {
 
-             board.setName(boardCreateDto.getName());
-             board.setWorkspace(workspace);
-         }
+            board.setName(boardCreateDto.getName());
+            board.setWorkspace(workspace);
+        }
 
         return BoardViewDto.of(boardRepository.save(board));
+    }
+
+    @Override
+    public BoardViewDto getBoardById(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException("Board is not found"));
+        if (isBoardBelongedUser(boardId))
+            return BoardViewDto.of(board);
+        else throw new BoardBelongAnotherUserException("The board is belonged another user.");
+    }
+
+    private boolean isBoardBelongedUser(Long boardId) {
+        return (boardRepository.isBoardBelongedUser(boardId, getUserName()) > 0);
+    }
+
+    private String getUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+    @Override
+    public List<BoardViewDto> getAllBoards(Optional<Long> workspaceId) {
+        List<Board> boards;
+        if (workspaceId.isPresent()) {
+            boards = boardRepository.findByWorkspaceId(workspaceId);
+        } else boards = boardRepository.findAll();
+        return boards.stream().map(board -> BoardViewDto.of(board)).collect(Collectors.toList());
     }
 
     @Override
@@ -73,14 +98,14 @@ public class BoardServiceImpl implements BoardService {
                     || (c >= '0' && c <= '9')
                     || (c == ' ')
                     || (c == '_')) {
-                if (c=='_'){
+                if (c == '_') {
                     countOf_++;
                 }
-            }else
+            } else
                 throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
         }
 
-        if (boardNameToChar.length<4 || boardNameToChar.length>15 || boardNameToChar[0]=='_'|| countOf_>1)
+        if (boardNameToChar.length < 4 || boardNameToChar.length > 15 || boardNameToChar[0] == '_' || countOf_ > 1)
             throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
 
         return true;

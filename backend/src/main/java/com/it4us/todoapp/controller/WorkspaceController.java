@@ -2,13 +2,10 @@ package com.it4us.todoapp.controller;
 
 import com.it4us.todoapp.dto.WorkspaceCreateDto;
 import com.it4us.todoapp.dto.WorkspaceViewDto;
-import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.service.WorkspaceService;
 import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -16,10 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/work-space")
 public class WorkspaceController {
 
-    private WorkspaceService workspaceService;
+    private final WorkspaceService workspaceService;
 
     public WorkspaceController(WorkspaceService workspaceService) {
         this.workspaceService=workspaceService;
+    }
+
+    @GetMapping("/{workspaceId}")
+    public ResponseEntity<WorkspaceViewDto> getWorkspaceWithBoardsById(@PathVariable("workspaceId") Long workspaceId) {
+        WorkspaceViewDto workspaceViewDto = workspaceService.getWorkspaceById(workspaceId);
+        return new ResponseEntity<>(workspaceViewDto, HttpStatus.OK);
     }
 
     @PostMapping

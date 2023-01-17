@@ -26,7 +26,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService, UserDetailsService{
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     @Override
     public UserViewDto create(UserCreateDto userCreateDto) {
         String uuid = UUID.randomUUID().toString();
-        String username=userCreateDto.getUsername();
+        String username = userCreateDto.getUsername();
         User user = new User();
 
 
@@ -66,6 +66,13 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 
         return UserViewDto.of(userRepository.save(user));
     }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
+    }
+
 
     @Override
     public Boolean isEmailExist(String email) {
@@ -114,8 +121,8 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     @Override
     public User findByEmail(String email) {
 
-        return  userRepository.findByEmail(email)
-                .orElseThrow(()->new UsernameNotFoundException("User is Not Found"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
     }
 
     @Override
