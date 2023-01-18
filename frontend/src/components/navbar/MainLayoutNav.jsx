@@ -11,8 +11,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from "../../modules/auth/_redux/auth-slice";
 
 export default function MainLayoutNav() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   console.log(user);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -24,6 +27,9 @@ export default function MainLayoutNav() {
     setAnchorEl(null);
   };
 
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
   // const isOpen = () => {
   //   setToggle(!toggle);
   // };
@@ -137,7 +143,7 @@ export default function MainLayoutNav() {
               </p>
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>Settings</MenuItem>
-              <MenuItem>Logout</MenuItem>
+              <MenuItem onClick={logoutHandler}>Logout</MenuItem>
             </Menu>
           </div>
         </Navbar.Collapse>
