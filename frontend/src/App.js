@@ -5,14 +5,14 @@ import About from "./pages/About";
 import { Routes, Route } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
 import CreateNewPass from "./pages/CreateNewPass";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
 import { AuthProvider } from "./modules/auth/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import AuthRoute from "./routes/AuthRoute";
-
-import "./assets/scss/main.scss";
 import Landing from "./pages/Landing";
+import MainLayout from "./pages/MainLayout";
+import "./assets/scss/main.scss";
 
 function App() {
   return (
@@ -33,7 +33,8 @@ function App() {
           </Route>
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/home" element={<Home />} />
+            <Route path="/mainlayout" element={<MainLayout />} />
+            {/* <Route path="/home" element={<Home />} /> */}
           </Route>
         </Routes>
       </AuthProvider>
