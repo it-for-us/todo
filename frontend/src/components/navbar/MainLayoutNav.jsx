@@ -10,8 +10,11 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function MainLayoutNav() {
+  const { user } = useSelector((state) => state.auth);
+  console.log(user);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -118,7 +121,7 @@ export default function MainLayoutNav() {
                 // fontSize: '10px',
               }}
             >
-              KT
+              {user.username.slice(0, 2).toUpperCase()}
             </Avatar>
             <Menu
               id="basic-menu"
@@ -129,7 +132,9 @@ export default function MainLayoutNav() {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <p style={{ color: "#7E34CF", margin: "0 15%" }}>Kemal</p>
+              <p style={{ color: "#7E34CF", margin: "0 15%" }}>
+                {user.username}
+              </p>
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>Settings</MenuItem>
               <MenuItem>Logout</MenuItem>
