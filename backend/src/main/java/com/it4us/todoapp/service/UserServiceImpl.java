@@ -6,6 +6,7 @@ import com.it4us.todoapp.dto.UserSignInResponse;
 import com.it4us.todoapp.dto.UserViewDto;
 import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.exception.UserExistException;
+import com.it4us.todoapp.exception.UserNameExistException;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.security.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService, UserDetailsService{
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -39,14 +40,23 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     @Override
     public UserViewDto create(UserCreateDto userCreateDto) {
         String uuid = UUID.randomUUID().toString();
-        String username=userCreateDto.getUsername();
+        String username = userCreateDto.getUsername();
         User user = new User();
 
 
-        if(isEmailExist(userCreateDto.getEmail()))
+        if(isEmailExist(userCreateDto.getEmail())) {
             throw new UserExistException("user already exist");
-        else if( username == null)
-            userCreateDto.setUsername(createUsernameIfNoPresent(userCreateDto));
+        }else if(isUserNameExist(userCreateDto.getUsername())){
+            throw new UserNameExistException("username already exist");
+        }
+        else if( username == null) {
+            String randomUsername = createUsernameIfNoPresent(userCreateDto);
+            if(isUserNameExist(randomUsername)) {
+                throw new UserNameExistException("username has already been used");
+            }else{
+                userCreateDto.setUsername(createUsernameIfNoPresent(userCreateDto));
+            }
+        }
 
 
         user.setUsername(userCreateDto.getUsername());
@@ -58,11 +68,26 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     }
 
     @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
+    }
+
+
+    @Override
     public Boolean isEmailExist(String email) {
 
         Optional<?> user = userRepository.findByEmail(email);
 
         return user.isPresent();
+    }
+
+    @Override
+    public Boolean isUserNameExist(String userName) {
+
+            Optional<?> user = userRepository.findByUsername(userName);
+
+            return user.isPresent();
     }
 
     @Override
@@ -96,8 +121,8 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     @Override
     public User findByEmail(String email) {
 
-        return  userRepository.findByEmail(email)
-                .orElseThrow(()->new UsernameNotFoundException("User is Not Found"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
     }
 
     @Override
