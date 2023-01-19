@@ -36,7 +36,7 @@ export default function MainLayoutNav() {
   return (
     <Navbar
       style={{ background: "#036AA7" }}
-      className="px-5 py-0 "
+      className="px-5 py-0 nav_bar"
       expand="lg"
       fixed="top"
       variant="dark"
