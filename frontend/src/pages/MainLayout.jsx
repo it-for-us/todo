@@ -3,7 +3,6 @@ import MainLayoutNav from "../components/navbar/MainLayoutNav";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import Home from "./Home";
 
 export default function MainLayout() {
   const [toggle, setToggle] = useState(false);
