@@ -1,14 +1,15 @@
 .landing-page {
   padding-top: 4vh;
   .hero-section {
-    padding: 10vh 6% 4vh 6%;
-    // background: url("../images/white-wave-bg.svg") center bottom -0.5px / 100% 14%
-    //     no-repeat scroll padding-box border-box,
-    //   linear-gradient(60deg, rgb(82, 67, 170), rgb(237, 80, 180)) 0% 0% / auto
-    //     repeat scroll padding-box border-box rgb(82, 67, 170);
-    // background-blend-mode: normal, normal;
-    background: linear-gradient(180deg, #e6e6ff 0%, #ffffff 100%);
-    color: #091e42;
+    padding: 10vh 8% 4vh 8%;
+    background: url("../images/white-wave-bg.svg") center bottom -0.5px / 100% 14%
+        no-repeat scroll padding-box border-box,
+      linear-gradient(60deg, rgb(82, 67, 170), rgb(237, 80, 180)) 0% 0% / auto
+        repeat scroll padding-box border-box rgb(82, 67, 170);
+    background-blend-mode: normal, normal;
+    // background: linear-gradient(180deg, #e6e6ff 0%, #ffffff 100%);
+    // color: #091e42;
+    color: #fff;
     display: flex;
     gap: 5px;
     align-items: center;
@@ -67,13 +68,13 @@
   article {
     text-align: left;
     width: 30%;
-    margin: 10vh 6%;
+    margin: 10vh 8%;
   }
   section {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin: 4vh 6%;
+    margin: 4vh 8%;
     img {
       width: 30%;
     }
