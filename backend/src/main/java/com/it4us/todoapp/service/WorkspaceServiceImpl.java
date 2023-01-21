@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.util.Objects;
 
 import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -114,13 +115,13 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     @Transactional
-    public void updateWorkspace(Long id, String name) {
+    public void updateWorkspace(Long id, String username, String name) {
 
 
         Workspace workspace=workspaceRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("workspace not found"));
 
-        if(id==null|| name==null || name.length()==0){
+        if(id==null|| name.length()==0){
             throw new IllegalStateException("Id or workspace is incorrect format");
         }
 
@@ -128,15 +129,16 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         if(workspaceOptional.isPresent()){
             throw new IllegalStateException("workspace already exists");
         }
-        if(id!=null && name!=null && name.length()>0){
-
-
+        if (username!=null&& id!=0 && name!=null){
+            workspace.setId(id);
+            workspace.setName(username);
             workspace.setName(name);
         }
     }
 
     private boolean isWorkspaceBelongedUser(Workspace workspace, String username) { //????
         return workspace.getUser().getUsername().equals(username);
+
     }
 }
 

@@ -28,10 +28,22 @@ public class BoardController {
                 LoggedUsername.getUsernameFromAuthentication());
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
     }
-
+    
     @GetMapping({"/{boardId}"})
     public ResponseEntity<BoardViewDto> getBoardById(@PathVariable("boardId") Long boardId){
         BoardViewDto boardViewDto = boardService.getBoardById(boardId);
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.OK);
     }
+
+
+    //board update
+    @PutMapping(path="{id}")
+    public HttpStatus updateWorkspace(Authentication auth, @PathVariable Long id, @RequestParam(required = false) String name) {
+        String username = auth.getName();
+
+        boardService.updateBoard(id,username,name);
+        return HttpStatus.OK;
+    }
+
+
 }

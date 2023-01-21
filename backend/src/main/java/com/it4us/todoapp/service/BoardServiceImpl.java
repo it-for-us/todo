@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -110,4 +111,39 @@ public class BoardServiceImpl implements BoardService {
 
         return true;
     }
+
+
+    @Override
+    public Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto) {
+
+        Optional<Workspace> workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId());
+
+        if (workspace.isEmpty())
+            throw new NotFoundException("There is no such workspace");
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public void updateBoard(Long id, String username, String name) {
+
+        Board board=boardRepository.findById(id)
+                       .orElseThrow(() -> new IllegalStateException("board not found"));
+
+        if(id==null|| name.length()==0){
+            throw new IllegalStateException("board id or boardname is in incorrect format");
+        }
+
+        Optional<Board> boardOptional=boardRepository.findBoardByName(name);
+        if(boardOptional.isPresent()){
+            throw new IllegalStateException("board already exists");
+        }
+        if (username!=null&& id!=0 && name!=null){
+            board.setId(id);
+            board.setName(username);
+            board.setName(name);
+        }
+    }
+
 }

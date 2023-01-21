@@ -17,6 +17,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
 
+
+
 springdoc:
   swagger-ui:
   url: /openapi.yaml

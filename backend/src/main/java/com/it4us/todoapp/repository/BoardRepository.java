@@ -12,6 +12,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByName(String name);
 
+
+    Optional<Board> findBoardByName(String name);
+
     @Query(value = "SELECT * FROM boards b where b.workspace_id = :workspaceId", nativeQuery = true)
     List<Board> findBoardsByWorkspaceId(@Param("workspaceId")Long workspaceId);
 
@@ -22,4 +25,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query(value = "select count(*) from workspaces where user_id= (select user_id from users where username= :username ) and workspace_id= (select workspace_id from boards where board_id = :boardId )", nativeQuery = true)
     int isBoardBelongedUser(@Param("boardId") Long boardId, @Param("username") String username);
+
 }
