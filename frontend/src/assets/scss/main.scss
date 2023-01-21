@@ -1,0 +1,16 @@
+// Include any default variable overrides here (though functions won't be available)
+$primary: #007bff;
+$danger: tomato;
+// $black:rgb(23, 43, 77);
+@import "~bootstrap/scss/bootstrap";
+// Then add additional custom code here
+
+@import "./base/variables";
+@import "./Footer.scss";
+@import "./Login.scss";
+@import "./Register.scss";
+@import "./Footer.scss";
+@import "./Navbar.scss";
+@import "./WorkSpace.scss";
+@import "./Landing.scss";
+@import "./MainLayout.scss";
