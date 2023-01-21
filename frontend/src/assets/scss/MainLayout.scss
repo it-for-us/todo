@@ -1,0 +1,30 @@
+.main-layout {
+  padding: 7vh 0 0 0;
+  .workspaces {
+    display: flex;
+    justify-content: flex-start;
+    .side-bar {
+      position: relative;
+      padding: 3vh 1%;
+      width: 15%;
+      height: 95vh;
+      background-color: rgba(228, 227, 227, 0.637);
+      border-radius: 0 20px 20px 0;
+      transform: translateX(-95%);
+      // left: -14%;
+      // right: 14%;
+      transition: all 0.3s ease-in-out;
+      color: gray;
+      h2 {
+        font-size: 1rem;
+        text-align: center;
+      }
+    }
+    .side-bar-boards {
+      padding: 1vh 0;
+      margin: 4vh 0;
+      border-bottom: gray solid 1px;
+      border-top: gray solid 1px;
+    }
+  }
+}

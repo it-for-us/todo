@@ -1,0 +1,18 @@
+.footer {
+  background-color: #182a4e;
+
+  section:nth-of-type(1) {
+    padding: 4vh 8%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: #fff 1px solid;
+    a {
+      text-decoration: none;
+      color: #fff;
+      padding: 10px;
+      &:hover {
+        background-color: rgba(210, 200, 200, 0.353);
+      }
+    }
+  }
+}
