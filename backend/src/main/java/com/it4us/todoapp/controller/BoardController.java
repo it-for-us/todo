@@ -28,6 +28,7 @@ public class BoardController {
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
     }
 
+    //board update
     @PutMapping(path="{id}")
     public HttpStatus updateWorkspace(Authentication auth, @PathVariable Long id, @RequestParam(required = false) String name) {
         String username = auth.getName();
