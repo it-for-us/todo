@@ -9,5 +9,5 @@ public interface BoardRepository extends JpaRepository<Board,Long> {
 
     Optional<Board> findByName(String name);
 
-    Optional<Board> findBoardByName(String name);
+
 }

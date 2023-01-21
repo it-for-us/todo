@@ -87,7 +87,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             throw new IllegalStateException("Id or workspace is incorrect format");
         }
 
-        Optional<Workspace> workspaceOptional=workspaceRepository.findWorkspaceByName(name);
+        Optional<Workspace> workspaceOptional=workspaceRepository.findByName(name);
         if(workspaceOptional.isPresent()){
             throw new IllegalStateException("workspace already exists");
         }

@@ -107,7 +107,7 @@ public class BoardServiceImpl implements BoardService {
             throw new IllegalStateException("board id or boardname is in incorrect format");
         }
 
-        Optional<Board> boardOptional=boardRepository.findBoardByName(name);
+        Optional<Board> boardOptional=boardRepository.findByName(name);
         if(boardOptional.isPresent()){
             throw new IllegalStateException("board already exists");
         }
