@@ -37,6 +37,7 @@ public class WorkspaceController {
         return HttpStatus.OK;
     }
 
+    //update username and workspace name
     @PutMapping(path="{id}")
     public HttpStatus updateWorkspace(Authentication auth,@PathVariable Long id, @RequestParam(required = false) String name) {
         String username = auth.getName();
