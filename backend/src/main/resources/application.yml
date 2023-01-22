@@ -1,11 +1,11 @@
 server:
-  port: 8088
+  port: 8080
 spring:
   application:
     name: todoapp
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/todoappdb
+    url: jdbc:postgresql://db:5432/todoappdb
     username: postgres
     password: 1234
   jpa:
