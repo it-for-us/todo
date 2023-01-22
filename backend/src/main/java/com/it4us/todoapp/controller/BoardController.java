@@ -5,6 +5,7 @@ import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.service.BoardService;
 import com.it4us.todoapp.utilities.LoggedUsername;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,8 @@ public class BoardController {
 
     //board update
     @PutMapping(path="{id}")
-    public HttpStatus updateWorkspace(Authentication auth, @PathVariable Long id, @RequestParam(required = false) String name) {
-        String username = auth.getName();
+    public HttpStatus updateWorkspace(@PathVariable Long id, @RequestParam(required = false) String name) {
+        String username = LoggedUsername.getUsernameFromAuthentication();
 
         boardService.updateBoard(id,username,name);
         return HttpStatus.OK;
