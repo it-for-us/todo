@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
 
     Optional<Workspace> findByName(String name);
-    Optional<Workspace> findWorkspaceByName(String name);
+
 
     @Query(value = "SELECT * FROM workspaces w where w.user_id = :userId", nativeQuery = true)
     List<Workspace> findWorkspacesByUserId(@Param("userId")Long userId);

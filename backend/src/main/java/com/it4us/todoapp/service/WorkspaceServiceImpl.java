@@ -1,7 +1,6 @@
 package com.it4us.todoapp.service;
 
 import com.it4us.todoapp.dto.BoardViewDto;
-import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.WorkspaceCreateDto;
 import com.it4us.todoapp.dto.WorkspaceViewDto;
 import com.it4us.todoapp.entity.User;
@@ -15,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Objects;
+
 
 import java.util.List;
 
@@ -119,17 +118,17 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 
         Workspace workspace=workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("workspace not found"));
+                .orElseThrow(() -> new IllegalStateException("workspace is not found"));
 
-        if(id==null|| name.length()==0){
+        if( name.length()==0){
             throw new IllegalStateException("Id or workspace is incorrect format");
         }
 
-        Optional<Workspace> workspaceOptional=workspaceRepository.findWorkspaceByName(name);
+        Optional<Workspace> workspaceOptional=workspaceRepository.findByName(name);
         if(workspaceOptional.isPresent()){
             throw new IllegalStateException("workspace already exists");
         }
-        if (username!=null&& id!=0 && name!=null){
+        if (username!=null&& id!=0 ){
             workspace.setId(id);
             workspace.setName(username);
             workspace.setName(name);
