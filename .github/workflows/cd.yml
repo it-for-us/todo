@@ -14,22 +14,25 @@ jobs:
       run:
         working-directory: frontend 
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: npm install
-        uses: actions/npm@master
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          args: install
-     
-      - name: npm test
-        uses: actions/npm@master
-        with:
-          args: run test
-     
-      - name: npm lint
-        uses: actions/npm@master
-        with:
-          args: run lint
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Build application
+        run: npm run build
+
+      - name: Test application
+        run: npm test
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
