@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - development
+      - 97-create-deployment-pipeline-for-frontend
 
 jobs:
   cd_frontend:
