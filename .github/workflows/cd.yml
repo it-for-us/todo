@@ -33,7 +33,7 @@ jobs:
           fi
 
       - name: Lint code
-        run: npm run lint
+        run: npm run eslint
 
       - name: Build application
         run: npm run build
