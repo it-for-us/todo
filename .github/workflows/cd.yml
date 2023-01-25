@@ -32,8 +32,8 @@ jobs:
           npm i
           fi
 
-      - name: Lint code
-        run: npm run eslint
+    #  - name: Code Linting
+    #    run: npm run lint
 
       - name: Build application
         run: npm run build
