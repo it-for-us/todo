@@ -4,15 +4,60 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../assets/images/Logo.png";
-import Form from "react-bootstrap/Form";
+// import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import SearchIcon from "@mui/icons-material/Search";
+import { styled, alpha } from "@mui/material/styles";
+import InputBase from "@mui/material/InputBase";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../../modules/auth/_redux/auth-slice";
+
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
+  },
+}));
 
 export default function MainLayoutNav() {
   const dispatch = useDispatch();
@@ -35,8 +80,8 @@ export default function MainLayoutNav() {
   // };
   return (
     <Navbar
-      style={{ background: "#036AA7" }}
-      className="px-5 py-0 nav_bar"
+      // style={{ background: "#1976d2" }}
+      className="py-0  nav_bar_layout"
       expand="lg"
       fixed="top"
       variant="dark"
@@ -106,14 +151,24 @@ export default function MainLayoutNav() {
             <Button variant="outline-warning">Create</Button>
           </Nav>
           <div className="d-flex align-items-center gap-3 auth-btn">
-            <Form className="d-flex">
+            {/* <Form className="d-flex">
               <Form.Control
                 type="search"
                 placeholder="Search"
                 className="me-2"
                 aria-label="Search"
               />
-            </Form>
+            </Form> */}
+
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
 
             <Avatar
               id="basic-button"
@@ -123,7 +178,7 @@ export default function MainLayoutNav() {
               onClick={handleClick}
               sx={{
                 m: 0.7,
-                bgcolor: "primary.main",
+                bgcolor: "secondary.main",
                 // fontSize: '10px',
               }}
             >
