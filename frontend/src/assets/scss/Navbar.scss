@@ -1,16 +1,18 @@
-img {
-  width: 25px;
-  margin-right: 5px;
-}
-.brand {
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  span {
-    font-size: 1.5rem;
-  }
-}
 .nav_bar {
+  box-shadow: 0px 8px 16px rgba(9, 30, 66, 0.15);
+  img {
+    width: 25px;
+    margin-right: 5px;
+  }
+  .brand {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    span {
+      font-size: 1.5rem;
+    }
+  }
+
   .auth-btn {
     a {
       text-decoration: none;

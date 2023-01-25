@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register as rdxRegister, registerReset } from "./_redux/auth-slice";
+import frame from "../../assets/images/Frame.png";
+import logo from "../../assets/images/Frame (2).png";
 
 export default function Register() {
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
@@ -59,6 +61,8 @@ export default function Register() {
 
   return (
     <div className="register-page ">
+      <img className="frame" src={frame} alt="frame" />
+      <img className="logo" src={logo} alt="logo" />
       {registerError && (
         <p style={{ color: "red" }}>{registerError?.message}</p>
       )}

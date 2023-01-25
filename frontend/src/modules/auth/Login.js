@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../components/Loading";
 import { login } from "./_redux/auth-slice";
+import frame from "../../assets/images/Frame (1).png";
+import logo from "../../assets/images/Frame (2).png";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -25,6 +27,8 @@ export default function Login() {
   return (
     <Suspense fallback={<Loading />}>
       <div className="login-page ">
+        <img className="frame" src={frame} alt="frame" />
+        <img className="logo" src={logo} alt="logo" />
         <Form className="d-grid" onSubmit={handleSubmit(onSubmit)}>
           <h2>Log in to DART</h2>
 
