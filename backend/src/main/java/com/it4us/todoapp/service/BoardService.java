@@ -17,7 +17,7 @@ public interface BoardService {
     BoardViewDto getBoardById(Long boardId);
     List<BoardViewDto> getAllBoards(Optional<Long> workspaceId);
     Boolean isBoardExist(String boardName, Long workspaceId);
-    void deleteBoard(Long id);
+    void deleteBoard(Long id, String username);
     Boolean isAValidBoardName(BoardCreateDto boardCreateDto);
 
     Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto);
