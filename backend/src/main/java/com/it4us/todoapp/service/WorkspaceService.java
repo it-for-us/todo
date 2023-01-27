@@ -3,10 +3,17 @@ package com.it4us.todoapp.service;
 import com.it4us.todoapp.dto.WorkspaceCreateDto;
 import com.it4us.todoapp.dto.WorkspaceViewDto;
 
-public interface WorkspaceService {
+import javax.transaction.Transactional;
 
-    WorkspaceViewDto creat (WorkspaceCreateDto workspaceCreateDto);
-    Boolean isWorkspaceExist(String workspaceName);
-    void deleteWorkspaceById(Long id);
+public interface WorkspaceService {
+    WorkspaceViewDto create (WorkspaceCreateDto workspaceCreateDto, String username);
+    WorkspaceViewDto getWorkspaceById(Long workspaceId);
+
+    Boolean isWorkspaceExist(String workspaceName, Long userId);
+    Boolean isAValidWorkspaceName(WorkspaceCreateDto workspaceCreateDto);
+    void deleteWorkspaceById(Long id, String username);
+    
+    @Transactional
+   void updateWorkspace(Long id, String username, String name);
 
 }

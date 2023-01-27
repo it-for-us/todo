@@ -21,8 +21,7 @@ const style = {
   borderRadius: "20px",
 };
 
-export default function WorkSpace() {
-  const [workSpace, setWorkSpace] = useState([]);
+export default function WorkSpace({ workSpace, setWorkSpace }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -146,7 +145,7 @@ export default function WorkSpace() {
                   {...register("boardName", {
                     required: true,
                     pattern: {
-                      value: /^(?=)(?=).{4,15}$/,
+                      value: /^[a-zA-Z0-9][a-zA-Z0-9_]{4,15}$/,
                     },
                   })}
                 />

@@ -15,4 +15,10 @@ public class UserSignInDto {
     @Size(min = 8)
     private String password;
 
+
+    //Alttaki 2 satiri cihat hocam eklemis
+    private String token;
+
+    private String username;
+
 }
