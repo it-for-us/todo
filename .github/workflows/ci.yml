@@ -3,10 +3,12 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - ci-frontend
+      - main
+      - development
   pull_request:
     branches:
-      - ci-frontend
+      - main
+      - development
 
 jobs:
   ci-backend:
@@ -39,8 +41,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm i && npm i eslint && npm run build --if-present
+    - run: npm ci && npm run build --if-present
