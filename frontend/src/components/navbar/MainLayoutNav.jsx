@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../assets/images/Logo.png";
+import logo from "../../assets/images/Group.png";
 // import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Avatar from "@mui/material/Avatar";
@@ -80,10 +80,10 @@ export default function MainLayoutNav() {
   // };
   return (
     <Navbar
-      // style={{ background: "#1976d2" }}
+      style={{ background: "#1976d2" }}
       className="py-0  nav_bar_layout"
       expand="lg"
-      fixed="top"
+      // fixed="top"
       variant="dark"
     >
       <Container fluid>
@@ -160,7 +160,7 @@ export default function MainLayoutNav() {
               />
             </Form> */}
 
-            <Search>
+            <Search style={{ borderRadius: "20px" }}>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>

@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register as rdxRegister, registerReset } from "./_redux/auth-slice";
 import frame from "../../assets/images/Frame.png";
-import logo from "../../assets/images/Frame (2).png";
+import logo from "../../assets/images/Group.png";
 
 export default function Register() {
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
