@@ -98,7 +98,7 @@ jobs:
 
   deployk8s-dev:
     needs: ["cd-backend", "cd-frontend"]
-    if: github.ref == 'refs/heads/97-create-deployment-pipeline-for-frontend'
+    if: github.ref == 'refs/heads/development'
     runs-on: ubuntu-latest
 
     steps:

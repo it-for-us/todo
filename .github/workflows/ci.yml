@@ -5,10 +5,10 @@ on:
     branches:
       - main
       - development
-  # pull_request:
-  #   branches:
-  #     - main
-  #     - development
+  pull_request:
+    branches:
+      - main
+      - development
 
 jobs:
   ci-backend:
