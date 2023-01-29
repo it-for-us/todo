@@ -96,8 +96,9 @@ jobs:
           push: true
           tags: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
 
-  deployk8s:
+  deployk8s-dev:
     needs: ["cd-backend", "cd-frontend"]
+    if: github.ref == 'refs/heads/97-create-deployment-pipeline-for-frontend'
     runs-on: ubuntu-latest
 
     steps:
@@ -109,20 +110,68 @@ jobs:
         with:
           kubeconfig: ${{secrets.KUBE_CONFIG}}
 
-      - name: Deploy main to K8s
-        if: github.ref == 'refs/heads/main'
-        uses: Azure/k8s-deploy@v4
-        with:
-          namespace: dart-prod
-          manifests: infrastructure/deployment-prod.yml
-          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
-
-      - name: Deploy development to K8s
-        if: github.ref == 'refs/heads/97-create-deployment-pipeline-for-frontend'
+      - name: Deploy postgres
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-dev
-          manifests: infrastructure/deployment-dev.yml
-          images: |
-            ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
-            ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+          manifests: infrastructure/postgres.yml
+
+      - name: Deploy backend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: infrastructure/backend.yml
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy frontend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: infrastructure/backend.yml
+          images: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy ingress
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: infrastructure/ingess-dev.yml
+
+  deployk8s-main:
+    needs: ["cd-backend", "cd-frontend"]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Kubernetes Context
+        uses: Azure/k8s-set-context@v3.0
+        with:
+          kubeconfig: ${{secrets.KUBE_CONFIG}}
+
+      - name: Deploy postgres
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/postgres.yml
+
+      - name: Deploy backend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/backend.yml
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy frontend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/backend.yml
+          images: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy ingress
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/ingess-prod.yml
