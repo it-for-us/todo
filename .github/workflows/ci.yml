@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - development
+      - 97-create-deployment-pipeline-for-frontend
 
 jobs:
   ci-backend:

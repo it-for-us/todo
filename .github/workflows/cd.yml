@@ -47,31 +47,6 @@ jobs:
           push: true
           tags: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
-  deployk8s:
-    needs: ["cd_frontend", "cd_backend"]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set Kubernetes Context
-        uses: Azure/k8s-set-context@v3.0
-        with:
-          kubeconfig: ${{secrets.KUBE_CONFIG}}
-
-      - name: Deploy main to K8s
-        if: github.ref == 'refs/heads/main'
-        uses: Azure/k8s-deploy@v4
-        with:
-          namespace: dart-prod
-          manifests: infrastructure/deployment-prod.yml
-          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
-
-      - name: Deploy development to K8s
-        if: github.ref == 'refs/heads/development'
-        uses: Azure/k8s-deploy@v4
-        with:
-          namespace: dart-dev
-          manifests: infrastructure/deployment-dev.yml
-          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
-
   cd-frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -119,3 +94,28 @@ jobs:
           file: frontend/Dockerfile
           push: true
           tags: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+
+  deployk8s:
+    needs: ["cd_backend", "cd-frontend"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Kubernetes Context
+        uses: Azure/k8s-set-context@v3.0
+        with:
+          kubeconfig: ${{secrets.KUBE_CONFIG}}
+
+      - name: Deploy main to K8s
+        if: github.ref == 'refs/heads/main'
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/deployment-prod.yml
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy development to K8s
+        if: github.ref == 'refs/heads/development'
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: infrastructure/deployment-dev.yml
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
