@@ -114,7 +114,7 @@ jobs:
           images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Deploy development to K8s
-        if: github.ref == 'refs/heads/development'
+        if: github.ref == 'refs/heads/97-create-deployment-pipeline-for-frontend'
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-dev
