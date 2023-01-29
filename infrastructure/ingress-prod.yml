@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dart-ingress
+  name: dart
 spec:
   rules:
     - host: dart-prod.fria.io
