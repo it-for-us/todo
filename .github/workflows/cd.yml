@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: CD Pipeline
 
 on:
   push:
@@ -22,6 +22,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Build with Maven
         run: ./mvnw --batch-mode --update-snapshots package
@@ -60,6 +61,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
