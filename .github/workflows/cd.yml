@@ -105,6 +105,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
+
       - name: Set Kubernetes Context
         uses: Azure/k8s-set-context@v3.0
         with:
@@ -136,7 +139,7 @@ jobs:
           namespace: dart-dev
           manifests: infrastructure/ingess-dev.yml
 
-  deployk8s-main:
+  deployk8s-prod:
     needs: ["cd-backend", "cd-frontend"]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -144,6 +147,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
 
       - name: Set Kubernetes Context
         uses: Azure/k8s-set-context@v3.0
