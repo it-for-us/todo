@@ -96,7 +96,7 @@ jobs:
           tags: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
 
   deployk8s:
-    needs: ["cd_backend", "cd-frontend"]
+    needs: ["cd-backend", "cd-frontend"]
     runs-on: ubuntu-latest
     steps:
       - name: Set Kubernetes Context
