@@ -8,61 +8,7 @@ on:
       - 97-create-deployment-pipeline-for-frontend
 
 jobs:
-  cd_frontend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-
-      - name: Install dependencies
-        run: |
-          if [ -e yarn.lock ]; then
-          yarn install --frozen-lockfile
-          elif [ -e package-lock.json ]; then
-          npm ci
-          else
-          npm i
-          fi
-
-    #  - name: Code Linting
-    #    run: npm run lint
-
-      - name: Build application
-        run: npm run build
-
-    #  - name: Test application
-    #    run: npm test
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2.0.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
-        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
-
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v3.1.1
-        with:
-          context: frontend/
-          file: frontend/Dockerfile
-          push: true
-          tags: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
-
-  cd_backend:
+  cd-backend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -125,3 +71,51 @@ jobs:
           namespace: dart-dev
           manifests: infrastructure/deployment-dev.yml
           images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+  cd-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm i
+          fi
+
+      - name: Build application
+        run: npm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3.1.1
+        with:
+          context: frontend/
+          file: frontend/Dockerfile
+          push: true
+          tags: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
