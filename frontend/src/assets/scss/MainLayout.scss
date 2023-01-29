@@ -1,0 +1,123 @@
+.nav_bar_layout {
+  margin-left: 6%;
+  height: 60px;
+  img {
+    width: 25px;
+    margin-right: 5px;
+  }
+  .brand {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    span {
+      font-size: 1.5rem;
+    }
+  }
+
+  .auth-btn {
+    a {
+      text-decoration: none;
+      &:nth-of-type(1) {
+        color: rgb(23, 43, 77);
+      }
+      &:nth-of-type(2) {
+        height: 50px;
+        width: 200px;
+        color: #fff;
+        background: rgb(0, 101, 255);
+        line-height: 50px;
+        text-align: center;
+        &:hover {
+          background: #0747a6;
+        }
+      }
+    }
+  }
+}
+
+// .main-layout {
+//   padding: 7vh 0 0 0;
+//   .workspaces {
+//     display: flex;
+//     justify-content: flex-start;
+//     .side-bar {
+//       position: relative;
+//       padding: 3vh 1%;
+//       width: 15%;
+//       height: 95vh;
+//       background-color: rgba(228, 227, 227, 0.637);
+//       border-radius: 0 20px 20px 0;
+//       transform: translateX(-95%);
+//       // left: -14%;
+//       // right: 14%;
+//       transition: all 0.3s ease-in-out;
+//       color: gray;
+//       h2 {
+//         font-size: 1rem;
+//         text-align: center;
+//       }
+//     }
+//     .side-bar-boards {
+//       padding: 1vh 0;
+//       margin: 4vh 0;
+//       border-bottom: gray solid 1px;
+//       border-top: gray solid 1px;
+//     }
+//   }
+// }
+// .main-layout {
+//   display: grid;
+//   height: 100vh;
+//   grid-template-columns: 0.5fr 1fr 1fr 1fr;
+//   grid-template-rows: 0.25fr 2fr 2fr;
+//   grid-template-areas:
+//     " nav nav nav nav"
+//     " sidebar main main main"
+//     " sidebar main main main";
+
+//   nav {
+//     grid-area: nav;
+//   }
+//   .sidebar {
+//     grid-area: sidebar;
+//     position: relative;
+//     padding: 3vh 1%;
+//     width: 100%;
+//     background-color: rgba(228, 227, 227, 0.637);
+//     transform: translateX(-95%);
+//     // left: -14%;
+//     // right: 14%;
+//     transition: all 0.3s ease-in-out;
+//     color: gray;
+//     h2 {
+//       font-size: 1rem;
+//       text-align: center;
+//     }
+//     .side-bar-boards {
+//       padding: 1vh 0;
+//       margin: 4vh 0;
+//       border-bottom: gray solid 1px;
+//       border-top: gray solid 1px;
+//     }
+//   }
+//   main {
+//     grid-area: main;
+//     display: grid;
+//     grid-template-columns: 1fr 1fr 1fr;
+//     grid-template-rows: 1fr 1fr 1fr;
+//     text-align: center;
+//     grid-template-areas:
+//       "content1 content2 content3"
+//       "content1 content2 content3"
+//       "content1 content2 content3";
+//     .content1 {
+//       grid-area: content1;
+//     }
+//     .content2 {
+//       grid-area: content2;
+//     }
+//     .content3 {
+//       grid-area: content3;
+//     }
+//   }
+// }

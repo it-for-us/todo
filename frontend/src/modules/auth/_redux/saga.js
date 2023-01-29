@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { call, put, takeEvery, select } from 'redux-saga/effects';
+import {authAxios} from '../../../app/setup-axios';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import {
   loginFailed,
   loginSuccess,
@@ -16,7 +17,7 @@ function* workLogin(action) {
   try {
     const { email, password } = action.payload;
     const resLogin = yield call(() =>
-      axios.post('https://dart-todo-api.onrender.com/users/login', {
+      axios.post('/users/login', {
         email,
         password,
       })
@@ -39,7 +40,7 @@ function* workRegister(action) {
   try {
     const { email, password, username, role } = action.payload;
     yield call(() =>
-      axios.post('https://dart-todo-api.onrender.com/users/register', {
+      axios.post('/users/register', {
         email,
         password,
         username,
@@ -59,14 +60,8 @@ function* workRegister(action) {
 function* workLogout(action) {
   try {
     // const { token } = action.payload;
-    const token = yield select((state) => state.auth.token);
-    yield call(() =>
-      axios.put('https://dart-todo-api.onrender.com/users/logout', null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-    );
+    // const token = yield select((state) => state.auth.token);
+    yield call(() => authAxios().put('/users/logout'));
     yield put(logoutSuccess());
   } catch (error) {
     if (error.response) {
