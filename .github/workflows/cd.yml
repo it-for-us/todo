@@ -137,7 +137,7 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-dev
-          manifests: infrastructure/ingess-dev.yml
+          manifests: infrastructure/ingress-dev.yml
 
   deployk8s-prod:
     needs: ["cd-backend", "cd-frontend"]
@@ -180,4 +180,4 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-prod
-          manifests: infrastructure/ingess-prod.yml
+          manifests: infrastructure/ingress-prod.yml
