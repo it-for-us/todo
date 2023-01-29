@@ -123,4 +123,6 @@ jobs:
         with:
           namespace: dart-dev
           manifests: infrastructure/deployment-dev.yml
-          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }} ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+          images: |
+            ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+            ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
