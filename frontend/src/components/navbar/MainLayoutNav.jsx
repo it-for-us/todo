@@ -4,8 +4,6 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../assets/images/Group.png";
-// import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -16,6 +14,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../../modules/auth/_redux/auth-slice";
+import MainLayoutNavCreateBtn from "../MainLayoutNavCreateBtn";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -80,7 +79,7 @@ export default function MainLayoutNav() {
   // };
   return (
     <Navbar
-      style={{ background: "#1976d2" }}
+      style={{ background: "#0747a6" }}
       className="py-0  nav_bar_layout"
       expand="lg"
       // fixed="top"
@@ -92,7 +91,7 @@ export default function MainLayoutNav() {
           <Navbar.Brand>Dart</Navbar.Brand>
         </Link>
         <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse className="ps-5" id="navbarScroll">
+        <Navbar.Collapse className="ps-2" id="navbarScroll">
           <Nav
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: "100px" }}
@@ -148,19 +147,11 @@ export default function MainLayoutNav() {
                 Something else here
               </NavDropdown.Item>
             </NavDropdown>
-            <Button variant="outline-warning">Create</Button>
+
+            <MainLayoutNavCreateBtn />
           </Nav>
           <div className="d-flex align-items-center gap-3 auth-btn">
-            {/* <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-            </Form> */}
-
-            <Search style={{ borderRadius: "20px" }}>
+            <Search style={{ borderRadius: "20px", color: "#ffff" }}>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
