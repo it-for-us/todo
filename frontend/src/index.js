@@ -1,19 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import App from "./App";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "./app/store";
-import { UserContextProvider } from "./contexts/UserContext";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import App from './App';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './app/store';
+import { UserContextProvider } from './contexts/UserContext';
+import { BrowserRouter } from 'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-    <PersistGate persistor={persistor} loading={null}>
-      <UserContextProvider>
-        <App />
-      </UserContextProvider>
-    </PersistGate>
-  </Provider>
+  <BrowserRouter>
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null}>
+        <UserContextProvider>
+          <App />
+        </UserContextProvider>
+      </PersistGate>
+    </Provider>
+  </BrowserRouter>
 );
