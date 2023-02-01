@@ -1,5 +1,5 @@
 .nav_bar_layout {
-  height: 60px;
+  height: 50px;
   img {
     width: 45px;
     margin-right: 5px;
@@ -12,7 +12,9 @@
       font-size: 1.5rem;
     }
   }
-
+  .create-btn {
+    margin-left: 6%;
+  }
   .auth-btn {
     a {
       text-decoration: none;
