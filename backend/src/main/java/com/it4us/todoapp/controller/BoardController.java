@@ -29,7 +29,13 @@ public class BoardController {
                 LoggedUsername.getUsernameFromAuthentication());
         return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
     }
-    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long id){
+
+        boardService.deleteBoard(id,LoggedUsername.getUsernameFromAuthentication());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping({"/{boardId}"})
     public ResponseEntity<BoardViewDto> getBoardById(@PathVariable("boardId") Long boardId){
         BoardViewDto boardViewDto = boardService.getBoardById(boardId);

@@ -146,4 +146,13 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
+    @Override
+    public void deleteBoard(Long id, String username) {
+        Board board=boardRepository.findById(id).orElseThrow(()->new NotFoundException("board not found"));
+        if(boardRepository.isBoardBelongToUser(id,username)== false){
+            throw new BoardBelongAnotherUserException("Board belongs to another user");
+        }
+        boardRepository.delete(board);
+    }
+
 }
