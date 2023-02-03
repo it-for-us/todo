@@ -73,7 +73,7 @@ export default function NavLanding() {
             </NavDropdown>
           </Nav>
           <div className="d-flex align-items-center gap-3 auth-btn">
-            <Link to={"/login"}>Login</Link>
+            <Link to={"/signin"}>Login</Link>
             <Link to={"/signup"}>Get Dart for free</Link>
           </div>
         </Navbar.Collapse>

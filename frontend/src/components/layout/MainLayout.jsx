@@ -1,19 +1,12 @@
 import React from "react";
 import MainLayoutNav from "../navbar/MainLayoutNav";
-// import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-// import DashboardIcon from "@mui/icons-material/Dashboard";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-// import MuiAppBar from "@mui/material/AppBar";
-// import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-// import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -44,23 +37,6 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   })
 );
 
-// const AppBar = styled(MuiAppBar, {
-//   shouldForwardProp: (prop) => prop !== "open",
-// })(({ theme, open }) => ({
-//   transition: theme.transitions.create(["margin", "width"], {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-//   }),
-//   ...(open && {
-//     width: `calc(100% - ${drawerWidth}px)`,
-//     marginLeft: `${drawerWidth}px`,
-//     transition: theme.transitions.create(["margin", "width"], {
-//       easing: theme.transitions.easing.easeOut,
-//       duration: theme.transitions.duration.enteringScreen,
-//     }),
-//   }),
-// }));
-
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -90,22 +66,7 @@ export default function MainLayout({ children }) {
     <div className="main">
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        {/* <AppBar position="fixed" open={open}>
-          <Toolbar>
-            <Typography
-              sx={{
-                margin: "0",
-                padding: "0",
-              }}
-              variant="h6"
-              noWrap
-              component="div"
-              className="navigation"
-            >
-            </Typography>
-          </Toolbar>
-        </AppBar> */}
-
+        {/* 
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -114,7 +75,7 @@ export default function MainLayout({ children }) {
           sx={{ mr: 0, ...(open && { display: "none" }) }}
         >
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
 
         <Drawer
           className="sidebar"
@@ -155,8 +116,8 @@ export default function MainLayout({ children }) {
           <Divider />
         </Drawer>
         <Main style={{ padding: "0" }} open={open}>
-          <MainLayoutNav />
-          <DrawerHeader />
+          <MainLayoutNav handleDrawerOpen={handleDrawerOpen} open={open} />
+          {/* <DrawerHeader /> */}
 
           {children}
         </Main>
