@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/work-spaces")
@@ -23,6 +25,12 @@ public class WorkspaceController {
     public ResponseEntity<WorkspaceViewDto> getWorkspaceWithBoardsById(@PathVariable("workspaceId") Long workspaceId) {
         WorkspaceViewDto workspaceViewDto = workspaceService.getWorkspaceById(workspaceId);
         return new ResponseEntity<>(workspaceViewDto, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<WorkspaceViewDto>> getAllWorkspacesOfUser() {
+
+        return new ResponseEntity<>(workspaceService.getAllWorkspacesOfUser(), HttpStatus.OK);
     }
 
     @PostMapping
