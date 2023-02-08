@@ -24,33 +24,32 @@ public class BoardController {
     }
 
     @PostMapping
-    public ResponseEntity<BoardViewDto> createBoard (@RequestBody BoardCreateDto boardCreateDto){
-        BoardViewDto boardViewDto = boardService.create(boardCreateDto,
-                LoggedUsername.getUsernameFromAuthentication());
-        return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.CREATED);
+    public ResponseEntity<BoardViewDto> createBoard(@RequestBody BoardCreateDto boardCreateDto) {
+        BoardViewDto boardViewDto = boardService.create(
+                boardCreateDto,
+                LoggedUsername.getUsernameFromAuthentication()
+        );
+        return new ResponseEntity<>(boardViewDto, HttpStatus.CREATED);
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBoard(@PathVariable Long id){
 
-        boardService.deleteBoard(id,LoggedUsername.getUsernameFromAuthentication());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long id) {
+        boardService.deleteBoard(id, LoggedUsername.getUsernameFromAuthentication());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping({"/{boardId}"})
-    public ResponseEntity<BoardViewDto> getBoardById(@PathVariable("boardId") Long boardId){
+    public ResponseEntity<BoardViewDto> getBoardById(@PathVariable("boardId") Long boardId) {
         BoardViewDto boardViewDto = boardService.getBoardById(boardId);
-        return new ResponseEntity<BoardViewDto>(boardViewDto, HttpStatus.OK);
+        return new ResponseEntity<>(boardViewDto, HttpStatus.OK);
     }
 
 
     //board update
-    @PutMapping(path="{id}")
+    @PutMapping(path = "{id}")
     public HttpStatus updateWorkspace(@PathVariable Long id, @RequestParam(required = false) String name) {
         String username = LoggedUsername.getUsernameFromAuthentication();
-
-        boardService.updateBoard(id,username,name);
+        boardService.updateBoard(id, username, name);
         return HttpStatus.OK;
     }
-
-
 }

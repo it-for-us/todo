@@ -30,21 +30,21 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final UserRepository userRepository;
 
 
-
     @Override
     public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto, String username) {
-        Workspace workspace = new Workspace();
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("User is not found"));
-
-
-        if (isWorkspaceExist(workspaceCreateDto.getName(), user.getUserId()))
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User is not found"));
+        if (isWorkspaceExist(workspaceCreateDto.getName(), user.getUserId())) {
             throw new WorkspaceExistException("Workspace is already exist");
-        else if (isAValidWorkspaceName(workspaceCreateDto)) {
-            workspace.setName(workspaceCreateDto.getName());
-            workspace.setUser(user);
         }
+
+        if (!isAValidWorkspaceName(workspaceCreateDto)) {
+            throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
+        }
+
+        Workspace workspace = new Workspace();
+        workspace.setName(workspaceCreateDto.getName());
+        workspace.setUser(user);
+
         return WorkspaceViewDto.of(workspaceRepository.save(workspace), null);
     }
 
@@ -53,19 +53,17 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
-        Workspace workspace = workspaceRepository.findById(workspaceId)
-                .orElseThrow(() -> new WorkspaceNotFoundException("Workspace is not found."));
+        Workspace workspace = workspaceRepository.findById(workspaceId).
+                orElseThrow(() -> new WorkspaceNotFoundException("Workspace is not found."));
 
         if (isWorkspaceBelongedUser(workspace, username)) {
             List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspaceId));
             return WorkspaceViewDto.of(workspace, boards);
-        } else
-            throw new WorkspaceBelongAnotherUserException("Workspace is belonged to another user.");
+        } else throw new WorkspaceBelongAnotherUserException("Workspace is belonged to another user.");
     }
 
     @Override
     public Boolean isWorkspaceExist(String workspaceName, Long userId) {
-
         return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
     }
 
@@ -77,19 +75,14 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         int countOf_ = 0;
 
         for (char c : workspaceNameToChar) {
-            if ((c >= 'a' && c <= 'z')
-                    || (c >= '0' && c <= '9')
-                    || (c == ' ')
-                    || (c == '_')) {
+            if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == ' ') || (c == '_')) {
                 if (c == '_') {
                     countOf_++;
                 }
-            } else
-                throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
+            } else throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
         }
 
-        if (workspaceNameToChar.length < 4 || workspaceNameToChar.length > 15
-                || workspaceNameToChar[0] == '_' || countOf_ > 1)
+        if (workspaceNameToChar.length < 4 || workspaceNameToChar.length > 15 || workspaceNameToChar[0] == '_' || countOf_ > 1)
             throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
 
         return true;
@@ -97,38 +90,32 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public void deleteWorkspaceById(Long id, String username) {
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("Workspace is not found"));
+        if (!isWorkspaceBelongsToUser(workspace, username)) {
+            throw new UnAuthorizedException("UnAuthorized Exception");
+        }
+        workspaceRepository.deleteById(id);
+    }
 
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("User is not found"));
-
-
-        Workspace workspace = workspaceRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Workspace is not found"));
-
-
-        if (user.getUsername().equals(workspace.getUser().getUsername())) {
-            workspaceRepository.deleteById(id);
-        }else throw new UnAuthorizedException("UnAuthorized Exception");
+    private boolean isWorkspaceBelongsToUser(Workspace workspace, String username) {
+        User user = userRepository.findByUsername(username).get();
+        return user.getUsername().equals(workspace.getUser().getUsername());
     }
 
     @Override
     @Transactional
     public void updateWorkspace(Long id, String username, String name) {
-
-
-        Workspace workspace=workspaceRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("workspace is not found"));
-
-        if( name.length()==0){
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new IllegalStateException("workspace is not found"));
+        if (name.length() == 0) {
             throw new IllegalStateException("Id or workspace is incorrect format");
         }
 
-        Optional<Workspace> workspaceOptional=workspaceRepository.findByName(name);
-        if(workspaceOptional.isPresent()){
+        Optional<Workspace> workspaceOptional = workspaceRepository.findByName(name);
+        if (workspaceOptional.isPresent()) {
             throw new IllegalStateException("workspace already exists");
         }
-        if (username!=null&& id!=0 ){
+
+        if (username != null && id != 0) {
             workspace.setId(id);
             workspace.setName(username);
             workspace.setName(name);
@@ -137,7 +124,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     private boolean isWorkspaceBelongedUser(Workspace workspace, String username) { //????
         return workspace.getUser().getUsername().equals(username);
-
     }
 }
 

@@ -13,37 +13,31 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    private String jwtSecret= "ToDoApp";
+    private String jwtSecret = "ToDoApp";
 
-    public String generateToken (User user){
+    public String generateToken(User user) {
 
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
 
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 100 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .withIssuer("ToDoApp")
                 .sign(algorithm);
     }
 
-    public String getUserFromJWTToken(String jwtToken){
-
+    public String getUserFromJWTToken(String jwtToken) {
         return JWT.decode(jwtToken).getSubject();
-
     }
 
-    public Boolean isJWTTokenValid(String jwtToken){
-
+    public Boolean isJWTTokenValid(String jwtToken) {
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
-        JWTVerifier verifier= JWT.require(algorithm).build();
+        JWTVerifier verifier = JWT.require(algorithm).build();
         try {
-            DecodedJWT decodedJWT= verifier.verify(jwtToken);
+            DecodedJWT decodedJWT = verifier.verify(jwtToken);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new UnAuthorizedException(e.getMessage());
         }
-
-
     }
-
 }
