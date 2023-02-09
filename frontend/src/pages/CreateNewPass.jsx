@@ -8,15 +8,11 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import UserContext from "../contexts/UserContext";
-import { useContext } from "react";
 
 const theme = createTheme();
 
-export default function CreateNewPass() {
+export default function CreateNewPass({ userData, setUserData }) {
   const [errorPasswordConfirm, setErrorPasswordConfirm] = useState("");
-
-  const { userData, setUserData } = useContext(UserContext);
 
   console.log(userData);
 

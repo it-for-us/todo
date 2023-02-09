@@ -3,20 +3,23 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { register as rdxRegister, registerReset } from "./_redux/auth-slice";
+import { useDispatch } from "react-redux";
+import { register as registerReset } from "./_redux/auth-slice";
 import frame from "../../assets/images/Frame.png";
-import logo from "../../assets/images/Frame (2).png";
+import logo from "../../assets/images/Group.png";
+import { useSignupMutation } from "../../app/services/auth-api";
 
 export default function Register() {
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    isLoading,
-    error: registerError,
-    status,
-  } = useSelector((state) => state.auth);
+  // const {
+  //   isLoading,
+  //   error: registerError,
+  //   status,
+  // } = useSelector((state) => state.auth);
+
+  const [signup, { isLoading, isError, error }] = useSignupMutation();
 
   useEffect(() => {
     return () => {
@@ -31,7 +34,6 @@ export default function Register() {
   } = useForm();
 
   const onSubmit = async (inputRegister) => {
-    console.log(inputRegister);
     const inputUserName = inputRegister.userName;
     const inputUserEmail = inputRegister.email;
     const inputUserPassword = inputRegister.password;
@@ -42,7 +44,8 @@ export default function Register() {
       password: inputUserPassword,
       role: "user",
     };
-    dispatch(rdxRegister(user));
+    // dispatch(rdxRegister(user));
+    await signup(user);
 
     if (inputUserPassword !== inputUserConfirmPassword) {
       setErrorConfirmPassword(
@@ -50,23 +53,30 @@ export default function Register() {
           Password not matched
         </p>
       );
-    } else if (status === "register/succeeded") {
-      navigate("/login");
+    } else {
+      setErrorConfirmPassword(
+        <p style={{ color: "green", textAlign: "center" }}>Register success</p>
+      );
+      return navigate("/signin");
     }
   };
 
-  // if (status === "register/succeeded") {
-  //   navigate("/login");
-  // }
+  // console.log(isError);
+  // console.log(error);
 
   return (
     <div className="register-page ">
       <img className="frame" src={frame} alt="frame" />
       <img className="logo" src={logo} alt="logo" />
-      {registerError && (
-        <p style={{ color: "red" }}>{registerError?.message}</p>
-      )}
+      {error && <p style={{ color: "red" }}>{error?.message}</p>}
+
       <Form className="d-grid" onSubmit={handleSubmit(onSubmit)}>
+        {isError && (
+          <p style={{ color: "red" }}>
+            {error?.data?.error?.message || "Error"}
+          </p>
+        )}
+
         <h2>Sign up for your account</h2>
         <Form.Group className="mb-3" controlId="formBasicUserName">
           <Form.Control

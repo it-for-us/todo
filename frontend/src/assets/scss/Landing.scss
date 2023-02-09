@@ -83,3 +83,89 @@
     }
   }
 }
+@media (max-width: 992px) {
+  .landing-page {
+    padding-top: 4vh;
+    .hero-section {
+      padding: 10vh 8% 4vh 8%;
+      background: url("../images/white-wave-bg.svg") center bottom -0.5px / 100%
+          14% no-repeat scroll padding-box border-box,
+        linear-gradient(60deg, rgb(82, 67, 170), rgb(237, 80, 180)) 0% 0% / auto
+          repeat scroll padding-box border-box rgb(82, 67, 170);
+      background-blend-mode: normal, normal;
+      // background: linear-gradient(180deg, #e6e6ff 0%, #ffffff 100%);
+      // color: #091e42;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .hero-img {
+        text-align: center;
+        width: 50%;
+        img {
+          width: 70%;
+        }
+      }
+      .hero-headline {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
+        width: 80%;
+        h1 {
+          font-size: 3rem;
+          font-weight: 500;
+        }
+        p {
+          font-size: 1.2rem;
+        }
+
+        form {
+          input {
+            font-size: 1rem;
+            padding: 0.7rem 0.75rem 0.8rem;
+            border: 1px solid rgb(223, 225, 230);
+            border-radius: 0.3rem;
+            max-width: 300px;
+            transition: all 250ms ease-out 0s;
+            width: 376px;
+            margin: 0 4% 4vh 0;
+          }
+          a {
+            text-decoration: none;
+            align-items: center;
+            border-radius: 0.3rem;
+            text-align: center;
+            display: inline-flex;
+            transition: all 250ms ease-out 0s;
+            background-color: rgb(0, 101, 255);
+            border: 1px solid rgb(0, 101, 255);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.7rem 1rem 0.8rem;
+
+            color: rgb(255, 255, 255) !important;
+          }
+        }
+      }
+    }
+
+    article {
+      text-align: left;
+      width: 30%;
+      margin: 10vh 8%;
+    }
+    section {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 4vh 8%;
+      img {
+        width: 30%;
+      }
+      div {
+        width: 50%;
+      }
+    }
+  }
+}

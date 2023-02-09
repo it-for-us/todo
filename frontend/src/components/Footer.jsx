@@ -4,7 +4,7 @@ import * as React from "react";
 import Icon from "@mui/material/Icon";
 import { Link } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Logo from "../assets/images/Logo.png";
+import Logo from "../assets/images/Group.png";
 // import { Link } from "react-router-dom";
 export default function Footer() {
   return (

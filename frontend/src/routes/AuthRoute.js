@@ -13,5 +13,5 @@ export default function AuthRoute() {
       </MainLayout>
     );
   }
-  return <Navigate to="/mainlayout" />;
+  return <Navigate to="/main" />;
 }
