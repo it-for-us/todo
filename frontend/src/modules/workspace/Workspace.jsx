@@ -164,7 +164,5 @@ export default function Workspace() {
         {/* {children} */}
       </Main>
     </Box>
-
-    // <MainLayout>Workspace</MainLayout>
   );
 }
