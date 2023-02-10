@@ -14,6 +14,18 @@
   }
   .create-btn {
     margin-left: 6%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    div {
+      color: #fff;
+      background-color: #1665c0;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      &:hover {
+        background: #6a99df;
+      }
+    }
   }
   .auth-btn {
     a {
@@ -35,9 +47,55 @@
     }
   }
 }
-main {
-  padding: 0;
-  margin: 0;
+.main-layout {
+  padding: 2vh 2%;
+  display: flex;
+
+  gap: 20px;
+
+  .side {
+    width: 20%;
+    margin: 40px 0 0;
+    max-height: 90vh;
+    padding: 0 16px;
+  }
+
+  .workspaces {
+    width: 80%;
+    margin: 40px 16px 0;
+    h3 {
+      text-transform: uppercase;
+      font-size: 1rem;
+      font-weight: 700;
+      color: gray;
+    }
+    .boards-container {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      .boards {
+        width: 200px;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #6c9cd3;
+        color: #fff;
+        cursor: pointer;
+      }
+      .create-new-board {
+        width: 200px;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #1665c0;
+        color: #fff;
+        cursor: pointer;
+      }
+    }
+  }
 }
 // .main-layout {
 //   padding: 7vh 0 0 0;

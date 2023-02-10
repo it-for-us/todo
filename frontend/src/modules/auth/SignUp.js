@@ -61,9 +61,6 @@ export default function Register() {
     }
   };
 
-  // console.log(isError);
-  // console.log(error);
-
   return (
     <div className="register-page ">
       <img className="frame" src={frame} alt="frame" />
@@ -158,7 +155,7 @@ export default function Register() {
           )}
         </Button>
         <p className="already-account">
-          Already have an account?<Link to={"/login"}> Log In</Link>
+          Already have an account?<Link to={"/signin"}> Log In</Link>
         </p>
       </Form>
     </div>
