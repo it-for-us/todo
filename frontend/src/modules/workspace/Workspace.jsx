@@ -159,7 +159,6 @@ export default function Workspace() {
       </Drawer>
       <Main style={{ padding: "0" }} open={open}>
         <MainLayoutNav handleDrawerOpen={handleDrawerOpen} open={open} />
-        {/* <DrawerHeader /> */}
 
         {/* {children} */}
       </Main>
