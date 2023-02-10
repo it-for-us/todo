@@ -1,13 +1,14 @@
-name: Build & Deploy
+name: CD Pipeline
 
 on:
   push:
     branches:
       - main
       - development
+      - 97-create-deployment-pipeline-for-frontend
 
 jobs:
-  cd:
+  cd-backend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,6 +22,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Build with Maven
         run: ./mvnw --batch-mode --update-snapshots package
@@ -46,23 +48,136 @@ jobs:
           push: true
           tags: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
 
+  cd-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm i
+          fi
+
+      - name: Build application
+        run: npm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3.1.1
+        with:
+          context: frontend/
+          file: frontend/Dockerfile
+          push: true
+          tags: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+
+  deployk8s-dev:
+    needs: ["cd-backend", "cd-frontend"]
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
+
       - name: Set Kubernetes Context
         uses: Azure/k8s-set-context@v3.0
         with:
           kubeconfig: ${{secrets.KUBE_CONFIG}}
 
-      - name: Deploy main to K8s
-        if: github.ref == 'refs/heads/main'
-        uses: Azure/k8s-deploy@v4
-        with:
-          namespace: dart-prod
-          manifests: infrastructure/deployment-prod.yml
-          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
-
-      - name: Deploy development to K8s
-        if: github.ref == 'refs/heads/development'
+      - name: Deploy postgres
         uses: Azure/k8s-deploy@v4
         with:
           namespace: dart-dev
-          manifests: infrastructure/deployment-dev.yml
+          manifests: infrastructure/postgres.yml
+
+      - name: Deploy backend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: infrastructure/backend.yml
           images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy frontend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: infrastructure/frontend.yml
+          images: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy ingress
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-dev
+          manifests: infrastructure/ingress-dev.yml
+
+  deployk8s-prod:
+    needs: ["cd-backend", "cd-frontend"]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Add DOCKER_IMAGE_TAG env property with commit short sha
+        run: echo "DOCKER_IMAGE_TAG=`echo ${GITHUB_SHA::7}`" >> $GITHUB_ENV
+
+      - name: Set Kubernetes Context
+        uses: Azure/k8s-set-context@v3.0
+        with:
+          kubeconfig: ${{secrets.KUBE_CONFIG}}
+
+      - name: Deploy postgres
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/postgres.yml
+
+      - name: Deploy backend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/backend.yml
+          images: ghcr.io/it-for-us/dart-backend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy frontend
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/frontend.yml
+          images: ghcr.io/it-for-us/dart-frontend:${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Deploy ingress
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: dart-prod
+          manifests: infrastructure/ingress-prod.yml

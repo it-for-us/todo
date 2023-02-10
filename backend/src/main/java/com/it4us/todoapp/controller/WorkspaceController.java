@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/work-space")
+@RequestMapping("/api/v1/work-spaces")
 public class WorkspaceController {
 
     private final WorkspaceService workspaceService;
 
     public WorkspaceController(WorkspaceService workspaceService) {
-        this.workspaceService=workspaceService;
+        this.workspaceService = workspaceService;
     }
 
     @GetMapping("/{workspaceId}")
@@ -26,23 +26,28 @@ public class WorkspaceController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkspaceViewDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto){
-
-        WorkspaceViewDto workspaceViewDto = workspaceService.create(workspaceCreateDto,
-                LoggedUsername.getUsernameFromAuthentication());
+    public ResponseEntity<WorkspaceViewDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto) {
+        WorkspaceViewDto workspaceViewDto = workspaceService.create(
+                workspaceCreateDto,
+                LoggedUsername.getUsernameFromAuthentication()
+        );
         return new ResponseEntity<>(workspaceViewDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus deleteWorkspace(@PathVariable Long id){
+    public HttpStatus deleteWorkspace(@PathVariable Long id) {
         workspaceService.deleteWorkspaceById(id, LoggedUsername.getUsernameFromAuthentication());
         return HttpStatus.OK;
     }
 
-    @PutMapping(path="{id}")
-    public void updateWorkspace(@PathVariable("id") Long id, @RequestParam(required = false) String name){
-        workspaceService.updateWorkspace(id,name);
+    //update username and workspace name
+    @PutMapping(path = "{id}")
+    public HttpStatus updateWorkspace(@PathVariable Long id, @RequestParam(required = false) String name) {
+        String username = LoggedUsername.getUsernameFromAuthentication();
+        workspaceService.updateWorkspace(id, username, name);
+        return HttpStatus.OK;
     }
+
 }
 
 

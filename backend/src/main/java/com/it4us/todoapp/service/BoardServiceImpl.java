@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,11 +44,11 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NotFoundException("User is not found"));
 
 
-        if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
+        if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId())) {
             throw new BoardExistException("Board is already exist");
-        else if (isAValidBoardName(boardCreateDto)
-                && workspace.getUser().getUsername().equals(user.getUsername())) {
+        }
 
+        if (isAValidBoardName(boardCreateDto) && workspace.getUser().getUsername().equals(user.getUsername())) {
             board.setName(boardCreateDto.getName());
             board.setWorkspace(workspace);
         }
@@ -58,9 +59,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardViewDto getBoardById(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException("Board is not found"));
-        if (isBoardBelongedUser(boardId))
-            return BoardViewDto.of(board);
-        else throw new BoardBelongAnotherUserException("The board is belonged another user.");
+        if (!isBoardBelongedUser(boardId)) {
+            throw new BoardBelongAnotherUserException("The board is belonged another user.");
+        }
+        return BoardViewDto.of(board);
     }
 
     private boolean isBoardBelongedUser(Long boardId) {
@@ -77,7 +79,9 @@ public class BoardServiceImpl implements BoardService {
         List<Board> boards;
         if (workspaceId.isPresent()) {
             boards = boardRepository.findByWorkspaceId(workspaceId);
-        } else boards = boardRepository.findAll();
+        } else {
+            boards = boardRepository.findAll();
+        }
         return boards.stream().map(board -> BoardViewDto.of(board)).collect(Collectors.toList());
     }
 
@@ -88,11 +92,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Boolean isAValidBoardName(BoardCreateDto boardCreateDto) {
-
-
         char[] boardNameToChar = boardCreateDto.getName().toCharArray();
         int countOf_ = 0;
-
         for (char c : boardNameToChar) {
             if ((c >= 'a' && c <= 'z')
                     || (c >= '0' && c <= '9')
@@ -110,4 +111,48 @@ public class BoardServiceImpl implements BoardService {
 
         return true;
     }
+
+
+    @Override
+    public Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto) {
+
+        Optional<Workspace> workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId());
+
+        if (workspace.isEmpty())
+            throw new NotFoundException("There is no such workspace");
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public void updateBoard(Long id, String username, String name) {
+
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("board not found"));
+
+        if (id == null || name.length() == 0) {
+            throw new IllegalStateException("board id or boardname is in incorrect format");
+        }
+
+        Optional<Board> boardOptional = boardRepository.findByName(name);
+        if (boardOptional.isPresent()) {
+            throw new IllegalStateException("board already exists");
+        }
+        if (username != null && id != 0 && name != null) {
+            board.setId(id);
+            board.setName(username);
+            board.setName(name);
+        }
+    }
+
+    @Override
+    public void deleteBoard(Long id, String username) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new NotFoundException("board not found"));
+        if (boardRepository.isBoardBelongToUser(id, username) == false) {
+            throw new BoardBelongAnotherUserException("Board belongs to another user");
+        }
+        boardRepository.delete(board);
+    }
+
 }

@@ -81,5 +81,7 @@ export default function MainLayout({ children }) {
         <div className="workspaces">{children}</div>
       </Box>
     </>
+
+ 
   );
 }

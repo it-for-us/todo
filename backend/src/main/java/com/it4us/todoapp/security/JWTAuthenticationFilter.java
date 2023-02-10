@@ -36,32 +36,32 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
-        try{
-            String jwtToken=jwtParser(request);
-            if(jwtToken!=null && jwtUtils.isJWTTokenValid(jwtToken)) {
-                String username=jwtUtils.getUserFromJWTToken(jwtToken);
-                UserDetails userDetails= userService.loadUserByUsername(username);
+        try {
+            String jwtToken = jwtParser(request);
+            if (jwtToken != null && jwtUtils.isJWTTokenValid(jwtToken)) {
+                String username = jwtUtils.getUserFromJWTToken(jwtToken);
+                UserDetails userDetails = userService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails,null,new ArrayList<>());
+                        new UsernamePasswordAuthenticationToken(userDetails, null, new ArrayList<>());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new UnAuthorizedException(e.getMessage());
-
         }
         filterChain.doFilter(request, response);
     }
 
 
-    private String jwtParser(HttpServletRequest request ){
+    private String jwtParser(HttpServletRequest request) {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader != null && authHeader.startsWith("Bearer ")){
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
         }
         return null;

@@ -15,12 +15,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class UserController {
+public class LoginController {
 
     private final UserService userService;
 
@@ -28,25 +29,25 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserViewDto> createUser(@Valid @RequestBody UserCreateDto userCreateDto){
+    public ResponseEntity<UserViewDto> createUser(@Valid @RequestBody UserCreateDto userCreateDto) {
         UserViewDto user = userService.create(userCreateDto);
         return ResponseEntity.ok(user);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<UserSignInResponse> signin(@Valid @RequestBody UserSignInDto userSignInDto){
+    public ResponseEntity<UserSignInResponse> signin(@Valid @RequestBody UserSignInDto userSignInDto) {
 
         User user = userService.findByEmail(userSignInDto.getEmail());
 
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), userSignInDto.getPassword()));
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), userSignInDto.getPassword())
+            );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw  new UnAuthorizedException(e.getMessage());
+            throw new UnAuthorizedException(e.getMessage());
         }
-
 
         UserSignInResponse signInResponse = userService.login(userSignInDto);
         return ResponseEntity.ok(signInResponse);
