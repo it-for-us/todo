@@ -1,5 +1,6 @@
-package com.it4us.todoapp.security;
+package com.it4us.todoapp.config;
 
+import com.it4us.todoapp.security.JWTAuthenticationFilter;
 import com.it4us.todoapp.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

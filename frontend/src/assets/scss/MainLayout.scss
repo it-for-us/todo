@@ -14,18 +14,7 @@
   }
   .create-btn {
     margin-left: 6%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    div {
-      color: #fff;
-      background-color: #1665c0;
-      padding: 0.3rem 0.8rem;
-      cursor: pointer;
-      &:hover {
-        background: #6a99df;
-      }
-    }
+
   }
   .auth-btn {
     a {
@@ -47,6 +36,7 @@
     }
   }
 }
+
 .main-layout {
   padding: 2vh 2%;
   display: flex;
@@ -96,6 +86,7 @@
       }
     }
   }
+
 }
 // .main-layout {
 //   padding: 7vh 0 0 0;
