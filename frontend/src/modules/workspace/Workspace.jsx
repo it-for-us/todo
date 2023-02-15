@@ -86,7 +86,7 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-const drawerWidth = 240;
+const drawerWidth = 180;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -213,7 +213,7 @@ export default function Workspace() {
             </Link>
           ))}
           <Divider />
-          <ListItem>
+          <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <InboxIcon />
