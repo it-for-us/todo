@@ -8,9 +8,8 @@ import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
+import com.it4us.todoapp.utilities.LoggedUsername;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,7 +24,6 @@ import java.util.Optional;
 public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
-    private final UserService userService;
     private final BoardService boardService;
     private final UserRepository userRepository;
 
@@ -50,13 +48,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public WorkspaceViewDto getWorkspaceById(Long workspaceId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username = LoggedUsername.getUsernameFromAuthentication();
 
         Workspace workspace = workspaceRepository.findById(workspaceId).
                 orElseThrow(() -> new WorkspaceNotFoundException("Workspace is not found."));
 
-        if (isWorkspaceBelongedUser(workspace, username)) {
+        if (isWorkspaceBelongsToUser(workspace, username)) {
             List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspaceId));
             return WorkspaceViewDto.of(workspace, boards);
         } else throw new WorkspaceBelongAnotherUserException("Workspace is belonged to another user.");
@@ -122,8 +119,5 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
     }
 
-    private boolean isWorkspaceBelongedUser(Workspace workspace, String username) { //????
-        return workspace.getUser().getUsername().equals(username);
-    }
 }
 
