@@ -8,6 +8,9 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { createWorkspace } from "../../modules/workspace/_redux/workspace-slice";
 
 export default function MainLayoutNavCreateBtn() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,9 +25,28 @@ export default function MainLayoutNavCreateBtn() {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+  const dispatch = useDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+  const onSubmit = (inputWorkSpace) => {
+    console.log(inputWorkSpace);
+    dispatch(
+      createWorkspace({
+        name: inputWorkSpace.workspace,
+        createdAt: new Date().toISOString(),
+      })
+    );
+    reset();
+    handleClose();
+  };
+
   return (
     <div className="create-btn">
-
       <div aria-describedby={id} variant="contained" onClick={handleClick}>
         Create
       </div>
@@ -53,7 +75,6 @@ export default function MainLayoutNavCreateBtn() {
             <Box
               component="form"
               sx={{
-
                 "& > :not(style)": { m: 1, width: "25ch" },
                 display: "flex",
                 flexDirection: "column",
@@ -84,6 +105,7 @@ export default function MainLayoutNavCreateBtn() {
           <AccordionDetails>
             <Box
               component="form"
+              onSubmit={handleSubmit(onSubmit)}
               sx={{
                 "& > :not(style)": { m: 1, width: "20ch" },
                 display: "flex",
@@ -99,8 +121,21 @@ export default function MainLayoutNavCreateBtn() {
                 label="Workspace title"
                 variant="outlined"
                 size="small"
+                {...register("workspace", {
+                  required: true,
+                  pattern: {
+                    value: /^(?=)(?=).{4,15}$/,
+                  },
+                })}
               />
-              <Button variant="contained">Create</Button>
+              {errors.workspace && (
+                <p style={{ color: "red", margin: "0", fontSize: "12px" }}>
+                  Please enter a valid Workspace name
+                </p>
+              )}
+              <Button type="submit" variant="contained">
+                Create
+              </Button>
             </Box>
           </AccordionDetails>
         </Accordion>

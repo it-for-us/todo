@@ -1,13 +1,22 @@
 import React from "react";
 import MainLayout from "../components/layout/MainLayout";
 import MainLayoutNavCreateBtn from "../components/navbar/MainLayoutNavCreateBtn";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Main() {
+  const { workspaces } = useSelector((state) => state.workspaceReducer);
+
+  console.log(workspaces);
   return (
     <MainLayout>
       <h3>Your workspaces</h3>
       <div className="boards-container">
-        <div className="boards">Dart</div>
+        {workspaces &&
+          workspaces.map((workspace, i) => (
+            <div key={i} className="boards">
+              {workspace.name}
+            </div>
+          ))}
         <div className="create-new-board">
           <MainLayoutNavCreateBtn />
         </div>
