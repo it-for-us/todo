@@ -72,7 +72,7 @@
     }
     .boards-container {
       display: flex;
-      justify-content: flex-start;
+      flex-wrap: wrap;
       align-items: center;
       gap: 10px;
       .boards {
@@ -81,7 +81,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #6c9cd3;
+        // background-color: #6c9cd3;
         color: #fff;
         cursor: pointer;
       }
@@ -97,7 +97,6 @@
       }
     }
   }
-
 }
 // .main-layout {
 //   padding: 7vh 0 0 0;
