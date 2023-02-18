@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../../modules/auth/_redux/auth-slice";
-import MainLayoutNavCreateBtn from "./MainLayoutNavCreateBtn";
+import MainLayoutNavCreateBtn from "../../modules/workspace/components/CreateWorkspace";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 

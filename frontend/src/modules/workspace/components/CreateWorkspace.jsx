@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { createWorkspace } from "../../modules/workspace/_redux/workspace-slice";
+import { createWorkspace } from "../_redux/workspace-slice";
 
 export default function MainLayoutNavCreateBtn() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -47,7 +47,6 @@ export default function MainLayoutNavCreateBtn() {
 
   return (
     <div className="create-btn">
-
       <div aria-describedby={id} variant="contained" onClick={handleClick}>
         Create
       </div>

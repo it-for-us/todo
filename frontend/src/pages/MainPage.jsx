@@ -1,6 +1,6 @@
 import React from "react";
 import MainLayout from "../components/layout/MainLayout";
-import MainLayoutNavCreateBtn from "../components/navbar/MainLayoutNavCreateBtn";
+import MainLayoutNavCreateBtn from "../modules/workspace/components/CreateWorkspace";
 import { useSelector } from "react-redux";
 
 export default function Main() {
