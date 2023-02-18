@@ -1,23 +1,17 @@
 import React from "react";
 import MainLayout from "../components/layout/MainLayout";
 import MainLayoutNavCreateBtn from "../components/navbar/MainLayoutNavCreateBtn";
-
 import { useSelector } from "react-redux";
 
 export default function Main() {
   const { workspaces } = useSelector((state) => state.workspaceReducer);
-  //
 
   console.log(workspaces);
-
-
-export default function Main() {
 
   return (
     <MainLayout>
       <h3>Your workspaces</h3>
       <div className="boards-container">
-
         {workspaces &&
           workspaces.map((workspace, i) => (
             <div
