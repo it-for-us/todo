@@ -79,6 +79,7 @@
         width: 200px;
         height: 100px;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         // background-color: #6c9cd3;
@@ -97,7 +98,6 @@
       }
     }
   }
-
 }
 // .main-layout {
 //   padding: 7vh 0 0 0;

@@ -1,7 +1,8 @@
 import React from "react";
 import MainLayout from "../components/layout/MainLayout";
-import MainLayoutNavCreateBtn from "../modules/workspace/components/CreateWorkspace";
+import CreateWorkspace from "../modules/workspace/components/CreateWorkspace";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 export default function Main() {
   const { workspaces } = useSelector((state) => state.workspaceReducer);
@@ -20,11 +21,12 @@ export default function Main() {
               className="boards"
             >
               {workspace.name}
+              <span>{moment(workspace.createdAt).fromNow()} </span>
             </div>
           ))}
 
         <div className="create-new-board">
-          <MainLayoutNavCreateBtn />
+          <CreateWorkspace />
         </div>
       </div>
     </MainLayout>

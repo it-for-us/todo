@@ -8,6 +8,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Textarea from "@mui/joy/Textarea";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { createWorkspace } from "../_redux/workspace-slice";
@@ -33,11 +34,12 @@ export default function MainLayoutNavCreateBtn() {
     formState: { errors },
     reset,
   } = useForm();
-  const onSubmit = (inputWorkSpace) => {
+  const onSubmitWorkSpace = (inputWorkSpace) => {
     console.log(inputWorkSpace);
     dispatch(
       createWorkspace({
         name: inputWorkSpace.workspace,
+        description: inputWorkSpace.description,
         createdAt: new Date().toISOString(),
       })
     );
@@ -105,7 +107,7 @@ export default function MainLayoutNavCreateBtn() {
           <AccordionDetails>
             <Box
               component="form"
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(onSubmitWorkSpace)}
               sx={{
                 "& > :not(style)": { m: 1, width: "20ch" },
                 display: "flex",
@@ -128,6 +130,20 @@ export default function MainLayoutNavCreateBtn() {
                   },
                 })}
               />
+
+              <Textarea
+                color="info"
+                minRows={2}
+                placeholder="Description "
+                variant="solid"
+                {...register("description", {
+                  required: true,
+                  pattern: {
+                    value: /^(?=)(?=).{4,15}$/,
+                  },
+                })}
+              />
+
               {errors.workspace && (
                 <p style={{ color: "red", margin: "0", fontSize: "12px" }}>
                   Please enter a valid Workspace name
