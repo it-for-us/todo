@@ -3,9 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../assets/images/Logo.png";
-// import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import logo from "../../assets/images/Group.png";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -16,6 +14,9 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../../modules/auth/_redux/auth-slice";
+import MainLayoutNavCreateBtn from "./MainLayoutNavCreateBtn";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,7 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function MainLayoutNav() {
+export default function MainLayoutNav({ open: isOpen, handleDrawerOpen }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   console.log(user);
@@ -75,30 +76,37 @@ export default function MainLayoutNav() {
   const logoutHandler = () => {
     dispatch(logout());
   };
-  // const isOpen = () => {
-  //   setToggle(!toggle);
-  // };
+
   return (
     <Navbar
-      // style={{ background: "#1976d2" }}
+      style={{ background: "#0747a6" }}
       className="py-0  nav_bar_layout"
       expand="lg"
-      fixed="top"
+      // fixed="top"
       variant="dark"
     >
       <Container fluid>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{ mr: 0, ...(isOpen && { display: "none" }), color: "white" }}
+        >
+          <MenuIcon />
+        </IconButton>
         <Link className="brand" to={"/"}>
           <img src={logo} alt="" />
           <Navbar.Brand>Dart</Navbar.Brand>
         </Link>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse className="ps-5" id="navbarScroll">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse className="ps-2" id="basic-navbar-nav">
           <Nav
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: "100px" }}
-            navbarScroll
+            basic-navbar-nav
           >
-            <NavDropdown title="Workspaces" id="navbarScrollingDropdown">
+            <NavDropdown title="Workspaces" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
@@ -108,7 +116,7 @@ export default function MainLayoutNav() {
                 Something else here
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Recent" id="navbarScrollingDropdown">
+            <NavDropdown title="Recent" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
@@ -118,7 +126,7 @@ export default function MainLayoutNav() {
                 Something else here
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Starred" id="navbarScrollingDropdown">
+            <NavDropdown title="Starred" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
@@ -128,7 +136,7 @@ export default function MainLayoutNav() {
                 Something else here
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Templates" id="navbarScrollingDropdown">
+            <NavDropdown title="Templates" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
@@ -138,7 +146,7 @@ export default function MainLayoutNav() {
                 Something else here
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Resources" id="navbarScrollingDropdown">
+            <NavDropdown title="Resources" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">
                 Another action
@@ -148,19 +156,16 @@ export default function MainLayoutNav() {
                 Something else here
               </NavDropdown.Item>
             </NavDropdown>
-            <Button variant="outline-warning">Create</Button>
+
+            <MainLayoutNavCreateBtn />
           </Nav>
           <div className="d-flex align-items-center gap-3 auth-btn">
-            {/* <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-            </Form> */}
-
-            <Search>
+            <Search
+              style={{
+                borderRadius: "20px",
+                color: "#ffff",
+              }}
+            >
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>

@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../assets/images/DartLogo.png";
+import logo from "../../assets/images/Group.png";
 import { Link } from "react-router-dom";
 
 export default function NavLanding() {
@@ -73,7 +73,7 @@ export default function NavLanding() {
             </NavDropdown>
           </Nav>
           <div className="d-flex align-items-center gap-3 auth-btn">
-            <Link to={"/login"}>Login</Link>
+            <Link to={"/signin"}>Login</Link>
             <Link to={"/signup"}>Get Dart for free</Link>
           </div>
         </Navbar.Collapse>

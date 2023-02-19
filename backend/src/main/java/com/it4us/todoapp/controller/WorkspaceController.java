@@ -18,7 +18,7 @@ public class WorkspaceController {
     private final WorkspaceService workspaceService;
 
     public WorkspaceController(WorkspaceService workspaceService) {
-        this.workspaceService = workspaceService;
+        this.workspaceService=workspaceService;
     }
 
     @GetMapping("/{workspaceId}")
@@ -35,23 +35,23 @@ public class WorkspaceController {
 
     @PostMapping
     public ResponseEntity<WorkspaceViewDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto) {
-
-        WorkspaceViewDto workspaceViewDto = workspaceService.create(workspaceCreateDto,
-                LoggedUsername.getUsernameFromAuthentication());
+        WorkspaceViewDto workspaceViewDto = workspaceService.create(
+                workspaceCreateDto,
+                LoggedUsername.getUsernameFromAuthentication()
+        );
         return new ResponseEntity<>(workspaceViewDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus deleteWorkspace(@PathVariable Long id) {
+    public HttpStatus deleteWorkspace(@PathVariable Long id){
         workspaceService.deleteWorkspaceById(id, LoggedUsername.getUsernameFromAuthentication());
         return HttpStatus.OK;
     }
 
     //update username and workspace name
-    @PutMapping(path = "{id}")
-    public HttpStatus updateWorkspace(@PathVariable Long id, @RequestParam(required = false) String name) {
+    @PutMapping(path="{id}")
+    public HttpStatus updateWorkspace( @PathVariable Long id, @RequestParam(required = false) String name) {
         String username = LoggedUsername.getUsernameFromAuthentication();
-
         workspaceService.updateWorkspace(id, username, name);
         return HttpStatus.OK;
     }

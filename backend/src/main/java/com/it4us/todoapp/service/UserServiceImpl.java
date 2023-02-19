@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -69,40 +71,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
+        return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
     }
 
 
     @Override
     public Boolean isEmailExist(String email) {
-
         Optional<?> user = userRepository.findByEmail(email);
-
         return user.isPresent();
     }
 
     @Override
     public Boolean isUserNameExist(String userName) {
-
-            Optional<?> user = userRepository.findByUsername(userName);
-
-            return user.isPresent();
+        Optional<?> user = userRepository.findByUsername(userName);
+        return user.isPresent();
     }
 
     @Override
     public String createUsernameIfNoPresent(UserCreateDto userCreateDto) {
         String[] temp = userCreateDto.getEmail().split("@");
+        int id = new Random().nextInt(99999);
+
+        NumberFormat formatter = new DecimalFormat("00000");
+        String number = formatter.format(id);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(temp[0]);
-
-        Random random = new Random();
-
-        for (int i = 0; i < 5; i++) {
-            stringBuilder.append(random.nextInt(9));
-        }
-        return stringBuilder.toString();
+        return stringBuilder.append(temp[0]).append(number).toString();
     }
 
     @Override
