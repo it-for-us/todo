@@ -5,6 +5,7 @@ import com.it4us.todoapp.dto.UserSignInDto;
 import com.it4us.todoapp.dto.UserSignInResponse;
 import com.it4us.todoapp.dto.UserViewDto;
 import com.it4us.todoapp.entity.User;
+import com.it4us.todoapp.exception.NotFoundException;
 import com.it4us.todoapp.exception.UserExistException;
 import com.it4us.todoapp.exception.UserNameExistException;
 import com.it4us.todoapp.repository.UserRepository;
@@ -74,31 +75,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
     }
 
-
-    @Override
-    public Boolean isEmailExist(String email) {
-        Optional<?> user = userRepository.findByEmail(email);
-        return user.isPresent();
-    }
-
-    @Override
-    public Boolean isUserNameExist(String userName) {
-        Optional<?> user = userRepository.findByUsername(userName);
-        return user.isPresent();
-    }
-
-    @Override
-    public String createUsernameIfNoPresent(UserCreateDto userCreateDto) {
-        String[] temp = userCreateDto.getEmail().split("@");
-        int id = new Random().nextInt(99999);
-
-        NumberFormat formatter = new DecimalFormat("00000");
-        String number = formatter.format(id);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        return stringBuilder.append(temp[0]).append(number).toString();
-    }
-
     @Override
     public UserSignInResponse login(UserSignInDto userSignInDto) {
 
@@ -116,7 +92,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User findByEmail(String email) {
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User is Not Found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User is not found"));
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(()-> new NotFoundException("User is not found"));
     }
 
     @Override
@@ -127,5 +109,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 new ArrayList<>());
+    }
+
+    private boolean isEmailExist(String email) {
+        Optional<?> user = userRepository.findByEmail(email);
+        return user.isPresent();
+    }
+
+    private boolean isUserNameExist(String userName) {
+        Optional<?> user = userRepository.findByUsername(userName);
+        return user.isPresent();
+    }
+
+    private String createUsernameIfNoPresent(UserCreateDto userCreateDto) {
+        String[] temp = userCreateDto.getEmail().split("@");
+        int id = new Random().nextInt(99999);
+
+        NumberFormat formatter = new DecimalFormat("00000");
+        String number = formatter.format(id);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        return stringBuilder.append(temp[0]).append(number).toString();
     }
 }

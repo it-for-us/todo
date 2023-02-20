@@ -6,19 +6,18 @@ import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.service.BoardService;
 import com.it4us.todoapp.utilities.LoggedUsername;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Table;
-
 @RestController
 @RequestMapping(value = "/api/boards")
-@Table(name = "Boards")
 public class BoardController {
 
     private final BoardService boardService;
 
+    @Autowired
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
