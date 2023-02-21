@@ -67,6 +67,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public Boolean isWorkspaceExist(String workspaceName, Long userId) {
+
         return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
     }
 
