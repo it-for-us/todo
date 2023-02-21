@@ -20,9 +20,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByWorkspaceId(Optional<Long> workspaceId);
 
-    @Query(value = "select count(*) from workspaces where user_id= (select user_id from users where username= :username ) and workspace_id= (select workspace_id from boards where board_id = :boardId )", nativeQuery = true)
-    int isBoardBelongedUser(@Param("boardId") Long boardId, @Param("username") String username);
-
     @Query(value = "SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM public.boards b inner join public.workspaces w on b.workspace_id = w.workspace_id " +
             "where b.board_id = :boardId and w.user_id= (select user_id from users where username= :username)", nativeQuery = true)
     boolean isBoardBelongToUser(@Param("boardId") Long boardId, @Param("username") String username);

@@ -23,9 +23,4 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
     @Query(value = "select * from workspaces w where w.user_id = :userId", nativeQuery = true)
     List<Workspace> findAllByUserId(@Param("userId") Long userId);
 
-
-    @Query(value = "select * from workspaces w where w.user_id = :userId", nativeQuery = true)
-    List<Workspace> findAllByUserId(@Param("userId") Long userId);
-
-
 }
