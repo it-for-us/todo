@@ -15,5 +15,6 @@ public interface UserService {
     String createUsernameIfNoPresent(UserCreateDto userCreateDto);
     UserSignInResponse login(UserSignInDto userSignInDto);
     User findByEmail(String email);
+    User findByUsername(String username);
 
 }
