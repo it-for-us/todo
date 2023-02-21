@@ -8,6 +8,7 @@ import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
+import com.it4us.todoapp.utilities.LoggedUsername;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
