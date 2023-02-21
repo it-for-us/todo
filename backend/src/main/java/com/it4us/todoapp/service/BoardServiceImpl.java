@@ -112,7 +112,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     private boolean isBoardBelongedUser(Long boardId) {
-        return (boardRepository.isBoardBelongedUser(boardId, LoggedUsername.getUsernameFromAuthentication()) > 0);
+        return (boardRepository.isBoardBelongToUser(boardId, LoggedUsername.getUsernameFromAuthentication()));
     }
 
     private boolean isBoardExist(String boardName, Long workspaceId) {

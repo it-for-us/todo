@@ -16,7 +16,6 @@ import java.util.List;
 @Service
 public class ListOfBoardServiceImpl implements ListOfBoardService {
 
-
     private final ListOfBoardRepository listOfBoardRepository;
     private final BoardService boardService;
 

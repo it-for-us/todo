@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/boards")
+@RequestMapping(value = "/api/v1/boards")
 public class BoardController {
 
     private final BoardService boardService;

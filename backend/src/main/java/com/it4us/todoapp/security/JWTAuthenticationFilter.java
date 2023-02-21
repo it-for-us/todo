@@ -32,7 +32,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return new AntPathMatcher().match("/api/signup", request.getServletPath());
+        return new AntPathMatcher().match("/api/v1/signup", request.getServletPath());
     }
 
     @Override

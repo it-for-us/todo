@@ -8,15 +8,12 @@ import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-
 import java.util.List;
-
 import java.util.Optional;
 
 @Service
@@ -47,9 +44,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public WorkspaceViewDto getWorkspaceById(Long workspaceId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
+        String username = LoggedUsername.getUsernameFromAuthentication();
         Workspace workspace = findWorkspaceById(workspaceId);
 
         if (isWorkspaceBelongsToUser(workspace, username)) {
@@ -66,11 +61,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public void deleteWorkspaceById(Long id, String username) {
-        Workspace workspace = workspaceRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Workspace is not found"));
-
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("Workspace is not found"));
         if (!isWorkspaceBelongsToUser(workspace, username)) {
-            throw new BelongToAnotherUserException("You can't access to Workspace of other User");
+            throw new UnAuthorizedException("UnAuthorized Exception");
         }
         workspaceRepository.deleteById(id);
     }
@@ -120,5 +113,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return workspace.getUser().getUsername().equals(username);
     }
 
+    private WorkspaceViewDto convertWorkspaceToWorkspaceViewDto(Workspace workspace) {
+        List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspace.getId()));
+        return WorkspaceViewDto.of(workspace, boards);
+    }
 }
 
