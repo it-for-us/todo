@@ -1,15 +1,15 @@
 import axios from "axios";
-import { API_URL } from "../constants/app-constants";
+import { PROD_API_URL } from "../lib/constants";
 
 export const axiosSetup = () => {
-  axios.defaults.baseURL = API_URL;
+  axios.defaults.baseURL = PROD_API_URL;
   axios.defaults.headers.common["Content-Type"] = "application/json";
   // axios.defaults.timeout = 10000;
 };
 
 export const authAxios = () => {
   const instance = axios.create({
-    baseURL: API_URL,
+    baseURL: PROD_API_URL,
     headers: {
       "Content-Type": "application/json",
     },

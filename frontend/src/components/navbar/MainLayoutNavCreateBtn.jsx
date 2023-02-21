@@ -24,9 +24,11 @@ export default function MainLayoutNavCreateBtn() {
   const id = open ? "simple-popover" : undefined;
   return (
     <div className="create-btn">
-      <Button aria-describedby={id} variant="contained" onClick={handleClick}>
+
+      <div aria-describedby={id} variant="contained" onClick={handleClick}>
         Create
-      </Button>
+      </div>
+
       <Popover
         id={id}
         open={open}
@@ -51,7 +53,8 @@ export default function MainLayoutNavCreateBtn() {
             <Box
               component="form"
               sx={{
-                "& > :not(style)": { m: 1, width: "20ch" },
+
+                "& > :not(style)": { m: 1, width: "25ch" },
                 display: "flex",
                 flexDirection: "column",
 

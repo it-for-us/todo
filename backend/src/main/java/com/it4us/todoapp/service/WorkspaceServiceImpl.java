@@ -18,14 +18,17 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
+    private final UserService userService;
     private final BoardService boardService;
     private final UserRepository userRepository;
+
 
 
     @Override
@@ -61,6 +64,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public Boolean isWorkspaceExist(String workspaceName, Long userId) {
+
         return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
     }
 
@@ -100,6 +104,18 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
+    public List<WorkspaceViewDto> getAllWorkspacesOfUser() {
+
+        User user = userService.findByUsername(LoggedUsername.getUsernameFromAuthentication());
+
+        List<Workspace> workspaces = workspaceRepository.findAllByUserId(user.getUserId());
+
+        List<WorkspaceViewDto> workspaceViewDtos = workspaces.stream().map(workspace ->
+                convertWorkspaceToWorkspaceViewDto(workspace)).collect(Collectors.toList());
+        return workspaceViewDtos;
+    }
+
+    @Override
     @Transactional
     public void updateWorkspace(Long id, String username, String name) {
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new IllegalStateException("workspace is not found"));
@@ -119,5 +135,14 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
     }
 
+    private boolean isWorkspaceBelongedUser(Workspace workspace, String username) { //????
+        return workspace.getUser().getUsername().equals(username);
+
+    }
+
+    private WorkspaceViewDto convertWorkspaceToWorkspaceViewDto(Workspace workspace) {
+        List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspace.getId()));
+        return WorkspaceViewDto.of(workspace, boards);
+    }
 }
 
