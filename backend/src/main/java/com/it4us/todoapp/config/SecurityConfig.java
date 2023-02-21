@@ -36,7 +36,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/v1/signin/**", "/api/v1/signup/**","/v3/api-docs/").permitAll()
+                .authorizeRequests().antMatchers(
+                        "/api/v1/signin/**",
+                        "/api/v1/signup/**",
+                        "/v3/api-docs/").
+                permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());

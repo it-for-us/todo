@@ -110,8 +110,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
         List<Workspace> workspaces = workspaceRepository.findAllByUserId(user.getUserId());
 
-        List<WorkspaceViewDto> workspaceViewDtos = workspaces.stream().map(workspace ->
-                convertWorkspaceToWorkspaceViewDto(workspace)).collect(Collectors.toList());
+        List<WorkspaceViewDto> workspaceViewDtos = workspaces.stream().map(
+                workspace -> convertWorkspaceToWorkspaceViewDto(workspace)).collect(Collectors.toList()
+        );
         return workspaceViewDtos;
     }
 
@@ -133,11 +134,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             workspace.setName(username);
             workspace.setName(name);
         }
-    }
-
-    private boolean isWorkspaceBelongedUser(Workspace workspace, String username) { //????
-        return workspace.getUser().getUsername().equals(username);
-
     }
 
     private WorkspaceViewDto convertWorkspaceToWorkspaceViewDto(Workspace workspace) {
