@@ -9,9 +9,8 @@ import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.BoardRepository;
 import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
+import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -66,12 +65,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     private boolean isBoardBelongedUser(Long boardId) {
-        return (boardRepository.isBoardBelongedUser(boardId, getUserName()) > 0);
+        return boardRepository.isBoardBelongToUser(boardId, getUserName());
     }
 
     private String getUserName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
+        return LoggedUsername.getUsernameFromAuthentication();
     }
 
     @Override
