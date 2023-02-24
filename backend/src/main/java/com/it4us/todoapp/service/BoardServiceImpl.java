@@ -2,13 +2,11 @@ package com.it4us.todoapp.service;
 
 import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.BoardViewDto;
+import com.it4us.todoapp.dto.ListOfBoardViewDto;
 import com.it4us.todoapp.entity.Board;
-import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.BoardRepository;
-import com.it4us.todoapp.repository.UserRepository;
-import com.it4us.todoapp.repository.WorkspaceRepository;
 import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,36 +21,29 @@ public class BoardServiceImpl implements BoardService {
 
     @Autowired
     private BoardRepository boardRepository;
-
     @Autowired
-    private WorkspaceRepository workspaceRepository;
-
+    private WorkspaceService workspaceService;
     @Autowired
-    private UserRepository userRepository;
+    private ListOfBoardService listOfBoardService;
 
 
     @Override
     public BoardViewDto create(BoardCreateDto boardCreateDto, String username) {
 
         Board board = new Board();
+        Workspace workspace = workspaceService.findWorkspaceById(boardCreateDto.getWorkspaceId());
 
-        Workspace workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId())
-                .orElseThrow(() -> new NotFoundException("Workspace is not found"));
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("User is not found"));
-
-
-        if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId())) {
+        if (isBoardExist(boardCreateDto.getName(), boardCreateDto.getWorkspaceId()))
             throw new BoardExistException("Board is already exist");
-        }
+        if (!isAValidBoardName(boardCreateDto.getName()))
+            throw new BadRequestException("Authorization Header, workspace Id or boardName is in incorrect format");
+        if (!workspace.getUser().getUsername().equals(username))
+            throw new BelongToAnotherUserException("You can't access to Workspace of other User");
 
-        if (isAValidBoardName(boardCreateDto) && workspace.getUser().getUsername().equals(user.getUsername())) {
-            board.setName(boardCreateDto.getName());
-            board.setWorkspace(workspace);
-        }
+        board.setName(boardCreateDto.getName());
+        board.setWorkspace(workspace);
 
-        return BoardViewDto.of(boardRepository.save(board));
+        return BoardViewDto.of(boardRepository.save(board), null);
     }
 
     @Override
@@ -61,15 +52,19 @@ public class BoardServiceImpl implements BoardService {
         if (!isBoardBelongedUser(boardId)) {
             throw new BoardBelongAnotherUserException("The board is belonged another user.");
         }
-        return BoardViewDto.of(board);
+        List<ListOfBoardViewDto> listViewDtoBoardsList = listOfBoardService.getAllListsInBoards(boardId);
+        return BoardViewDto.of(findBoardById(boardId), listViewDtoBoardsList);
     }
 
-    private boolean isBoardBelongedUser(Long boardId) {
-        return boardRepository.isBoardBelongToUser(boardId, getUserName());
-    }
+    @Override
+    public Board findBoardById(Long boardId){
 
-    private String getUserName() {
-        return LoggedUsername.getUsernameFromAuthentication();
+        Board board = boardRepository.findById(boardId).orElseThrow(()  -> new BoardNotFoundException("Board is not found"));
+
+        if (!isBoardBelongedUser(boardId)) {
+            throw new BoardBelongAnotherUserException("The board is belonged another user.");
+        }
+        return board;
     }
 
     @Override
@@ -80,46 +75,9 @@ public class BoardServiceImpl implements BoardService {
         } else {
             boards = boardRepository.findAll();
         }
-        return boards.stream().map(board -> BoardViewDto.of(board)).collect(Collectors.toList());
-    }
-
-    @Override
-    public Boolean isBoardExist(String boardName, Long workspaceId) {
-        return boardRepository.isBoardExistInWorkSpace(boardName, workspaceId);
-    }
-
-    @Override
-    public Boolean isAValidBoardName(BoardCreateDto boardCreateDto) {
-        char[] boardNameToChar = boardCreateDto.getName().toCharArray();
-        int countOf_ = 0;
-        for (char c : boardNameToChar) {
-            if ((c >= 'a' && c <= 'z')
-                    || (c >= '0' && c <= '9')
-                    || (c == ' ')
-                    || (c == '_')) {
-                if (c == '_') {
-                    countOf_++;
-                }
-            } else
-                throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
-        }
-
-        if (boardNameToChar.length < 4 || boardNameToChar.length > 15 || boardNameToChar[0] == '_' || countOf_ > 1)
-            throw new BadRequestException("Authorization Header, workspace Id or boardname is in incorrect format");
-
-        return true;
-    }
-
-
-    @Override
-    public Boolean isAValidWorkspaceId(BoardCreateDto boardCreateDto) {
-
-        Optional<Workspace> workspace = workspaceRepository.findById(boardCreateDto.getWorkspaceId());
-
-        if (workspace.isEmpty())
-            throw new NotFoundException("There is no such workspace");
-
-        return true;
+        return boards.stream()
+                .map(board -> BoardViewDto.of(board, listOfBoardService.getAllListsInBoards(board.getId())))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -152,5 +110,31 @@ public class BoardServiceImpl implements BoardService {
         }
         boardRepository.delete(board);
     }
+
+    private boolean isBoardBelongedUser(Long boardId) {
+        return (boardRepository.isBoardBelongToUser(boardId, LoggedUsername.getUsernameFromAuthentication()));
+    }
+
+    private boolean isBoardExist(String boardName, Long workspaceId) {
+        return boardRepository.isBoardExistInWorkSpace(boardName, workspaceId);
+    }
+
+    private boolean isAValidBoardName(String boardName) {
+
+        char[] boardNameToChar = boardName.toCharArray();
+        int countOf_ = 0;
+        for (char c : boardNameToChar) {
+            if (c == '_') {
+                countOf_++;
+                if (countOf_ > 1)
+                    return false;
+            } else if (!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == ' '))) {
+                return false;
+            }
+        }
+        return  (boardNameToChar.length > 4 && boardNameToChar.length < 15 && boardNameToChar[0] != '_');
+    }
+
+
 
 }
