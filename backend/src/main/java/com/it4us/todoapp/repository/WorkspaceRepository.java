@@ -1,6 +1,5 @@
 package com.it4us.todoapp.repository;
 
-import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

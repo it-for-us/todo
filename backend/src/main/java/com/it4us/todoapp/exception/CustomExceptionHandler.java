@@ -87,6 +87,18 @@ public class CustomExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(boardNotFoundException.getMessage(), 404);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(AlreadyExistException.class)
+    public ResponseEntity<?> alreadyExistException(AlreadyExistException alreadyExistException){
+        ErrorResponse errorResponse = new ErrorResponse(alreadyExistException.getMessage(), 403);
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(BelongToAnotherUserException.class)
+    public ResponseEntity<?> belongToAnotherUserException(BelongToAnotherUserException belongToAnotherUserException){
+        ErrorResponse errorResponse = new ErrorResponse(belongToAnotherUserException.getMessage(),401);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
 }
 
 
