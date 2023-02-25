@@ -1,20 +1,25 @@
-import React from "react";
-import Popover from "@mui/material/Popover";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Textarea from "@mui/joy/Textarea";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { createWorkspace } from "../_redux/workspace-slice";
+import React, { useRef } from 'react';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { createBoard, createWorkspace } from '../core/workspace.slice';
+import { useSelector } from 'react-redux';
+import { MenuItem, Select } from '@mui/material';
 
 export default function MainLayoutNavCreateBtn() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { workspaces } = useSelector((state) => state.workspace);
+
+  const boardRef = useRef(null);
+  const workspaceSelectRef = useRef(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,7 +30,7 @@ export default function MainLayoutNavCreateBtn() {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
   const dispatch = useDispatch();
 
   const {
@@ -34,16 +39,26 @@ export default function MainLayoutNavCreateBtn() {
     formState: { errors },
     reset,
   } = useForm();
+
   const onSubmitWorkSpace = (inputWorkSpace) => {
-    console.log(inputWorkSpace);
     dispatch(
       createWorkspace({
         name: inputWorkSpace.workspace,
-        description: inputWorkSpace.description,
-        createdAt: new Date().toISOString(),
       })
     );
     reset();
+    handleClose();
+  };
+
+  const onSubmitBoard = () => {
+    const name = boardRef.current.value;
+    const workspaceId = workspaceSelectRef.current.value;
+    dispatch(
+      createBoard({
+        name,
+        workspaceId,
+      })
+    );
     handleClose();
   };
 
@@ -59,8 +74,8 @@ export default function MainLayoutNavCreateBtn() {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
       >
         {/* <Typography sx={{ p: 2 }}>The content of the Popover.</Typography> */}
@@ -77,22 +92,39 @@ export default function MainLayoutNavCreateBtn() {
             <Box
               component="form"
               sx={{
-                "& > :not(style)": { m: 1, width: "25ch" },
-                display: "flex",
-                flexDirection: "column",
+                '& > :not(style)': { m: 1, width: '25ch' },
+                display: 'flex',
+                flexDirection: 'column',
 
-                alignItems: "center",
+                alignItems: 'center',
               }}
               noValidate
               autoComplete="off"
             >
               <TextField
-                id="outlined-basic"
+                id="input-board-name"
                 label="Board title"
                 variant="outlined"
                 size="small"
+                inputRef={boardRef}
               />
-              <Button variant="contained">Create</Button>
+
+              <Select
+                labelId="demo-simple-select-label"
+                id="input-workspace-select"
+                label="Workspace"
+                inputRef={workspaceSelectRef}
+                value={workspaces[0]._id}
+              >
+                {workspaces.map((workspace) => (
+                  <MenuItem key={workspace._id} value={workspace._id}>
+                    {workspace.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Button variant="contained" onClick={onSubmitBoard}>
+                Create
+              </Button>
             </Box>
           </AccordionDetails>
         </Accordion>
@@ -109,11 +141,11 @@ export default function MainLayoutNavCreateBtn() {
               component="form"
               onSubmit={handleSubmit(onSubmitWorkSpace)}
               sx={{
-                "& > :not(style)": { m: 1, width: "20ch" },
-                display: "flex",
-                flexDirection: "column",
+                '& > :not(style)': { m: 1, width: '20ch' },
+                display: 'flex',
+                flexDirection: 'column',
 
-                alignItems: "center",
+                alignItems: 'center',
               }}
               noValidate
               autoComplete="off"
@@ -123,29 +155,15 @@ export default function MainLayoutNavCreateBtn() {
                 label="Workspace title"
                 variant="outlined"
                 size="small"
-                {...register("workspace", {
+                {...register('workspace', {
                   required: true,
                   pattern: {
                     value: /^(?=)(?=).{4,15}$/,
                   },
                 })}
               />
-
-              <Textarea
-                color="primary"
-                minRows={2}
-                placeholder="Description "
-                variant="solid"
-                {...register("description", {
-                  required: true,
-                  pattern: {
-                    value: /^(?=)(?=).{4,15}$/,
-                  },
-                })}
-              />
-
               {errors.workspace && (
-                <p style={{ color: "red", margin: "0", fontSize: "12px" }}>
+                <p style={{ color: 'red', margin: '0', fontSize: '12px' }}>
                   Please enter a valid Workspace name
                 </p>
               )}
