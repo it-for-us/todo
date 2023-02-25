@@ -132,7 +132,7 @@ export default function MainLayoutNavCreateBtn() {
               />
 
               <Textarea
-                color="info"
+                color="primary"
                 minRows={2}
                 placeholder="Description "
                 variant="solid"
