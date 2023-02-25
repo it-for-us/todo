@@ -17,7 +17,7 @@ function* workLogin(action) {
   try {
     const { email, password } = action.payload;
     const resLogin = yield call(() =>
-      axios.post('/users/login', {
+      axios.post('/signin', {
         email,
         password,
       })
@@ -40,7 +40,7 @@ function* workRegister(action) {
   try {
     const { email, password, username, role } = action.payload;
     yield call(() =>
-      axios.post('/users/register', {
+      axios.post('/signup', {
         email,
         password,
         username,
