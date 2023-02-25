@@ -138,14 +138,14 @@ export default function Workspace() {
               </ListItemIcon>
               <ListItemText primary="Workspaces" />
             </ListItemButton>
-          </ListItem>
-
           {boards?.length > 0 &&
             boards.map((board, i) => (
               <Link key={i} to={`/workspace/${workspaceId}/b/${board._id}`}>
                 <ListItemText primary={board.name} />
               </Link>
             ))}
+          </ListItem>
+
         </List>
         <Divider />
       </Drawer>
