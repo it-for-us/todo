@@ -8,6 +8,8 @@ spring:
     url: jdbc:postgresql://db:5432/todoappdb
     username: postgres
     password: 1234
+  main:
+    allow-circular-references: true
   jpa:
     hibernate:
       ddl-auto: update

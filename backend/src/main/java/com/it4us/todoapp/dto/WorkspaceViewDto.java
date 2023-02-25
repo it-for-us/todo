@@ -16,7 +16,6 @@ public class WorkspaceViewDto {
     private String name;
     private List<BoardViewDto> boards;
 
-
     public static WorkspaceViewDto of(Workspace workspace, List<BoardViewDto> boards) {
         return new WorkspaceViewDto(workspace.getId(), workspace.getName(), boards);
     }
