@@ -6,40 +6,34 @@ import com.it4us.todoapp.dto.WorkspaceViewDto;
 import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
-import com.it4us.todoapp.repository.UserRepository;
 import com.it4us.todoapp.repository.WorkspaceRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-
 import java.util.List;
-
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class WorkspaceServiceImpl implements WorkspaceService {
 
-    private final WorkspaceRepository workspaceRepository;
-    private final UserService userService;
-    private final BoardService boardService;
-    private final UserRepository userRepository;
-
+    @Autowired
+    private WorkspaceRepository workspaceRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private BoardService boardService;
 
     @Override
     public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User is not found"));
-        if (isWorkspaceExist(workspaceCreateDto.getName(), user.getUserId())) {
-            throw new WorkspaceExistException("Workspace is already exist");
-        }
+        User user = userService.findByUsername(username);
 
-        if (!isAValidWorkspaceName(workspaceCreateDto)) {
+        if (isWorkspaceExist(workspaceCreateDto.getName(), user.getUserId()))
+            throw new AlreadyExistException("Workspace is already exist");
+        if (!isAValidWorkspaceName(workspaceCreateDto.getName()))
             throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
-        }
 
         Workspace workspace = new Workspace();
         workspace.setName(workspaceCreateDto.getName());
@@ -50,42 +44,19 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public WorkspaceViewDto getWorkspaceById(Long workspaceId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+        String username = LoggedUsername.getUsernameFromAuthentication();
+        Workspace workspace = findWorkspaceById(workspaceId);
 
-        Workspace workspace = workspaceRepository.findById(workspaceId).
-                orElseThrow(() -> new WorkspaceNotFoundException("Workspace is not found."));
-
-        if (isWorkspaceBelongedUser(workspace, username)) {
+        if (isWorkspaceBelongsToUser(workspace, username)) {
             List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspaceId));
             return WorkspaceViewDto.of(workspace, boards);
         } else throw new WorkspaceBelongAnotherUserException("Workspace is belonged to another user.");
     }
 
     @Override
-    public Boolean isWorkspaceExist(String workspaceName, Long userId) {
-        return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
-    }
-
-    @Override
-    public Boolean isAValidWorkspaceName(WorkspaceCreateDto workspaceCreateDto) {
-
-        char[] workspaceNameToChar = workspaceCreateDto.getName().toCharArray();
-
-        int countOf_ = 0;
-
-        for (char c : workspaceNameToChar) {
-            if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == ' ') || (c == '_')) {
-                if (c == '_') {
-                    countOf_++;
-                }
-            } else throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
-        }
-
-        if (workspaceNameToChar.length < 4 || workspaceNameToChar.length > 15 || workspaceNameToChar[0] == '_' || countOf_ > 1)
-            throw new BadRequestException("Authorization Header or Workspace name is in incorrect format");
-
-        return true;
+    public Workspace findWorkspaceById(Long workspaceId) {
+        return workspaceRepository.findById(workspaceId).
+                orElseThrow(() -> new WorkspaceNotFoundException("Workspace is not found."));
     }
 
     @Override
@@ -95,11 +66,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             throw new UnAuthorizedException("UnAuthorized Exception");
         }
         workspaceRepository.deleteById(id);
-    }
-
-    private boolean isWorkspaceBelongsToUser(Workspace workspace, String username) {
-        User user = userRepository.findByUsername(username).get();
-        return user.getUsername().equals(workspace.getUser().getUsername());
     }
 
     @Override
@@ -122,8 +88,34 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
     }
 
-    private boolean isWorkspaceBelongedUser(Workspace workspace, String username) { //????
+    private boolean isWorkspaceExist(String workspaceName, Long userId) {
+        return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
+    }
+
+    private boolean isAValidWorkspaceName(String workspaceName) {
+
+        char[] workspaceNameToChar = workspaceName.toCharArray();
+
+        int countOf_ = 0;
+        for (char c : workspaceNameToChar) {
+            if (c == '_') {
+                countOf_++;
+                if (countOf_ > 1)
+                    return false;
+            } else if (!((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == ' '))) {
+                return false;
+            }
+        }
+        return  (workspaceNameToChar.length > 4 && workspaceNameToChar.length < 15 && workspaceNameToChar[0] != '_');
+    }
+
+    private boolean isWorkspaceBelongsToUser(Workspace workspace, String username) {
         return workspace.getUser().getUsername().equals(username);
+    }
+
+    private WorkspaceViewDto convertWorkspaceToWorkspaceViewDto(Workspace workspace) {
+        List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspace.getId()));
+        return WorkspaceViewDto.of(workspace, boards);
     }
 }
 
