@@ -37,7 +37,7 @@ export default function Login() {
 
   if (isSuccess) {
     console.log("success");
-    return navigate("/main");
+    return navigate("/boards");
   }
 
   return (

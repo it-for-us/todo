@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 const sidebarItems = [
   {
     title: "Boards",
-    path: "/workspace",
+    path: "/boards",
     icon: <DashboardCustomizeIcon />,
     hasBottomDivider: false,
     hasTopDivider: false,

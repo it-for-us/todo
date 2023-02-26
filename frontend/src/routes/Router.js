@@ -31,7 +31,7 @@ export default function Router() {
       </Route>
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/main" element={<MainPage />} />
+        <Route path="/boards" element={<MainPage />} />
         <Route path="/workspace/:workspaceId" element={<Workspace />}>
           <Route path="b/:boardId" element={<Board />} />
 
