@@ -12,11 +12,12 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { createBoard, createWorkspace } from '../core/workspace.slice';
 import { useSelector } from 'react-redux';
-import { MenuItem, Select } from '@mui/material';
+import { MenuItem, Select,FormControl,InputLabel } from '@mui/material';
 
 export default function MainLayoutNavCreateBtn() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { workspaces } = useSelector((state) => state.workspace);
+  console.log(workspaces);
 
   const boardRef = useRef(null);
   const workspaceSelectRef = useRef(null);
@@ -109,19 +110,22 @@ export default function MainLayoutNavCreateBtn() {
                 inputRef={boardRef}
               />
 
-              <Select
-                labelId="demo-simple-select-label"
-                id="input-workspace-select"
-                label="Workspace"
-                inputRef={workspaceSelectRef}
-                value={workspaces[0]._id}
-              >
-                {workspaces.map((workspace) => (
+    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <InputLabel id="demo-select-small">Workspace</InputLabel>
+      <Select
+        labelId="demo-select-small"
+        id="demo-select-small"
+        label="Workspace"
+        inputRef={workspaceSelectRef}
+      >
+  
+          {workspaces.map((workspace) => (
                   <MenuItem key={workspace._id} value={workspace._id}>
                     {workspace.name}
                   </MenuItem>
                 ))}
-              </Select>
+      </Select>
+    </FormControl>
               <Button variant="contained" onClick={onSubmitBoard}>
                 Create
               </Button>

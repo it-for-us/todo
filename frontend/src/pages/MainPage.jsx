@@ -14,16 +14,16 @@ export default function Main() {
       <div className="boards-container">
         {workspaces &&
           workspaces.map((workspace, i) => (
+            <Link to={`/workspace/${workspace._id}`}>
             <div
               key={workspace._id}
               style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
               className="boards"
             >
-              <Link to={`/workspace/${workspace._id}`}>
                 {workspace.name}
                 <span>{moment(workspace.createdAt).fromNow()} </span>
-              </Link>
             </div>
+              </Link>
           ))}
 
         <div className="create-new-board">

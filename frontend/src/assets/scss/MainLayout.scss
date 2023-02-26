@@ -75,6 +75,9 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 10px;
+        a{
+          text-decoration: none;
+        }
       .boards {
         width: 200px;
         height: 100px;
@@ -85,6 +88,7 @@
         // background-color: #6c9cd3;
         color: #fff;
         cursor: pointer;
+      
       }
       .create-new-board {
         width: 200px;
