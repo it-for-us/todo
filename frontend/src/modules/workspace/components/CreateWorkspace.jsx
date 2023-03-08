@@ -1,23 +1,14 @@
 import React, { useRef } from 'react';
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { createBoard, createWorkspace } from '../core/workspace.slice';
 import { useSelector } from 'react-redux';
-import { MenuItem, Select,FormControl,InputLabel } from '@mui/material';
+import { MenuItem,TextField, Box,Select,FormControl,InputLabel,AccordionSummary,AccordionDetails,Accordion,Typography,Button ,Popover} from '@mui/material';
 
 export default function MainLayoutNavCreateBtn() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { workspaces } = useSelector((state) => state.workspace);
-  console.log(workspaces);
 
   const boardRef = useRef(null);
   const workspaceSelectRef = useRef(null);
@@ -54,6 +45,7 @@ export default function MainLayoutNavCreateBtn() {
   const onSubmitBoard = () => {
     const name = boardRef.current.value;
     const workspaceId = workspaceSelectRef.current.value;
+    console.log(workspaceId);
     dispatch(
       createBoard({
         name,

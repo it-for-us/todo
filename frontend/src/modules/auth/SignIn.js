@@ -10,6 +10,7 @@ import Loading from "../../components/Loading";
 import frame from "../../assets/images/Frame (1).png";
 import logo from "../../assets/images/Group.png";
 import { useLoginMutation } from "../../app/services/auth-api";
+import ValidPassword from "../../components/_Partial/ValidPassword";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -80,9 +81,8 @@ export default function Login() {
                 {error.data?.error?.message || "Something went wrong"}!
               </Alert>
             )}
-            {errors.password && (
-              <p style={{ color: "red" }}>Please enter a valid password</p>
-            )}
+            {errors.password && <ValidPassword />
+            }
           </Form.Group>
 
           <Button variant="success" className=" mb-5 mt-3" type="submit">

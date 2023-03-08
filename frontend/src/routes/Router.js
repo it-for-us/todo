@@ -8,6 +8,7 @@ import AboutPage from '../pages/AboutPage';
 import ContactPage from '../pages/ContactPage';
 import CreateNewPass from '../pages/CreateNewPass';
 import ForgotPassword from '../pages/ForgotPassword';
+import Home from '../pages/Home';
 import LandingPage from '../pages/LandingPage';
 import MainPage from '../pages/MainPage';
 import AuthRoute from './AuthRoute';
@@ -36,7 +37,7 @@ export default function Router() {
           <Route path="b/:boardId" element={<Board />} />
 
         </Route>
-        {/* <Route path="/home" element={<Home />} /> */}
+        <Route path="/workspace/:name/home" element={<Home />} />
       </Route>
     </Routes>
   );

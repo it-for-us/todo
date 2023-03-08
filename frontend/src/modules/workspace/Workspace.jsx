@@ -1,18 +1,9 @@
 import React, { useEffect } from 'react';
 import MainLayoutNav from '../../components/navbar/MainLayoutNav';
 import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+import {ListItemText,ListItemIcon,ListItemButton,ListItem,IconButton,Divider,List,CssBaseline,Drawer,Box} from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { Link, Outlet, useParams } from 'react-router-dom';
@@ -53,7 +44,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const sidebarItems = [
   {
     title: 'Boards',
-    path: '/workspace',
+    path: '/boards',
     icon: <DashboardCustomizeIcon />,
     hasBottomDivider: false,
     hasTopDivider: false,
@@ -67,6 +58,8 @@ export default function Workspace() {
   const { workspaceId } = useParams();
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.workspace.boards);
+  const workspace = useSelector((state) => state.workspace);
+  console.log(workspace);
 
   useEffect(() => {
     if (workspaceId) {

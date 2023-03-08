@@ -8,6 +8,7 @@ import { register as registerReset } from "./_redux/auth-slice";
 import frame from "../../assets/images/Frame.png";
 import logo from "../../assets/images/Group.png";
 import { useSignupMutation } from "../../app/services/auth-api";
+import ValidPassword from "../../components/_Partial/ValidPassword";
 
 export default function Register() {
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
@@ -118,9 +119,7 @@ export default function Register() {
               },
             })}
           />
-          {errors.password && (
-            <p style={{ color: "red" }}>Please enter a valid password</p>
-          )}
+          {errors.password && <ValidPassword />}
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicconfirmPassword">
           <Form.Control
@@ -134,9 +133,7 @@ export default function Register() {
             })}
           />
           {errorConfirmPassword}
-          {errors.passwordConfirm && (
-            <p style={{ color: "red" }}>Please enter a valid password</p>
-          )}
+          {errors.passwordConfirm && <ValidPassword />}
         </Form.Group>
         <Form.Text className="text-muted">
           By signing up, you confirm that you've read and accepted our
