@@ -34,7 +34,7 @@ export default function Login() {
     await login(user);
   };
 
-  console.log(error);
+
 
   if (isSuccess) {
     console.log("success");

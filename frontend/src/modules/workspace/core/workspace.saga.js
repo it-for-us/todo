@@ -14,6 +14,7 @@ import {
   getBoards,
   getBoardsSuccess,
   getBoardsFailed,
+  getWorkspaces,
 } from './workspace.slice';
 
 function* workCreateWorkspace(action) {
@@ -86,7 +87,8 @@ function* workCreateBoard(action) {
       })
     );
     yield put(createdBoardSuccess());
-    // yield fork(workGetBoards, { payload: { workspaceId } });
+    yield fork(workGetBoards, { payload: { workspaceId } });
+
   } catch (error) {
     if (error.response) {
       yield put(createdBoardFailed({ error: error.response.data }));
@@ -102,7 +104,7 @@ function* workGetBoards(action) {
     const { workspaceId } = action.payload;
     const url = new URL(LOCAL_EXPRESS_API_URL + '/boards');
     url.searchParams.append('workspaceId', workspaceId);
-    url.searchParams.append('fields', 'name,id');
+    // url.searchParams.append('fields', 'name,id');
     const response = yield call(() =>
       axios.get(url, {
         headers: {
@@ -111,6 +113,7 @@ function* workGetBoards(action) {
       })
     );
     yield put(getBoardsSuccess(response.data));
+    yield fork(workGetWorkspaces);
   } catch (error) {
     if (error.response) {
       yield put(getBoardsFailed({ error: error.response.data }));
@@ -122,7 +125,7 @@ function* workGetBoards(action) {
 
 export function* workspaceSaga() {
   yield takeEvery(createWorkspace.type, workCreateWorkspace);
-  yield takeEvery(getWorkspacesSuccess.type, workGetWorkspaces);
+  yield takeEvery(getWorkspaces.type, workGetWorkspaces);
   yield takeEvery(createBoard.type, workCreateBoard);
   yield takeEvery(getBoards.type, workGetBoards);
 }

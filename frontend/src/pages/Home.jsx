@@ -12,12 +12,11 @@ export default function Home() {
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.workspace.boards);
   const { workspaces } = useSelector((state) => state.workspace);
-  console.log(workspaces);
-  console.log(boards);
-  console.log(name);
+
+
 
   const workspace = workspaces.find((workspace) => workspace.name === name);
-  console.log(workspace);
+
   const workspaceId = workspace._id;
 
   useEffect(() => {
@@ -29,6 +28,7 @@ export default function Home() {
       );
     }
   }, [dispatch, workspaceId]);
+
   return (
     <MainLayout>
       <div className="board-container">

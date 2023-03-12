@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
@@ -11,7 +11,7 @@ import { useSignupMutation } from "../../app/services/auth-api";
 import ValidPassword from "../../components/_Partial/ValidPassword";
 
 export default function Register() {
-  const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const {
@@ -20,7 +20,7 @@ export default function Register() {
   //   status,
   // } = useSelector((state) => state.auth);
 
-  const [signup, { isLoading, isError, error }] = useSignupMutation();
+  const [signup, { isLoading, isError, error, isSuccess }] = useSignupMutation();
 
   useEffect(() => {
     return () => {
@@ -38,7 +38,7 @@ export default function Register() {
     const inputUserName = inputRegister.userName;
     const inputUserEmail = inputRegister.email;
     const inputUserPassword = inputRegister.password;
-    const inputUserConfirmPassword = inputRegister.passwordConfirm;
+    // const inputUserConfirmPassword = inputRegister.passwordConfirm;
     const user = {
       username: inputUserName,
       email: inputUserEmail,
@@ -47,33 +47,18 @@ export default function Register() {
     };
     // dispatch(rdxRegister(user));
     await signup(user);
-
-    if (inputUserPassword !== inputUserConfirmPassword) {
-      setErrorConfirmPassword(
-        <p style={{ color: "red", textAlign: "center" }}>
-          Password not matched
-        </p>
-      );
-    } else {
-      setErrorConfirmPassword(
-        <p style={{ color: "green", textAlign: "center" }}>Register success</p>
-      );
-      return navigate("/signin");
-    }
   };
+
+  if (isSuccess) {
+    navigate("/signin");
+  }
 
   return (
     <div className="register-page ">
       <img className="frame" src={frame} alt="frame" />
       <img className="logo" src={logo} alt="logo" />
-      {error && <p style={{ color: "red" }}>{error?.message}</p>}
 
       <Form className="d-grid" onSubmit={handleSubmit(onSubmit)}>
-        {isError && (
-          <p style={{ color: "red" }}>
-            {error?.data?.error?.message || "Error"}
-          </p>
-        )}
 
         <h2>Sign up for your account</h2>
         <Form.Group className="mb-3" controlId="formBasicUserName">
@@ -120,8 +105,13 @@ export default function Register() {
             })}
           />
           {errors.password && <ValidPassword />}
+          {isError && (
+            <p style={{ color: "red", marginTop: '5px' }}>
+              {error?.data?.error?.message || "username already exist !"}
+            </p>
+          )}
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicconfirmPassword">
+        {/* <Form.Group className="mb-3" controlId="formBasicconfirmPassword">
           <Form.Control
             type="password"
             placeholder="Confirm Password"
@@ -134,7 +124,7 @@ export default function Register() {
           />
           {errorConfirmPassword}
           {errors.passwordConfirm && <ValidPassword />}
-        </Form.Group>
+        </Form.Group> */}
         <Form.Text className="text-muted">
           By signing up, you confirm that you've read and accepted our
           <Link>Terms of Service</Link> and
