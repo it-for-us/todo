@@ -69,6 +69,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
+    public List<WorkspaceViewDto> getAllWorkspacesOfUser() {
+        return null;
+    }
+
+    @Override
     @Transactional
     public void updateWorkspace(Long id, String username, String name) {
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new IllegalStateException("workspace is not found"));
@@ -88,8 +93,13 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
     }
 
-    private boolean isWorkspaceExist(String workspaceName, Long userId) {
+    public Boolean isWorkspaceExist(String workspaceName, Long userId) {
         return workspaceRepository.isWorkspaceExistInUser(workspaceName, userId);
+    }
+
+    @Override
+    public Boolean isAValidWorkspaceName(WorkspaceCreateDto workspaceCreateDto) {
+        return null;
     }
 
     private boolean isAValidWorkspaceName(String workspaceName) {
