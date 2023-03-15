@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../../modules/auth/_redux/auth-slice";
-import MainLayoutNavCreateBtn from "./MainLayoutNavCreateBtn";
+import MainLayoutNavCreateBtn from "../../modules/workspace/components/CreateWorkspace";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -63,7 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function MainLayoutNav({ open: isOpen, handleDrawerOpen }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {

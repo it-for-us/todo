@@ -1,24 +1,31 @@
 import React from "react";
 import MainLayoutNav from "../navbar/MainLayoutNav";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import {
+  ListItemText,
+  ListItemIcon,
+  Box,
+  ListItemButton,
+  Divider,
+  CssBaseline,
+  ListItem,
+  List,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard";
 import HomeIcon from "@mui/icons-material/Home";
-
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const sidebarItems = [
   {
     title: "Boards",
-    path: "/workspace",
+    path: "/boards",
     icon: <DashboardCustomizeIcon />,
     hasBottomDivider: false,
     hasTopDivider: false,
@@ -44,6 +51,8 @@ const sidebarItems = [
   },
 ];
 export default function MainLayout({ children }) {
+  const { workspaces } = useSelector((state) => state.workspace);
+
   return (
     <>
       <MainLayoutNav
@@ -76,12 +85,42 @@ export default function MainLayout({ children }) {
                 <ListItemText primary="Workspaces" />
               </ListItemButton>
             </ListItem>
+            <Divider />
+            {workspaces.map((workspace, i) => (
+              <>
+                <Divider />
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Typography>{workspace.name}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Link key={i} to={`/workspace/${workspace.name}/home`}>
+                          <ListItem disablePadding>
+                            <ListItemButton>
+                              <ListItemIcon>
+                                <DashboardCustomizeIcon />
+                              </ListItemIcon>
+                              <ListItemText primary="Boards" />
+                            </ListItemButton>
+                          </ListItem>
+                        </Link>
+                      </AccordionDetails>
+                    </Accordion>
+                  </ListItemButton>
+                </ListItem>
+                <Divider />
+              </>
+            ))}
           </List>
         </Box>
         <div className="workspaces">{children}</div>
       </Box>
     </>
-
- 
   );
 }

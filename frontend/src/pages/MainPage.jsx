@@ -1,55 +1,69 @@
-import React from "react";
-import MainLayout from "../components/layout/MainLayout";
-import MainLayoutNavCreateBtn from "../components/navbar/MainLayoutNavCreateBtn";
+import React, { useEffect } from 'react';
+import MainLayout from '../components/layout/MainLayout';
+import CreateWorkspace from '../modules/workspace/components/CreateWorkspace';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import { getWorkspaces } from '../modules/workspace/core/workspace.slice';
 
 export default function Main() {
+
+  const workspaces = useSelector((state) => state.workspace.workspaces);
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getWorkspaces())
+  }, [dispatch])
+
+
+
   return (
     <MainLayout>
       <h3>Your workspaces</h3>
-      <div className="boards-container">
-        <div className="boards">Dart</div>
-        <div className="create-new-board">
-          <MainLayoutNavCreateBtn />
-        </div>
-      </div>
+      <div className="workspace-container">
+        {workspaces && workspaces.map((workspace, i) =>
 
-      {/* <div className="main-layout">
-        <Box className="side">
-          <List>
-            {sidebarItems.map((sidebar, i) => (
-              <Link key={i} to={sidebar.path}>
-                {sidebar.hasTopDivider && <Divider />}
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>{sidebar.icon}</ListItemIcon>
-                    <ListItemText primary={sidebar.title} />
-                  </ListItemButton>
-                </ListItem>
-                {sidebar.hasBottomDivider && <Divider />}
-              </Link>
-            ))}
-            <Divider />
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Workspaces" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </Box>
-
-        <div className="workspaces">
-          <h3>Your workspaces</h3>
-          <div className="boards-container">
-            <div className="boards">Dart</div>
-            <div className="create-new-board">
-              <MainLayoutNavCreateBtn />
+          <div key={i} className="workspaces">
+            <h3>{workspace.name}</h3>
+            <div className="boards-container">
+              {workspace.boards.map((board, i) =>
+                <Link to={`/workspace/${workspace._id}`}>
+                  <div
+                    key={board._id}
+                    style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
+                    className="boards"
+                  >
+                    {board.name}
+                    <span>{moment(board.createdAt).fromNow()} </span>
+                  </div>
+                </Link>
+              )}
+              <div className="create-new-board">
+                <CreateWorkspace />
+              </div>
             </div>
           </div>
-        </div>
-      </div> */}
+        )}
+
+        {/* {workspaces &&
+          workspaces.map((workspace, i) => (
+            <Link to={`/workspace/${workspace._id}`}>
+            <div
+              key={workspace._id}
+              style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
+              className="boards"
+            >
+                {workspace.name}
+                <span>{moment(workspace.createdAt).fromNow()} </span>
+            </div>
+              </Link>
+          ))} */}
+        {/* 
+        <div className="create-new-board">
+          <CreateWorkspace />
+        </div> */}
+      </div>
     </MainLayout>
   );
 }

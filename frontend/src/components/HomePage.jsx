@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { useContext, useState } from "react";
 import UserContext from "../contexts/UserContext";
-import WorkSpace from "../components/WorkSpace";
+import WorkSpace from "./WorkSpace";
 import { useDispatch } from "react-redux";
 import { logout } from "../modules/auth/_redux/auth-slice";
 
