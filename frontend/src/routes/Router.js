@@ -33,11 +33,11 @@ export default function Router() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/boards" element={<MainPage />} />
-        <Route path="/workspace/:workspaceId" element={<Workspace />}>
+        <Route path="/b/:workspaceId/:boardId/:boardName" element={<Workspace />}>
           <Route path="b/:boardId" element={<Board />} />
 
         </Route>
-        <Route path="/workspace/:name/home" element={<Home />} />
+        <Route path="/w/:name/home" element={<Home />} />
       </Route>
     </Routes>
   );

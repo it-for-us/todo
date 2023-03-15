@@ -100,7 +100,7 @@ export default function MainLayout({ children }) {
                         <Typography>{workspace.name}</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
-                        <Link key={i} to={`/workspace/${workspace.name}/home`}>
+                        <Link key={i} to={`/w/${workspace.name}/home`}>
                           <ListItem disablePadding>
                             <ListItemButton>
                               <ListItemIcon>

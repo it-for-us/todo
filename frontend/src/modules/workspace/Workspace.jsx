@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import MainLayoutNav from '../../components/navbar/MainLayoutNav';
 import { styled, useTheme } from '@mui/material/styles';
-import {ListItemText,ListItemIcon,ListItemButton,ListItem,IconButton,Divider,List,CssBaseline,Drawer,Box} from '@mui/material';
+import { ListItemText, ListItemIcon, ListItemButton, ListItem, IconButton, Divider, List, CssBaseline, Drawer, Box } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -10,6 +10,7 @@ import { Link, Outlet, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getBoards } from './core/workspace.slice';
 import { useSelector } from 'react-redux';
+import Board from './components/Board';
 
 const drawerWidth = 180;
 
@@ -134,12 +135,12 @@ export default function Workspace() {
           </ListItem>
 
         </List>
-          {boards?.length > 0 &&
-            boards.map((board, i) => (
-              <Link key={i} to={`/workspace/${workspaceId}/b/${board._id}`}>
-                <ListItemText primary={board.name} />
-              </Link>
-            ))}
+        {boards?.length > 0 &&
+          boards.map((board, i) => (
+            <Link key={i} to={`/b/${workspace._id}/${board._id}/${board.name}`}>
+              <ListItemText primary={board.name} />
+            </Link>
+          ))}
         <Divider />
       </Drawer>
       <Main style={{ padding: '0' }} open={open}>
@@ -149,9 +150,11 @@ export default function Workspace() {
             style={{
               display: 'flex',
               justifyContent: 'center',
+              flexDirection: 'column',
               height: '100%',
             }}
           >
+            <Board />
             <Outlet />
           </div>
         </div>

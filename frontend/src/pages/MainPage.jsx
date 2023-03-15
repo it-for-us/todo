@@ -28,7 +28,7 @@ export default function Main() {
             <h3>{workspace.name}</h3>
             <div className="boards-container">
               {workspace.boards.map((board, i) =>
-                <Link to={`/workspace/${workspace._id}`}>
+                <Link to={`/b/${workspace._id}/${board._id}/${board.name}`}>
                   <div
                     key={board._id}
                     style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
@@ -45,24 +45,6 @@ export default function Main() {
             </div>
           </div>
         )}
-
-        {/* {workspaces &&
-          workspaces.map((workspace, i) => (
-            <Link to={`/workspace/${workspace._id}`}>
-            <div
-              key={workspace._id}
-              style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
-              className="boards"
-            >
-                {workspace.name}
-                <span>{moment(workspace.createdAt).fromNow()} </span>
-            </div>
-              </Link>
-          ))} */}
-        {/* 
-        <div className="create-new-board">
-          <CreateWorkspace />
-        </div> */}
       </div>
     </MainLayout>
   );
