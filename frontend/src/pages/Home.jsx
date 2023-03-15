@@ -13,8 +13,6 @@ export default function Home() {
   const boards = useSelector((state) => state.workspace.boards);
   const { workspaces } = useSelector((state) => state.workspace);
 
-
-
   const workspace = workspaces.find((workspace) => workspace.name === name);
 
   const workspaceId = workspace._id;
