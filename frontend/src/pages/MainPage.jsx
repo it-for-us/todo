@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import MainLayout from '../components/layout/MainLayout';
+import MainLayout from '../layout/MainLayout';
 import CreateWorkspace from '../modules/workspace/components/CreateWorkspace';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
@@ -34,8 +34,10 @@ export default function Main() {
                     style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
                     className="boards"
                   >
-                    {board.name}
-                    <span>{moment(board.createdAt).fromNow()} </span>
+                    <div className="board-headline">
+                      <h5>{board.name}</h5>
+                      <span>{moment(board.createdAt).fromNow()} </span>
+                    </div>
                   </div>
                 </Link>
               )}

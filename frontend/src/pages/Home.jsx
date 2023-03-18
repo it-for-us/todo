@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import MainLayout from "../components/layout/MainLayout";
+import MainLayout from "../layout/MainLayout";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getBoards } from "../modules/workspace/core/workspace.slice";
@@ -47,7 +47,7 @@ export default function Home() {
             </div>
             {boards &&
               boards.map((board, i) => (
-                <Link to={`/b/${board._id}/${board.name}`}>
+                <Link to={`/b/${workspace._id}/${board._id}/${board.name}`}>
                   <div
                     key={board._id}
                     style={{ background: i % 2 === 0 ? "#6c9cd3" : "#0747a6" }}

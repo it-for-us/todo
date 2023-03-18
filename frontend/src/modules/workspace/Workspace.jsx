@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import MainLayoutNav from '../../components/navbar/MainLayoutNav';
 import { styled, useTheme } from '@mui/material/styles';
-import { ListItemText, ListItemIcon, ListItemButton, ListItem, IconButton, Divider, List, CssBaseline, Drawer, Box } from '@mui/material';
+import { ListItemText, ListItemIcon, ListItemButton, ListItem, IconButton, Divider, Typography, Popover, List, CssBaseline, Drawer, Box } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { getBoards } from './core/workspace.slice';
 import { useSelector } from 'react-redux';
 import Board from './components/Board';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const drawerWidth = 180;
 
@@ -56,6 +57,28 @@ const sidebarItems = [
 export default function Workspace() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+
+  };
+  console.log(anchorEl);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openn = Boolean(anchorEl);
+  const id = openn ? 'simple-popover' : undefined;
+
   const { workspaceId } = useParams();
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.workspace.boards);
@@ -72,13 +95,8 @@ export default function Workspace() {
     }
   }, [dispatch, workspaceId]);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const closeBoard = () => { }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -137,9 +155,31 @@ export default function Workspace() {
         </List>
         {boards?.length > 0 &&
           boards.map((board, i) => (
-            <Link key={i} to={`/b/${workspace._id}/${board._id}/${board.name}`}>
-              <ListItemText primary={board.name} />
-            </Link>
+
+            <ListItem disablePadding>
+              <ListItemButton>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                  <Link key={i} to={`/b/${workspace._id}/${board._id}/${board.name}`}>
+                    <ListItemText primary={board.name} />
+                  </Link>
+                  <MoreHorizIcon onClick={handleClick} />
+
+                </div>
+
+              </ListItemButton>
+              <Popover
+                id={id}
+                open={openn}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+              >
+                <Typography onClick={closeBoard} sx={{ p: 2, width: '200px', textAlign: 'center', cursor: 'pointer' }}>Close board</Typography>
+              </Popover>
+            </ListItem>
           ))}
         <Divider />
       </Drawer>

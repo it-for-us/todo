@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayoutNav from "../navbar/MainLayoutNav";
+import MainLayoutNav from "../components/navbar/MainLayoutNav";
 import {
   ListItemText,
   ListItemIcon,
@@ -97,7 +97,7 @@ export default function MainLayout({ children }) {
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                       >
-                        <Typography>{workspace.name}</Typography>
+                        <Typography sx={{ width: '100%' }} ><span style={{ color: 'white', background: 'linear-gradient( #0747a6,#008da6)', marginRight: '5px', padding: '10px', borderRadius: '10px', textAlign: 'center' }} >{(workspace.name).slice(0, 1)} </span> {workspace.name}</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
                         <Link key={i} to={`/w/${workspace.name}/home`}>
@@ -119,7 +119,7 @@ export default function MainLayout({ children }) {
             ))}
           </List>
         </Box>
-        <div className="workspaces">{children}</div>
+        <div className="workspaces-container">{children}</div>
       </Box>
     </>
   );
