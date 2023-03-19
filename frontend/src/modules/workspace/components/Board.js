@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
-
+import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
+import Button from 'react-bootstrap/Button';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useParams } from 'react-router';
 
 const tasks = [
   { id: '1', content: 'First task' },
-  { id: '2', content: 'Second task' },
-  { id: '3', content: 'Third task' },
-  { id: '4', content: 'Fourth task' },
-  { id: '5', content: 'Fifth task' },
+  // { id: '2', content: 'Second task' },
+  // { id: '3', content: 'Third task' },
+  // { id: '4', content: 'Fourth task' },
+  // { id: '5', content: 'Fifth task' },
 ];
 
 const taskStatus = {
-  requested: {
-    name: 'Requested',
-    items: tasks,
-  },
+
   toDo: {
     name: 'To do',
-    items: [],
+    items: tasks,
   },
   inProgress: {
-    name: 'In Progress',
+    name: 'Doing',
     items: [],
   },
   done: {
@@ -70,12 +69,25 @@ const onDragEnd = (result, columns, setColumns) => {
 export default function Board() {
   const { boardName } = useParams();
   const [columns, setColumns] = useState(taskStatus);
+  const [toggle, setToggle] = useState(false)
+  const [taskInput, setTaskInput] = useState('')
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(taskInput);
+
+    console.log(columns);
+
+    setToggle(!toggle)
+    setTaskInput('')
+  }
+
   return (
     <>
       <div className="py-2 bg-light m-3">
         <p>boardName: {boardName}</p>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-start', marginLeft: '5rem' }}>
         <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
           {Object.entries(columns).map(([columnId, column], index) => {
             return (
@@ -100,9 +112,26 @@ export default function Board() {
                             background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
                             padding: 4,
                             width: 250,
-                            minHeight: 500,
+                            // minHeight: 500,
                           }}
                         >
+                          <div className="add-card">
+                            <div onClick={() => setToggle(!toggle)} className='btn d-flex gap-2 ' >
+
+                              <AddIcon style={{ display: toggle ? 'none' : 'block' }} />
+                              <span style={{ display: toggle ? 'none' : 'block' }}>Add a card</span>
+
+                            </div>
+                            <div style={{ display: !toggle ? 'none' : 'block' }} className="input">
+                              <form onSubmit={handleSubmit} action="">
+                                <input value={taskInput} onChange={(e) => setTaskInput(e.target.value)} className=' input-group' type="text" name="text" />
+                                <div className=' d-flex gap-2 align-items-center p-1'>
+                                  <Button type='submit' variant="primary" >Add card</Button>
+                                  <ClearIcon onClick={() => setToggle(!toggle)} />
+                                </div>
+                              </form>
+                            </div>
+                          </div>
                           {column.items.map((item, index) => {
                             return (
                               <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -124,6 +153,7 @@ export default function Board() {
                                         ...provided.draggableProps.style,
                                       }}
                                     >
+
                                       {item.content}
                                     </div>
                                   );
