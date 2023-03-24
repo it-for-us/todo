@@ -1,8 +1,6 @@
 package com.it4us.todoapp.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +9,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -21,3 +21,4 @@ public class User {
     private String email;
     private String password;
 }
+

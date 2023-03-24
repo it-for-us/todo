@@ -7,6 +7,8 @@ import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.WorkspaceRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Service
 public class WorkspaceServiceImpl implements WorkspaceService {
 
