@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { getBoards } from './core/workspace.slice';
 import { useSelector } from 'react-redux';
 import Board from './components/Board';
+import { deleteBoard } from './core/workspace.slice';
 
 
 const drawerWidth = 180;
@@ -70,7 +71,8 @@ export default function Workspace() {
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.workspace.boards);
   const workspace = useSelector((state) => state.workspace);
-  console.log(workspace);
+
+  console.log(boards);
 
   useEffect(() => {
     if (workspaceId) {
@@ -85,6 +87,9 @@ export default function Workspace() {
 
   const closeBoard = (boardId) => {
     console.log(boardId);
+    dispatch(deleteBoard(boardId))
+    //sayfa yenilenince güncelleme yapiliyor ,saga da islem yapilmali
+    navigate(0)
   }
 
   return (
@@ -140,13 +145,9 @@ export default function Workspace() {
                 <Accordion.Body>
                   {boards?.length > 0 &&
                     boards.map((board, i) => (
-
                       <Dropdown className='w-100 p-1' key={i} as={ButtonGroup}>
-
                         <Button onClick={() => navigate(`/b/${workspace._id}/${board._id}/${board.name}`)} variant="secondary">{board.name}</Button>
-
                         <Dropdown.Toggle split variant="secondary" id="dropdown-split-basic" />
-
                         <Dropdown.Menu>
                           <Dropdown.Item onClick={() => closeBoard(board._id)}>Close board</Dropdown.Item>
                         </Dropdown.Menu>

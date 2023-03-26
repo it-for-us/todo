@@ -92,6 +92,25 @@ const workspaceSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload.error || 'Get boards failed';
     },
+
+    // Delete boards
+    deleteBoard: (state, action) => {
+      const boardId = action.payload;
+      console.log(boardId);
+      state.boards = state.boards.filter((board => board.id !== boardId))
+
+
+    },
+    deleteBoardSuccess: (state, action) => {
+      state.status = 'delete/succeeded';
+      state.isLoading = false;
+      state.error = null;
+    },
+    deleteWBoardFailed: (state, action) => {
+      state.status = 'delete/failed';
+      state.isLoading = false;
+      state.error = action.payload.error || 'Delete board failed';
+    },
   },
 });
 
@@ -118,6 +137,12 @@ export const {
   getBoardsFailed,
   getBoardsSuccess,
 } = workspaceSlice.actions;
+
+export const {
+  deleteBoard,
+  deleteBoardSuccess,
+  deleteWBoardFailed
+} = workspaceSlice.actions
 
 export const selectWorkspace = (state) => state.workspace;
 

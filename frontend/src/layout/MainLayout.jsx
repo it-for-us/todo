@@ -36,7 +36,7 @@ const sidebarItems = [
   },
   {
     title: "Templates",
-    path: "/templates",
+    // path: "/templates",
     icon: <DeveloperBoardIcon />,
     hasBottomDivider: false,
     hasTopDivider: false,
@@ -45,7 +45,7 @@ const sidebarItems = [
   },
   {
     title: "Home",
-    path: "/starred",
+    // path: "/starred",
     icon: <HomeIcon />,
     hasBottomDivider: false,
     hasTopDivider: false,
@@ -60,7 +60,6 @@ export default function MainLayout({ children }) {
 
 
   const delWorkspace = (workspaceId) => {
-    console.log(workspaceId);
     dispatch(deleteWorkspace(workspaceId))
   }
 
