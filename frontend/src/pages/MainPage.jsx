@@ -6,6 +6,8 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { getWorkspaces } from '../modules/workspace/core/workspace.slice';
 
+
+
 export default function Main() {
 
   const workspaces = useSelector((state) => state.workspace.workspaces);
@@ -16,7 +18,7 @@ export default function Main() {
     dispatch(getWorkspaces())
   }, [dispatch])
 
-
+  console.log(workspaces);
 
   return (
     <MainLayout>
@@ -24,8 +26,9 @@ export default function Main() {
       <div className="workspace-container">
         {workspaces && workspaces.map((workspace, i) =>
 
-          <div key={i} className="workspaces">
+          <div key={i} className="workspaces" >
             <h3>{workspace.name}</h3>
+
             <div className="boards-container">
               {workspace.boards.map((board, i) =>
                 <Link to={`/b/${workspace._id}/${board._id}/${board.name}`}>
@@ -38,6 +41,7 @@ export default function Main() {
                       <h5>{board.name}</h5>
                       <span>{moment(board.createdAt).fromNow()} </span>
                     </div>
+
                   </div>
                 </Link>
               )}

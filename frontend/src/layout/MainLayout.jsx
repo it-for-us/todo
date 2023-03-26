@@ -13,14 +13,17 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  Button
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard";
 import HomeIcon from "@mui/icons-material/Home";
-import { useSelector } from "react-redux";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { deleteWorkspace } from "../modules/workspace/core/workspace.slice";
 
 const sidebarItems = [
   {
@@ -51,7 +54,15 @@ const sidebarItems = [
   },
 ];
 export default function MainLayout({ children }) {
+
   const { workspaces } = useSelector((state) => state.workspace);
+  const dispatch = useDispatch()
+
+
+  const delWorkspace = (workspaceId) => {
+    console.log(workspaceId);
+    dispatch(deleteWorkspace(workspaceId))
+  }
 
   return (
     <>
@@ -110,6 +121,13 @@ export default function MainLayout({ children }) {
                             </ListItemButton>
                           </ListItem>
                         </Link>
+                        <ListItem disablePadding>
+                          <ListItemButton onClick={() => delWorkspace(workspace._id)} >
+                            <Button variant="outlined" color="error" startIcon={<DeleteIcon />}>
+                              Delete
+                            </Button>
+                          </ListItemButton>
+                        </ListItem>
                       </AccordionDetails>
                     </Accordion>
                   </ListItemButton>

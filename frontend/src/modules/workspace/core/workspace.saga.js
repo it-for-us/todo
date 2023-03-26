@@ -15,6 +15,9 @@ import {
   getBoardsSuccess,
   getBoardsFailed,
   getWorkspaces,
+  deleteWorkspace,
+  deleteWorkspaceSuccess,
+  deleteWorkspacesFailed
 } from './workspace.slice';
 
 function* workCreateWorkspace(action) {
@@ -123,9 +126,36 @@ function* workGetBoards(action) {
   }
 }
 
+function* workDeleteWorkspace(action) {
+  try {
+    const workspaceId = action.payload;
+    console.log(workspaceId);
+    const token = yield select((state) => state.auth.token);
+    yield call(() =>
+      axios.delete(LOCAL_EXPRESS_API_URL + `/workspaces/${workspaceId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    )
+
+    yield put(deleteWorkspaceSuccess())
+    yield fork(workGetWorkspaces)
+
+
+  } catch (error) {
+    if (error.response) {
+      yield put(deleteWorkspacesFailed({ error: error.response.data }));
+    } else {
+      yield put(deleteWorkspacesFailed({ error: error.message || 'Delete workspace failed' }));
+    }
+  }
+}
+
 export function* workspaceSaga() {
   yield takeEvery(createWorkspace.type, workCreateWorkspace);
   yield takeEvery(getWorkspaces.type, workGetWorkspaces);
   yield takeEvery(createBoard.type, workCreateBoard);
   yield takeEvery(getBoards.type, workGetBoards);
+  yield takeEvery(deleteWorkspace.type, workDeleteWorkspace)
 }

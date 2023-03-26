@@ -2,22 +2,22 @@ import React, { useEffect } from "react";
 import MainLayout from "../layout/MainLayout";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getBoards } from "../modules/workspace/core/workspace.slice";
+import { getBoards, selectWorkspaceByName } from "../modules/workspace/core/workspace.slice";
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
 import CreateWorkspace from "../modules/workspace/components/CreateWorkspace";
 
+
 export default function Home() {
   const { name } = useParams();
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.workspace.boards);
-  const { workspaces } = useSelector((state) => state.workspace);
 
-  const workspace = workspaces.find((workspace) => workspace.name === name);
+  const { _id: workspaceId } = useSelector((state) => selectWorkspaceByName(state, name));
 
-  const workspaceId = workspace._id;
+
 
   useEffect(() => {
     if (workspaceId) {
@@ -28,6 +28,8 @@ export default function Home() {
       );
     }
   }, [dispatch, workspaceId]);
+
+
 
   return (
     <MainLayout>
@@ -47,7 +49,7 @@ export default function Home() {
             </div>
             {boards &&
               boards.map((board, i) => (
-                <Link to={`/b/${workspace._id}/${board._id}/${board.name}`}>
+                <Link to={`/b/${workspaceId}/${board._id}/${board.name}`}>
                   <div
                     key={board._id}
                     style={{ background: i % 2 === 0 ? "#6c9cd3" : "#0747a6" }}
