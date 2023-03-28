@@ -42,6 +42,22 @@ const workspaceSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload.error || 'Get workspaces failed';
     },
+    // Delete Workspace
+    deleteWorkspace: (state, action) => {
+      const workspaceId = action.payload;
+      state.workspaces = state.workspaces.filter((workspace => workspace.id !== workspaceId))
+
+    },
+    deleteWorkspaceSuccess: (state, action) => {
+      state.status = 'delete/succeeded';
+      state.isLoading = false;
+      state.error = null;
+    },
+    deleteWorkspacesFailed: (state, action) => {
+      state.status = 'delete/failed';
+      state.isLoading = false;
+      state.error = action.payload.error || 'Delete workspaces failed';
+    },
 
     // Board actions
     createBoard: (state, action) => {
@@ -76,6 +92,25 @@ const workspaceSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload.error || 'Get boards failed';
     },
+
+    // Delete boards
+    deleteBoard: (state, action) => {
+      const boardId = action.payload;
+      console.log(boardId);
+      state.boards = state.boards.filter((board => board.id !== boardId))
+
+
+    },
+    deleteBoardSuccess: (state, action) => {
+      state.status = 'delete/succeeded';
+      state.isLoading = false;
+      state.error = null;
+    },
+    deleteWBoardFailed: (state, action) => {
+      state.status = 'delete/failed';
+      state.isLoading = false;
+      state.error = action.payload.error || 'Delete board failed';
+    },
   },
 });
 
@@ -89,6 +124,12 @@ export const {
 } = workspaceSlice.actions;
 
 export const {
+  deleteWorkspace,
+  deleteWorkspaceSuccess,
+  deleteWorkspacesFailed,
+} = workspaceSlice.actions
+
+export const {
   createBoard,
   createdBoardSuccess,
   createdBoardFailed,
@@ -96,5 +137,17 @@ export const {
   getBoardsFailed,
   getBoardsSuccess,
 } = workspaceSlice.actions;
+
+export const {
+  deleteBoard,
+  deleteBoardSuccess,
+  deleteWBoardFailed
+} = workspaceSlice.actions
+
+export const selectWorkspace = (state) => state.workspace;
+
+export const selectWorkspaceByName = (state, name) => {
+  return state.workspace.workspaces.find((workspace) => workspace.name === name);
+};
 
 export default workspaceSlice.reducer;

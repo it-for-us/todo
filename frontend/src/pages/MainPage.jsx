@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import MainLayout from '../components/layout/MainLayout';
+import MainLayout from '../layout/MainLayout';
 import CreateWorkspace from '../modules/workspace/components/CreateWorkspace';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { getWorkspaces } from '../modules/workspace/core/workspace.slice';
+
+
 
 export default function Main() {
 
@@ -16,7 +18,7 @@ export default function Main() {
     dispatch(getWorkspaces())
   }, [dispatch])
 
-
+  console.log(workspaces);
 
   return (
     <MainLayout>
@@ -24,18 +26,22 @@ export default function Main() {
       <div className="workspace-container">
         {workspaces && workspaces.map((workspace, i) =>
 
-          <div key={i} className="workspaces">
+          <div key={i} className="workspaces" >
             <h3>{workspace.name}</h3>
+
             <div className="boards-container">
               {workspace.boards.map((board, i) =>
-                <Link to={`/workspace/${workspace._id}`}>
+                <Link to={`/b/${workspace._id}/${board._id}/${board.name}`}>
                   <div
                     key={board._id}
                     style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
                     className="boards"
                   >
-                    {board.name}
-                    <span>{moment(board.createdAt).fromNow()} </span>
+                    <div className="board-headline">
+                      <h5>{board.name}</h5>
+                      <span>{moment(board.createdAt).fromNow()} </span>
+                    </div>
+
                   </div>
                 </Link>
               )}
@@ -45,24 +51,6 @@ export default function Main() {
             </div>
           </div>
         )}
-
-        {/* {workspaces &&
-          workspaces.map((workspace, i) => (
-            <Link to={`/workspace/${workspace._id}`}>
-            <div
-              key={workspace._id}
-              style={{ background: i % 2 === 0 ? '#6c9cd3' : '#0747a6' }}
-              className="boards"
-            >
-                {workspace.name}
-                <span>{moment(workspace.createdAt).fromNow()} </span>
-            </div>
-              </Link>
-          ))} */}
-        {/* 
-        <div className="create-new-board">
-          <CreateWorkspace />
-        </div> */}
       </div>
     </MainLayout>
   );

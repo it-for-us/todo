@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayoutNav from "../navbar/MainLayoutNav";
+import MainLayoutNav from "../components/navbar/MainLayoutNav";
 import {
   ListItemText,
   ListItemIcon,
@@ -13,14 +13,17 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  Button
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard";
 import HomeIcon from "@mui/icons-material/Home";
-import { useSelector } from "react-redux";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { deleteWorkspace } from "../modules/workspace/core/workspace.slice";
 
 const sidebarItems = [
   {
@@ -33,7 +36,7 @@ const sidebarItems = [
   },
   {
     title: "Templates",
-    path: "/templates",
+    // path: "/templates",
     icon: <DeveloperBoardIcon />,
     hasBottomDivider: false,
     hasTopDivider: false,
@@ -42,7 +45,7 @@ const sidebarItems = [
   },
   {
     title: "Home",
-    path: "/starred",
+    // path: "/starred",
     icon: <HomeIcon />,
     hasBottomDivider: false,
     hasTopDivider: false,
@@ -51,7 +54,14 @@ const sidebarItems = [
   },
 ];
 export default function MainLayout({ children }) {
+
   const { workspaces } = useSelector((state) => state.workspace);
+  const dispatch = useDispatch()
+
+
+  const delWorkspace = (workspaceId) => {
+    dispatch(deleteWorkspace(workspaceId))
+  }
 
   return (
     <>
@@ -97,10 +107,10 @@ export default function MainLayout({ children }) {
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                       >
-                        <Typography>{workspace.name}</Typography>
+                        <Typography sx={{ width: '100%' }} ><span style={{ color: 'white', background: 'linear-gradient( #0747a6,#008da6)', marginRight: '5px', padding: '10px', borderRadius: '10px', textAlign: 'center' }} >{(workspace.name).slice(0, 1)} </span> {workspace.name}</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
-                        <Link key={i} to={`/workspace/${workspace.name}/home`}>
+                        <Link key={i} to={`/w/${workspace.name}/home`}>
                           <ListItem disablePadding>
                             <ListItemButton>
                               <ListItemIcon>
@@ -110,6 +120,13 @@ export default function MainLayout({ children }) {
                             </ListItemButton>
                           </ListItem>
                         </Link>
+                        <ListItem disablePadding>
+                          <ListItemButton onClick={() => delWorkspace(workspace._id)} >
+                            <Button variant="outlined" color="error" startIcon={<DeleteIcon />}>
+                              Delete
+                            </Button>
+                          </ListItemButton>
+                        </ListItem>
                       </AccordionDetails>
                     </Accordion>
                   </ListItemButton>
@@ -119,7 +136,7 @@ export default function MainLayout({ children }) {
             ))}
           </List>
         </Box>
-        <div className="workspaces">{children}</div>
+        <div className="workspaces-container">{children}</div>
       </Box>
     </>
   );

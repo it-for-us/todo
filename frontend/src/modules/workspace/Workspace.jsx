@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import MainLayoutNav from '../../components/navbar/MainLayoutNav';
 import { styled, useTheme } from '@mui/material/styles';
-import {ListItemText,ListItemIcon,ListItemButton,ListItem,IconButton,Divider,List,CssBaseline,Drawer,Box} from '@mui/material';
+import { ListItemText, ListItemIcon, ListItemButton, ListItem, IconButton, Divider, List, CssBaseline, Drawer, Box } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Accordion, Dropdown, ButtonGroup, Button } from 'react-bootstrap';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getBoards } from './core/workspace.slice';
 import { useSelector } from 'react-redux';
+import Board from './components/Board';
+import { deleteBoard } from './core/workspace.slice';
+
 
 const drawerWidth = 180;
 
@@ -55,11 +58,21 @@ const sidebarItems = [
 export default function Workspace() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const { workspaceId } = useParams();
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.workspace.boards);
   const workspace = useSelector((state) => state.workspace);
-  console.log(workspace);
+
+  console.log(boards);
 
   useEffect(() => {
     if (workspaceId) {
@@ -71,13 +84,13 @@ export default function Workspace() {
     }
   }, [dispatch, workspaceId]);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const closeBoard = (boardId) => {
+    console.log(boardId);
+    dispatch(deleteBoard(boardId))
+    //sayfa yenilenince güncelleme yapiliyor ,saga da islem yapilmali
+    navigate(0)
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -125,21 +138,29 @@ export default function Workspace() {
           ))}
           <Divider />
           <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary="Workspaces" />
-            </ListItemButton>
+
+            <Accordion className='w-100 ' defaultActiveKey={['0']} alwaysOpen>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Workspaces</Accordion.Header>
+                <Accordion.Body>
+                  {boards?.length > 0 &&
+                    boards.map((board, i) => (
+                      <Dropdown className='w-100 p-1' key={i} as={ButtonGroup}>
+                        <Button onClick={() => navigate(`/b/${workspace._id}/${board._id}/${board.name}`)} variant="secondary">{board.name}</Button>
+                        <Dropdown.Toggle split variant="secondary" id="dropdown-split-basic" />
+                        <Dropdown.Menu>
+                          <Dropdown.Item onClick={() => closeBoard(board._id)}>Close board</Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    ))}
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+
           </ListItem>
 
         </List>
-          {boards?.length > 0 &&
-            boards.map((board, i) => (
-              <Link key={i} to={`/workspace/${workspaceId}/b/${board._id}`}>
-                <ListItemText primary={board.name} />
-              </Link>
-            ))}
+
         <Divider />
       </Drawer>
       <Main style={{ padding: '0' }} open={open}>
@@ -149,9 +170,11 @@ export default function Workspace() {
             style={{
               display: 'flex',
               justifyContent: 'center',
+              flexDirection: 'column',
               height: '100%',
             }}
           >
+            <Board />
             <Outlet />
           </div>
         </div>
