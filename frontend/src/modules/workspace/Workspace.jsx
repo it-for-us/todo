@@ -72,21 +72,15 @@ export default function Workspace() {
   const boards = useSelector((state) => state.workspace.boards);
   const workspace = useSelector((state) => state.workspace);
 
-  console.log(boards);
-
   useEffect(() => {
     if (workspaceId) {
-      dispatch(
-        getBoards({
-          workspaceId,
-        })
+      dispatch(getBoards({ workspaceId, })
       );
     }
   }, [dispatch, workspaceId]);
 
 
   const closeBoard = (boardId) => {
-    console.log(boardId);
     dispatch(deleteBoard(boardId))
     //sayfa yenilenince güncelleme yapiliyor ,saga da islem yapilmali
     navigate(0)
