@@ -18,12 +18,12 @@ export default function Main() {
     dispatch(getWorkspaces())
   }, [dispatch])
 
-  console.log(workspaces);
 
   return (
     <MainLayout>
       <h3>Your workspaces</h3>
-      <div className="workspace-container">
+
+      {workspaces.length > 0 ? <div className="workspace-container">
         {workspaces && workspaces.map((workspace, i) =>
 
           <div key={i} className="workspaces" >
@@ -51,7 +51,7 @@ export default function Main() {
             </div>
           </div>
         )}
-      </div>
+      </div> : <p style={{ fontStyle: 'italic', color: 'gray', fontWeight: 'bold' }}>Please click the create button above to create a workspace.</p>}
     </MainLayout>
   );
 }

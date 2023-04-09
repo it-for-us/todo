@@ -99,7 +99,7 @@ export default function MainLayout({ children }) {
             {workspaces.map((workspace, i) => (
               <>
                 <Divider />
-                <ListItem disablePadding>
+                <ListItem key={i} disablePadding>
                   <ListItemButton>
                     <Accordion>
                       <AccordionSummary
@@ -130,14 +130,14 @@ export default function MainLayout({ children }) {
                       </AccordionDetails>
                     </Accordion>
                   </ListItemButton>
-                </ListItem>
+                </ListItem >
                 <Divider />
               </>
             ))}
           </List>
         </Box>
         <div className="workspaces-container">{children}</div>
-      </Box>
+      </Box >
     </>
   );
 }

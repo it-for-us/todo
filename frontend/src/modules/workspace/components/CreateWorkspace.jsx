@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useForm } from 'react-hook-form';
 import { createBoard, createWorkspace, getWorkspaces } from '../core/workspace.slice';
@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { MenuItem, TextField, Box, Select, FormControl, InputLabel, AccordionSummary, AccordionDetails, Accordion, Typography, Button, Popover } from '@mui/material';
 
 export default function MainLayoutNavCreateBtn() {
+
+  const [error, setError] = useState('')
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { workspaces } = useSelector((state) => state.workspace);
   const dispatch = useDispatch()
@@ -51,12 +53,20 @@ export default function MainLayoutNavCreateBtn() {
     const name = boardRef.current.value;
     const workspaceId = workspaceSelectRef.current.value;
 
+    if (!name) {
+      return setError('Please enter a bord name')
+    } else if (!workspaceId) {
+      return setError('Please select a workspace')
+    }
+
+    setError('')
     dispatch(
       createBoard({
         name,
         workspaceId,
       })
     );
+
     handleClose();
   };
 
@@ -105,6 +115,7 @@ export default function MainLayoutNavCreateBtn() {
                 variant="outlined"
                 size="small"
                 inputRef={boardRef}
+                required
               />
 
               <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -114,6 +125,7 @@ export default function MainLayoutNavCreateBtn() {
                   id="demo-select-small"
                   label="Workspace"
                   inputRef={workspaceSelectRef}
+                  required
                 >
 
                   {workspaces.map((workspace) => (
@@ -123,6 +135,9 @@ export default function MainLayoutNavCreateBtn() {
                   ))}
                 </Select>
               </FormControl>
+              {error && <p style={{ color: 'red', margin: '0', fontSize: '12px' }}>
+                {error}
+              </p>}
               <Button variant="contained" onClick={onSubmitBoard}>
                 Create
               </Button>

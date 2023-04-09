@@ -11,12 +11,12 @@ import CreateWorkspace from "../modules/workspace/components/CreateWorkspace";
 
 
 export default function Home() {
+
   const { name } = useParams();
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.workspace.boards);
 
   const { _id: workspaceId } = useSelector((state) => selectWorkspaceByName(state, name));
-
 
 
   useEffect(() => {
@@ -28,7 +28,6 @@ export default function Home() {
       );
     }
   }, [dispatch, workspaceId]);
-
 
 
   return (
