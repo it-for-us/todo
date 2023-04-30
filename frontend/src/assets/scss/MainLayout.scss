@@ -1,39 +1,48 @@
 .nav_bar_layout {
   height: 50px;
+
   img {
     width: 45px;
     margin-right: 5px;
   }
+
   .brand {
     text-decoration: none;
     display: flex;
     align-items: center;
+
     span {
       font-size: 1.5rem;
     }
   }
+
   .create-btn {
     margin-left: 6%;
 
     display: flex;
     justify-content: center;
     align-items: center;
+
     div {
       color: #fff;
       background-color: #1665c0;
       padding: 0.3rem 0.8rem;
       cursor: pointer;
+
       &:hover {
         background: #6a99df;
       }
     }
   }
+
   .auth-btn {
     a {
       text-decoration: none;
+
       &:nth-of-type(1) {
         color: rgb(23, 43, 77);
       }
+
       &:nth-of-type(2) {
         height: 50px;
         width: 200px;
@@ -41,6 +50,7 @@
         background: rgb(0, 101, 255);
         line-height: 50px;
         text-align: center;
+
         &:hover {
           background: #0747a6;
         }
@@ -61,44 +71,93 @@
     padding: 0 16px;
   }
 
-  .workspaces {
+  .workspaces-container {
     width: 80%;
     margin: 40px 16px 0;
+
     h3 {
       text-transform: uppercase;
       font-size: 1rem;
       font-weight: 700;
       color: gray;
     }
+
+    .workspace-container {
+      display: flex;
+      flex-direction: column;
+
+      .workspaces {
+        margin: 2vh 0;
+
+        .boards {
+          width: 200px;
+          height: 100px;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+          // background-color: #6c9cd3;
+          color: #fff;
+          cursor: pointer;
+
+          .board-headline{
+            width: 100%;
+            padding: 1rem;
+            h5{
+              border-bottom: 1px solid #e1e6eb;
+            }
+          }
+        }
+
+        .create-new-board {
+          width: 200px;
+          height: 100px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #1665c0;
+          color: #fff;
+          cursor: pointer;
+        }
+      }
+    }
+
     .boards-container {
       display: flex;
-      justify-content: flex-start;
+      flex-wrap: wrap;
       align-items: center;
       gap: 10px;
+
+      a {
+        text-decoration: none;
+      }
+
       .boards {
         width: 200px;
         height: 100px;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: #6c9cd3;
+        // background-color: #6c9cd3;
         color: #fff;
         cursor: pointer;
       }
+
       .create-new-board {
         width: 200px;
         height: 100px;
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #1665c0;
-        color: #fff;
+        background-color: #e1e6eb;
+        color: gray;
         cursor: pointer;
       }
     }
   }
-
 }
+
 // .main-layout {
 //   padding: 7vh 0 0 0;
 //   .workspaces {
