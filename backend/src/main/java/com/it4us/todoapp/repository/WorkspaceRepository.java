@@ -19,6 +19,8 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
     @Query(value = "SELECT CASE WHEN COUNT(w) > 0 THEN true ELSE false END FROM workspaces w where w.user_id = :userId and w.workspace_name= :workspaceName", nativeQuery = true)
     Boolean isWorkspaceExistInUser(@Param("workspaceName") String workspaceName, @Param("userId") Long userId);
 
+
+
     @Query(value = "select * from workspaces w where w.user_id = :userId", nativeQuery = true)
     List<Workspace> findAllByUserId(@Param("userId") Long userId);
 

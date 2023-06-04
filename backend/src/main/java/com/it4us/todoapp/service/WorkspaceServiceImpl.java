@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,27 +71,42 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public List<WorkspaceViewDto> getAllWorkspacesOfUser() {
-        return null;
+        User user = userService.findByUsername(LoggedUsername.getUsernameFromAuthentication());
+        List<Workspace> workspaces = workspaceRepository.findAllByUserId(user.getUserId());
+        if (workspaces.size() < 1) {
+            new NotFoundException("Workspace is not found");
+        }
+        List<WorkspaceViewDto> workspaceViewDtos = new ArrayList<>();
+        workspaces.stream().forEach(workspace -> {
+            WorkspaceViewDto workspaceViewDto = getWorkspaceById(workspace.getId());
+            workspaceViewDtos.add(workspaceViewDto);
+        });
+        return workspaceViewDtos;
+
     }
 
     @Override
     @Transactional
-    public void updateWorkspace(Long id, String username, String name) {
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new IllegalStateException("workspace is not found"));
-        if (name.length() == 0) {
-            throw new IllegalStateException("Id or workspace is incorrect format");
+    public WorkspaceViewDto updateWorkspace(WorkspaceCreateDto workspaceCreateDto) {
+
+        Workspace workspace = workspaceRepository.findById(workspaceCreateDto.getId()).orElseThrow(() -> new IllegalStateException("workspace is not found"));
+        String username = LoggedUsername.getUsernameFromAuthentication();
+        if (workspaceCreateDto.getName().length() == 0) {
+            throw new BadRequestException("Workspace name is incorrect format");
         }
 
-        Optional<Workspace> workspaceOptional = workspaceRepository.findByName(name);
+        Optional<Workspace> workspaceOptional = workspaceRepository.findByName(workspaceCreateDto.getName());
         if (workspaceOptional.isPresent()) {
-            throw new IllegalStateException("workspace already exists");
+
+            throw new WorkspaceExistException("workspace already exists");
         }
 
-        if (username != null && id != 0) {
-            workspace.setId(id);
-            workspace.setName(username);
-            workspace.setName(name);
+        if (!isWorkspaceBelongsToUser(workspace, username)) {
+            throw new UnAuthorizedException("UnAuthorized Exception");
         }
+        workspace.setName(workspaceCreateDto.getName());
+        workspaceRepository.save(workspace);
+        return getWorkspaceById(workspace.getId());
     }
 
     public Boolean isWorkspaceExist(String workspaceName, Long userId) {
@@ -116,7 +132,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 return false;
             }
         }
-        return  (workspaceNameToChar.length > 4 && workspaceNameToChar.length < 15 && workspaceNameToChar[0] != '_');
+        return (workspaceNameToChar.length > 4 && workspaceNameToChar.length < 15 && workspaceNameToChar[0] != '_');
     }
 
     private boolean isWorkspaceBelongsToUser(Workspace workspace, String username) {

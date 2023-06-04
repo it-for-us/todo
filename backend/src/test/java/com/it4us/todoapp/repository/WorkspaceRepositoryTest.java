@@ -2,6 +2,7 @@ package com.it4us.todoapp.repository;
 
 import com.it4us.todoapp.entity.User;
 import com.it4us.todoapp.entity.Workspace;
+import com.it4us.todoapp.service.WorkspaceService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,17 +29,23 @@ class WorkspaceRepositoryTest {
     @Test
     void itShouldCheckIfWorkspaceExistInUser() {
         //given
-        User user = new User(null, "9d071c6c-fe7b-4ba5-92e5-b5521676e20b", "testuser", "test@gmail.com", "password");
+        User user = new User(2L, "9d071c6c-fe7b-4ba5-92e5-b5521676e20b", "testuser", "test@gmail.com", "password");
         User userReturnedFromDB = userRepository.save(user);
-        Workspace workspace1 = new Workspace(null, "testworkspace", userReturnedFromDB);
-        workspaceRepositoryUnderTest.save(workspace1);
+        Workspace workspace = new Workspace(1L, "testworkspace", userReturnedFromDB);
+
+
+       Workspace returnedWorkspace= workspaceRepositoryUnderTest.save(workspace);
 
         //when
-        Boolean result;
-        result = workspaceRepositoryUnderTest.isWorkspaceExistInUser("testworkspace", userReturnedFromDB.getUserId());
+
+        Boolean result = workspaceRepositoryUnderTest.isWorkspaceExistInUser(returnedWorkspace.getName(),userReturnedFromDB.getUserId());
+
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result);
+
 
         //then
-        Assertions.assertTrue(result);
+      //  Assertions.assertTrue(result);
     }
 
     @Test

@@ -12,13 +12,13 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/work-space")
+@RequestMapping("/api/v1/work-space")
 public class WorkspaceController {
 
     private final WorkspaceService workspaceService;
 
     public WorkspaceController(WorkspaceService workspaceService) {
-        this.workspaceService=workspaceService;
+        this.workspaceService = workspaceService;
     }
 
     @GetMapping("/{workspaceId}")
@@ -43,17 +43,16 @@ public class WorkspaceController {
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus deleteWorkspace(@PathVariable Long id){
+    public ResponseEntity<?> deleteWorkspace(@PathVariable Long id) {
         workspaceService.deleteWorkspaceById(id, LoggedUsername.getUsernameFromAuthentication());
-        return HttpStatus.OK;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //update username and workspace name
-    @PutMapping(path="{id}")
-    public HttpStatus updateWorkspace( @PathVariable Long id, @RequestParam(required = false) String name) {
-        String username = LoggedUsername.getUsernameFromAuthentication();
-        workspaceService.updateWorkspace(id, username, name);
-        return HttpStatus.OK;
+    @PutMapping
+    public ResponseEntity<WorkspaceViewDto> updateWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto) {
+
+        return new ResponseEntity<>(workspaceService.updateWorkspace(workspaceCreateDto), HttpStatus.OK);
     }
 
 }
