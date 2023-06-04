@@ -48,7 +48,7 @@ public class WorkspaceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //update username and workspace name
+    //update workspace name
     @PutMapping
     public ResponseEntity<WorkspaceViewDto> updateWorkspace(@RequestBody WorkspaceCreateDto workspaceCreateDto) {
 
