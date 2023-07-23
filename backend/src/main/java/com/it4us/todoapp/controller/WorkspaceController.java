@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/work-space")
+@RequestMapping("/api/v1/work-space")
 public class WorkspaceController {
 
     private final WorkspaceService workspaceService;

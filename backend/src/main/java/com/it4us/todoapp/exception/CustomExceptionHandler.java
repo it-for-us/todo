@@ -99,6 +99,11 @@ public class CustomExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(belongToAnotherUserException.getMessage(),401);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler(ListBelongsToAnotherUserException.class)
+    public ResponseEntity<?> handleListBlongsToAnotherUserException(ListBelongsToAnotherUserException listBelongsToAnotherUserException) {
+        ErrorResponse errorResponse = new ErrorResponse(listBelongsToAnotherUserException.getMessage(), 401);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
 }
 
 
