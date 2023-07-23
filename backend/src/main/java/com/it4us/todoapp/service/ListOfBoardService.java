@@ -13,4 +13,9 @@ public interface ListOfBoardService {
     List<ListOfBoardViewDto> getAllListsInBoards(Long boardId);
 
     List<ListOfBoard> findAllListsInBoards(Long boardId);
+
+    void deleteList(Long listId);
+
+    ListOfBoard findById(Long listId);
+
 }
