@@ -1,30 +1,34 @@
 package com.it4us.todoapp.service;
 
-import com.it4us.todoapp.dto.BoardViewDto;
-import com.it4us.todoapp.dto.WorkspaceCreateDto;
-import com.it4us.todoapp.dto.WorkspaceViewDto;
-import com.it4us.todoapp.entity.User;
-import com.it4us.todoapp.entity.Workspace;
+import com.it4us.todoapp.dto.*;
+import com.it4us.todoapp.entity.*;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.it4us.todoapp.utilities.LoggedUsername;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkspaceServiceImpl implements WorkspaceService {
 
-    @Autowired
     private WorkspaceRepository workspaceRepository;
-    @Autowired
     private UserService userService;
+    //private BoardService boardService;
+
     @Autowired
-    private BoardService boardService;
+    public WorkspaceServiceImpl(WorkspaceRepository workspaceRepository,
+                                UserService userService){
+        this.workspaceRepository = workspaceRepository;
+        this.userService = userService;
+        //this.boardService = boardService;
+    }
 
     @Override
     public WorkspaceViewDto create(WorkspaceCreateDto workspaceCreateDto, String username) {
@@ -48,7 +52,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Workspace workspace = findWorkspaceById(workspaceId);
 
         if (isWorkspaceBelongsToUser(workspace, username)) {
-            List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspaceId));
+            List<BoardViewDto> boards = getAllBoardDtosInWorkspace(workspaceId);
             return WorkspaceViewDto.of(workspace, boards);
         } else throw new WorkspaceBelongAnotherUserException("Workspace is belonged to another user.");
     }
@@ -102,6 +106,17 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return null;
     }
 
+    private List<BoardViewDto> getAllBoardDtosInWorkspace (Long workspaceId){
+        List<Board> allBoardsInWorkspace;
+        if (workspaceId != null) {
+            allBoardsInWorkspace = workspaceRepository.getAllBoardsByWorkspaceId(workspaceId);
+        } else return null;
+
+        return allBoardsInWorkspace.stream()
+                .map(board -> BoardViewDto.of(board,getAllListOfBoardViewDtosInBoard(board.getId())))
+                .collect(Collectors.toList());
+    }
+
     private boolean isAValidWorkspaceName(String workspaceName) {
 
         char[] workspaceNameToChar = workspaceName.toCharArray();
@@ -123,9 +138,31 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return workspace.getUser().getUsername().equals(username);
     }
 
-    private WorkspaceViewDto convertWorkspaceToWorkspaceViewDto(Workspace workspace) {
+    /*private WorkspaceViewDto convertWorkspaceToWorkspaceViewDto(Workspace workspace) {
         List<BoardViewDto> boards = boardService.getAllBoards(Optional.of(workspace.getId()));
         return WorkspaceViewDto.of(workspace, boards);
+    }*/
+
+    private List<ListOfBoardViewDto> getAllListOfBoardViewDtosInBoard (Long boardId){
+        List<ListOfBoard> allListOfBoardsInBoard;
+        if (boardId != null) {
+            allListOfBoardsInBoard = workspaceRepository.getAllListsByBoardId(boardId);
+        } else return null;
+
+        return allListOfBoardsInBoard.stream()
+                .map(listOfBoard -> ListOfBoardViewDto.of(listOfBoard,getAllCardViewDtosInList(listOfBoard.getId())))
+                .collect(Collectors.toList());
+    }
+
+    private List<CardViewDto> getAllCardViewDtosInList (Long listOfBoardId){
+        List<Card> allCardsInList;
+        if (listOfBoardId != null) {
+            allCardsInList = workspaceRepository.getAllCardsByListId(listOfBoardId);
+        } else return null;
+
+        return allCardsInList.stream()
+                .map(card -> CardViewDto.of(card))
+                .collect(Collectors.toList());
     }
 }
 

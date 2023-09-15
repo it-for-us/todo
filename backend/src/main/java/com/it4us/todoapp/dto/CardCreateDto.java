@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardCreateDto {
+public class CardCreateDto {
 
     private Long id;
-    private String name;
-    private Long workspaceId;
+    private String title;
+    private String description;
+    private Integer orderNumber;
+    private Long listId;
 
 }

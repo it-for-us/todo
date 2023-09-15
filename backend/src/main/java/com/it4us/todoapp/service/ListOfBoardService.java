@@ -9,8 +9,9 @@ import java.util.List;
 public interface ListOfBoardService {
 
     ListOfBoardViewDto create(ListOfBoardCreateDto listOfBoardCreateDto, String username);
-
-    List<ListOfBoardViewDto> getAllListsInBoards(Long boardId);
-
-    List<ListOfBoard> findAllListsInBoards(Long boardId);
+    ListOfBoardViewDto update(ListOfBoardCreateDto listOfBoardCreateDto, String username);
+    void delete(Long id, String username);
+    ListOfBoardViewDto getListOfBoardById(Long listOfBoardId);
+    ListOfBoard findListOfBoardById(Long listOfBoardId);
+    List<ListOfBoardViewDto> getAllListViewDtosOfBoard(Long boardId);
 }

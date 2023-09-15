@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/v1/boards")
 public class BoardController {
@@ -24,11 +26,20 @@ public class BoardController {
 
     @PostMapping
     public ResponseEntity<BoardViewDto> createBoard(@RequestBody BoardCreateDto boardCreateDto) {
-        BoardViewDto boardViewDto = boardService.create(
+        BoardViewDto boardViewDto = boardService.createBoard(
                 boardCreateDto,
                 LoggedUsername.getUsernameFromAuthentication()
         );
         return new ResponseEntity<>(boardViewDto, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<BoardViewDto> updateBoard(@RequestBody BoardCreateDto boardCreateDto) {
+        BoardViewDto boardViewDto = boardService.updateBoard(
+                boardCreateDto,
+                LoggedUsername.getUsernameFromAuthentication()
+        );
+        return new ResponseEntity<>(boardViewDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -37,18 +48,15 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping({"/{boardId}"})
-    public ResponseEntity<BoardViewDto> getBoardById(@PathVariable("boardId") Long boardId) {
-        BoardViewDto boardViewDto = boardService.getBoardById(boardId);
+    @GetMapping({"/{id}"})
+    public ResponseEntity<BoardViewDto> getBoardById(@PathVariable("id") Long id) {
+        BoardViewDto boardViewDto = boardService.getBoardById(id);
         return new ResponseEntity<>(boardViewDto, HttpStatus.OK);
     }
 
-
-    //board update
-    @PutMapping(path = "{id}")
-    public HttpStatus updateWorkspace(@PathVariable Long id, @RequestParam(required = false) String name) {
-        String username = LoggedUsername.getUsernameFromAuthentication();
-        boardService.updateBoard(id, username, name);
-        return HttpStatus.OK;
+    @GetMapping({"/{workspaceId}"})
+    public ResponseEntity<List<BoardViewDto>> getAllLBoard(@PathVariable("workspaceId")Long workspaceId) {
+        List<BoardViewDto> BoardViewDtoList = boardService.getAllBoardsOfWorkspace(workspaceId);
+        return new ResponseEntity<>(BoardViewDtoList, HttpStatus.OK);
     }
 }
