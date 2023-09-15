@@ -6,20 +6,18 @@ import com.it4us.todoapp.dto.BoardViewDto;
 import com.it4us.todoapp.entity.Board;
 
 
-import javax.transaction.Transactional;
-
 import java.util.List;
-import java.util.Optional;
 
 
 public interface BoardService {
 
-    BoardViewDto create (BoardCreateDto boardCreateDto,String username);
+    BoardViewDto createBoard(BoardCreateDto boardCreateDto, String username);
+    BoardViewDto updateBoard(BoardCreateDto boardCreateDto, String username);
+    void deleteBoard(Long id, String username);
     BoardViewDto getBoardById(Long boardId);
     Board findBoardById(Long boardId);
-    List<BoardViewDto> getAllBoards(Optional<Long> workspaceId);
-    void deleteBoard(Long id, String username);
-    @Transactional
-    void updateBoard(Long id, String username, String name);
+    List<BoardViewDto> getAllBoardsOfWorkspace(Long workspaceId);
+
+
 
 }

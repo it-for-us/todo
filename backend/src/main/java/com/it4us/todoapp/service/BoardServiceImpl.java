@@ -2,8 +2,11 @@ package com.it4us.todoapp.service;
 
 import com.it4us.todoapp.dto.BoardCreateDto;
 import com.it4us.todoapp.dto.BoardViewDto;
+import com.it4us.todoapp.dto.CardViewDto;
 import com.it4us.todoapp.dto.ListOfBoardViewDto;
 import com.it4us.todoapp.entity.Board;
+import com.it4us.todoapp.entity.Card;
+import com.it4us.todoapp.entity.ListOfBoard;
 import com.it4us.todoapp.entity.Workspace;
 import com.it4us.todoapp.exception.*;
 import com.it4us.todoapp.repository.BoardRepository;
@@ -11,7 +14,6 @@ import com.it4us.todoapp.utilities.LoggedUsername;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,16 +21,22 @@ import java.util.stream.Collectors;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    @Autowired
-    private BoardRepository boardRepository;
-    @Autowired
-    private WorkspaceService workspaceService;
-    @Autowired
-    private ListOfBoardService listOfBoardService;
+    private final BoardRepository boardRepository;
+    private final WorkspaceService workspaceService;
+    //private final ListOfBoardService listOfBoardService;
 
+    @Autowired
+    //@Lazy
+    public BoardServiceImpl(//ListOfBoardService listOfBoardService,
+                            BoardRepository boardRepository,
+                            WorkspaceService workspaceService ){
+        //this.listOfBoardService = listOfBoardService;
+        this.boardRepository = boardRepository;
+        this.workspaceService = workspaceService;
+    }
 
     @Override
-    public BoardViewDto create(BoardCreateDto boardCreateDto, String username) {
+    public BoardViewDto createBoard(BoardCreateDto boardCreateDto, String username) {
 
         Board board = new Board();
         Workspace workspace = workspaceService.findWorkspaceById(boardCreateDto.getWorkspaceId());
@@ -47,13 +55,46 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public BoardViewDto updateBoard(BoardCreateDto boardCreateDto, String username) {
+
+        Board board = boardRepository.findById(boardCreateDto.getId())
+                .orElseThrow(() -> new NotFoundException("Board is not found"));
+
+        if (!isBoardBelongedUser(board.getId())){
+            throw new BelongToAnotherUserException("You can't access to Board of other User");
+        }
+        if (boardCreateDto.getId() == null
+                || boardCreateDto.getName().isEmpty()
+                || !isAValidBoardName(boardCreateDto.getName())) {
+            throw new BadRequestException("Board id or Board name is in incorrect format");
+        }
+        Optional<Board> boardOptional = boardRepository.findByName(boardCreateDto.getName());
+        if (boardOptional.isPresent()) {
+            throw new AlreadyExistException("Board is already exists");
+        }
+        if (username != null && boardCreateDto.getId() != 0 && boardCreateDto.getName() != null) {
+            board.setName(boardCreateDto.getName());
+        }
+        return BoardViewDto.of(boardRepository.save(board),getAllListOfBoardViewDtosInBoard(board.getId()));
+    }
+
+    @Override
+    public void deleteBoard(Long id, String username) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new NotFoundException("Board is not found"));
+        if (!isBoardBelongedUser(id)) {
+            throw new BelongToAnotherUserException("Board belongs to another user");
+        }
+        boardRepository.delete(board);
+    }
+
+    @Override
     public BoardViewDto getBoardById(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException("Board is not found"));
         if (!isBoardBelongedUser(boardId)) {
-            throw new BoardBelongAnotherUserException("The board is belonged another user.");
+            throw new BelongToAnotherUserException("Board is belonged another user.");
         }
-        List<ListOfBoardViewDto> listViewDtoBoardsList = listOfBoardService.getAllListsInBoards(boardId);
-        return BoardViewDto.of(findBoardById(boardId), listViewDtoBoardsList);
+        List<ListOfBoardViewDto> listOfBoardViewDtoList = getAllListOfBoardViewDtosInBoard(boardId);
+        return BoardViewDto.of(findBoardById(boardId), listOfBoardViewDtoList);
     }
 
     @Override
@@ -68,47 +109,37 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardViewDto> getAllBoards(Optional<Long> workspaceId) {
+    public List<BoardViewDto> getAllBoardsOfWorkspace(Long workspaceId) {
         List<Board> boards;
-        if (workspaceId.isPresent()) {
-            boards = boardRepository.findByWorkspaceId(workspaceId);
-        } else {
-            boards = boardRepository.findAll();
-        }
+        if (workspaceId != null) {
+            boards = boardRepository.findByWorkspaceId(Optional.of(workspaceId));
+        } else return null;
+
         return boards.stream()
-                .map(board -> BoardViewDto.of(board, listOfBoardService.getAllListsInBoards(board.getId())))
+                .map(board -> BoardViewDto.of(board, getAllListOfBoardViewDtosInBoard(board.getId())))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional
-    public void updateBoard(Long id, String username, String name) {
+    private List<ListOfBoardViewDto> getAllListOfBoardViewDtosInBoard (Long boardId){
+        List<ListOfBoard> allListOfBoardsInBoard;
+        if (boardId != null) {
+            allListOfBoardsInBoard = boardRepository.getAllListsByBoardId(boardId);
+        } else return null;
 
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("board not found"));
-
-        if (id == null || name.length() == 0) {
-            throw new IllegalStateException("board id or boardname is in incorrect format");
-        }
-
-        Optional<Board> boardOptional = boardRepository.findByName(name);
-        if (boardOptional.isPresent()) {
-            throw new IllegalStateException("board already exists");
-        }
-        if (username != null && id != 0 && name != null) {
-            board.setId(id);
-            board.setName(username);
-            board.setName(name);
-        }
+        return allListOfBoardsInBoard.stream()
+                .map(listOfBoard -> ListOfBoardViewDto.of(listOfBoard,getAllCardViewDtosInList(listOfBoard.getId())))
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public void deleteBoard(Long id, String username) {
-        Board board = boardRepository.findById(id).orElseThrow(() -> new NotFoundException("board not found"));
-        if (boardRepository.isBoardBelongToUser(id, username) == false) {
-            throw new BoardBelongAnotherUserException("Board belongs to another user");
-        }
-        boardRepository.delete(board);
+    private List<CardViewDto> getAllCardViewDtosInList (Long listOfBoardId){
+        List<Card> allCardsInList;
+        if (listOfBoardId != null) {
+            allCardsInList = boardRepository.getAllCardsByListId(listOfBoardId);
+        } else return null;
+
+        return allCardsInList.stream()
+                .map(card -> CardViewDto.of(card))
+                .collect(Collectors.toList());
     }
 
     private boolean isBoardBelongedUser(Long boardId) {
@@ -134,7 +165,5 @@ public class BoardServiceImpl implements BoardService {
         }
         return  (boardNameToChar.length > 4 && boardNameToChar.length < 15 && boardNameToChar[0] != '_');
     }
-
-
 
 }

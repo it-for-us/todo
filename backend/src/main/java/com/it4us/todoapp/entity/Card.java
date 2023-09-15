@@ -1,7 +1,5 @@
 package com.it4us.todoapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,21 +12,25 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Boards")
-public class Board {
-
+@Table(name = "Cards")
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "board_id")
+    @Column(name = "card_id")
     private Long id;
 
-    @Column(name = "board_name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
-    @ManyToOne//(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workspace_id", nullable = false)
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "order_number")
+    private Integer orderNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "list_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Workspace workspace;
+    private ListOfBoard listOfBoard;
 }
